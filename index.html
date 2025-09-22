@@ -22,13 +22,6 @@
   --container:1180px;
   --header-blur:6px;
   --header-h:72px;
-
-  /* social sizing that adapts to small -> large phones.
-     min 44px (very small phone), preferred based on viewport, max 80px (large phablet)
-  */
-  --social-size: clamp(44px, 8.5vw, 80px);
-  --social-gap: clamp(8px, 3.5vw, 18px);
-  --social-inner-pad: 6px;
 }
 
 /* Accessibility helper */
@@ -41,7 +34,7 @@ body{background:var(--bg);color:var(--text);}
 
 /* Header */
 header{
-  position:fixed;top:0;left:0;right:0;height:var(--header-h);z-index:400;
+  position:fixed;top:0;left:0;right:0;height:var(--header-h);z-index:200;
   display:flex;align-items:center;justify-content:center;
   backdrop-filter:blur(var(--header-blur));
   transition:background .18s ease, box-shadow .18s ease;
@@ -51,24 +44,6 @@ html[data-theme="light"] header{background: rgba(0,0,0,0.06);}
 .header-inner{
   width:100%;max-width:var(--container);padding:0 20px;
   display:flex;align-items:center;justify-content:space-between;gap:18px;
-}
-
-/* MOBILE FIXED SOCIAL BAR (shown on small viewports) */
-/* placed immediately after header in DOM so it visually sits below header */
-.social-fixed {
-  display:none; /* shown via media query */
-  position:fixed;
-  top: calc(var(--header-h) + 8px);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 395;
-  gap: var(--social-gap);
-  width: min(96%, 420px);
-  justify-content: space-between;
-  padding: 6px 8px;
-  background: transparent;
-  pointer-events:auto;
-  align-items:center;
 }
 
 /* Hamburger - improved accessibility & animation */
@@ -146,7 +121,7 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
 .neon-frame { display: inline-block; border-radius: 16px; padding: 3px; background: conic-gradient(from 0deg, #fff, #34e6ff, #ff59d0, #fff); box-shadow: none; -webkit-mask: none; mask: none; overflow: hidden; }
 .neon-image { display: block; width: 100%; height: 440px; object-fit: cover; border-radius: 13px; filter: none; box-shadow: none; }
 
-/* Social row default (desktop inside frame) */
+/* Social row (desktop & mobile inside home section) */
 .social-row {
   position: absolute;
   left: calc(50% - 27px);
@@ -158,14 +133,14 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   pointer-events: auto;
 }
 
-/* Reusable social tile variables & sizing via clamp */
+/* Social tile */
 .social-square {
   display: inline-grid;
   place-items: center;
-  width: var(--social-size);
-  height: var(--social-size);
+  width: 64px;
+  height: 64px;
   border-radius: 14px;
-  padding: var(--social-inner-pad);
+  padding: 3px;
   background: linear-gradient(135deg, #1fb3ff, #ffffff);
   cursor: pointer;
   text-decoration: none;
@@ -173,7 +148,7 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   overflow: hidden;
 }
 .social-square .icon-bg { width: 100%; height: 100%; border-radius: 11px; display: grid; place-items: center; background: var(--bg); color: var(--text); transition: color 200ms ease; }
-.social-square svg { width: calc(var(--social-size) * 0.48); height: calc(var(--social-size) * 0.48); fill:currentColor; stroke:currentColor; stroke-width:1.6; display:block; pointer-events:none; }
+.social-square svg { width: 28px;height: 28px;fill:currentColor;stroke:currentColor;stroke-width:1.6;display:block;pointer-events:none; }
 .social-square:hover { transform: translateY(-6px) scale(1.06); box-shadow: 0 6px 18px rgba(31, 179, 255, 0.15); }
 .social-square:hover .icon-bg { color: #1fb3ff; }
 .social-square:active .icon-bg { color: #0d8adf; transform: scale(0.96); }
@@ -183,18 +158,10 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
 .mobile-menu { display: none; }
 
 /* Mobile baseline tweaks */
-@media (max-width: 820px) {
-  /* switch to mobile sizing & show fixed social bar */
-  body { /* reduce heavy section padding on small viewports to keep CTAs visible */ }
-  .social-row { display:none; }              /* hide desktop in-frame icons */
-  .social-fixed { display:flex; }           /* show the fixed bar under header */
-
-  /* smaller icons on tight screens (clamp already handles sizes) */
-  .social-square { border-radius: 12px; }
-  .social-square .icon-bg { border-radius: 9px; }
-
-  /* reduce hero top padding so content isn't pushed down too far on short screens */
-  section{padding:74px 12px;min-height:calc(100vh - var(--header-h));}
+@media (max-width: 520px) {
+  .social-square { width: 68px; height: 68px; }
+  .social-square .icon-bg { border-radius:12px; }
+  .social-square svg { width:28px; height:28px; }
 }
 
 /* Dark / Light icon visibility */
@@ -207,8 +174,9 @@ html[data-theme="light"] .icon-sun { display:inline-block; font-size:1.5rem; }
 @media (max-width:1100px){.hero-inner{gap:28px}.right{flex:0 0 420px}.neon-image{height:360px;}}
 @media (max-width:860px){.hero-inner{flex-direction:column-reverse;align-items:center}.left{text-align:center} h1{font-size:48px;} nav{display:none;}}
 
-/* MOBILE: stack text above image and ensure CTAs visible on narrow phones */
+/* ========== MOBILE-SPECIFIC LAYOUT (ONLY below 520px) ========== */
 @media (max-width:520px){
+  /* show hamburger at left, theme at right */
   .hamburger{display:inline-flex;order:0;}
   .theme-btn{order:2;margin-left:auto;}
   .header-inner{padding:0 14px;align-items:center;}
@@ -224,33 +192,32 @@ html[data-theme="light"] .icon-sun { display:inline-block; font-size:1.5rem; }
     display:none;
     flex-direction:column;
     gap:10px;
-    z-index:410;
+    z-index:110;
   }
   .mobile-menu.show{display:flex;}
   .mobile-menu a{padding:12px;border-radius:10px;text-decoration:none;color:var(--text);font-weight:700;border:1px solid rgba(255,255,255,0.03);background:transparent;}
   .mobile-menu a:hover{background:rgba(255,255,255,0.02);color:var(--accent);}
 
-  /* swap order so left/text appears above image on mobile (keeps CTAs visible) */
-  .hero-inner{flex-direction:column;align-items:center;gap:12px;padding-top:8px;}
-  .left{order:1;text-align:center;width:100%;max-width:620px;padding:6px 14px;}
-  .right{order:2;flex-basis:100%;display:flex;flex-direction:column;align-items:center;width:100%;}
-  .neon-frame{ width:100%; max-width:420px; padding:3px; margin-top:8px; } /* small spacing under text */
+  /* make neon frame sit below header on mobile */
+  .neon-frame { width: 100%; max-width: 420px; padding: 3px; margin-top: 20px; }
+
+  /* fluid image */
+  .right{flex-basis:100%;display:flex;flex-direction:column;align-items:center;order:1;width:100%;}
   .neon-image{height:auto;max-width:100%;border-radius:11px;object-fit:cover;}
 
+  /* center text & buttons, reduce sizes to fit */
+  .hero-inner{flex-direction:column;align-items:center;gap:12px;padding-top:12px;}
+  .left{order:2;text-align:center;width:100%;max-width:620px;padding:6px 14px;}
   .eyebrow{font-size:11px;margin-bottom:10px;}
   h1{font-size:34px;line-height:1.02;margin:0 0 6px;}
   .underline{width:200px;margin:8px auto 12px;height:4px;}
   p.lead{padding:0 6px;color:var(--muted);max-width:100%;}
-  .cta{justify-content:center;flex-wrap:wrap;padding-bottom:12px;gap:10px;margin-top:16px;}
-  .btn{min-width:120px;text-align:center;font-size:14px;padding:10px 14px;}
+  .cta{justify-content:center;flex-wrap:wrap;padding-bottom:16px;gap:10px;}
+  .btn{min-width:130px;text-align:center;font-size:14px;padding:10px 14px;}
   .btn.primary{padding:10px 14px;}
   .btn.ghost{padding:10px 14px;}
 
-  /* ensure hero isn't overlapped by header + social fixed bar:
-     we reduce the top padding of the first section and add a small spacer so content is visible */
-  #home { padding-top: calc(var(--header-h) + var(--social-size) + 28px); }
-  /* other sections keep a smaller top to avoid big gaps */
-  section:not(#home){ padding-top: calc(var(--header-h) + 18px); }
+  section{padding:86px 10px;}
 }
 
 /* Theme variables */
@@ -287,22 +254,6 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
   </div>
 </header>
 
-<!-- mobile fixed social bar (visible on viewports <= 820px) -->
-<nav class="social-fixed" aria-label="Social links - fixed (mobile)">
-  <a class="social-square" href="mailto:abhinandbabu2502@gmail.com" title="Email" aria-label="Email">
-    <span class="icon-bg" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2l-8 4.8-8-4.8V6l8 4.8L20 6v2.2z"/></svg></span>
-  </a>
-  <a class="social-square" href="https://github.com/Abhinand2502" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
-    <span class="icon-bg" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 0.5C5.73.5.75 5.49.75 11.76c0 4.85 3.14 8.96 7.5 10.42.55.1.75-.24.75-.53v-1.86c-3.05.66-3.7-1.4-3.7-1.4-.5-1.26-1.22-1.6-1.22-1.6-.99-.68.08-.67.08-.67 1.1.08 1.68 1.13 1.68 1.13.97 1.66 2.54 1.18 3.16.9.1-.7.38-1.18.69-1.45-2.43-.28-4.98-1.22-4.98-5.44 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.42.11-2.96 0 0 .92-.3 3.02 1.13a10.5 10.5 0 0 1 5.5 0c2.09-1.43 3.01-1.13 3.01-1.13.61 1.54.23 2.68.11 2.96.7.77 1.13 1.75 1.13 2.95 0 4.23-2.56 5.16-4.99 5.43.39.34.73 1.01.73 2.04v3.02c0 .3.2.64.76.53 4.36-1.46 7.5-5.57 7.5-10.42C23.25 5.49 18.27.5 12 .5z"/></svg></span>
-  </a>
-  <a class="social-square" href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">
-    <span class="icon-bg" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4.98 3.5C3.88 3.5 3 4.38 3 5.48c0 1.1.88 1.98 1.98 1.98h.02C6.07 7.46 7 6.58 7 5.48 7 4.38 6.07 3.5 4.98 3.5zM3.5 8.98h3v11.52h-3V8.98zM9.5 8.98h2.88v1.57h.04c.4-.76 1.37-1.57 2.82-1.57 3.01 0 3.57 1.98 3.57 4.55v6.97h-3V14.9c0-1.52-.03-3.47-2.12-3.47-2.12 0-2.44 1.65-2.44 3.36v6.18h-3V8.98z"/></svg></span>
-  </a>
-  <a class="social-square" href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener" title="Instagram" aria-label="Instagram">
-    <span class="icon-bg" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.2" y="2.2" width="19.6" height="19.6" rx="5.2" ry="5.2" fill="none" /><circle cx="12" cy="12" r="3.7" /><circle cx="17.5" cy="6.2" r="0.95" /></svg></span>
-  </a>
-</nav>
-
 <!-- Mobile menu (hidden on desktop by default) -->
 <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
   <a href="#home" data-target="home" class="mobile-link">HOME</a>
@@ -327,22 +278,34 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 
     <div class="right">
       <div class="neon-frame">
-        <!-- Desktop : in-frame social row (hidden on small viewports) -->
+        <!-- Social row (kept in home section for both desktop & mobile) -->
         <div class="social-row" role="navigation" aria-label="Social links">
           <a class="social-square" href="mailto:abhinandbabu2502@gmail.com" title="Email" aria-label="Email">
-            <span class="icon-bg"><svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2l-8 4.8-8-4.8V6l8 4.8L20 6v2.2z"/></svg></span>
+            <span class="icon-bg">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2l-8 4.8-8-4.8V6l8 4.8L20 6v2.2z"/></svg>
+            </span>
           </a>
 
           <a class="social-square" href="https://github.com/Abhinand2502" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
-            <span class="icon-bg"><svg viewBox="0 0 24 24"><path d="M12 0.5C5.73.5.75 5.49.75 11.76c0 4.85 3.14 8.96 7.5 10.42.55.1.75-.24.75-.53v-1.86c-3.05.66-3.7-1.4-3.7-1.4-.5-1.26-1.22-1.6-1.22-1.6-.99-.68.08-.67.08-.67 1.1.08 1.68 1.13 1.68 1.13.97 1.66 2.54 1.18 3.16.9.1-.7.38-1.18.69-1.45-2.43-.28-4.98-1.22-4.98-5.44 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.42.11-2.96 0 0 .92-.3 3.02 1.13a10.5 10.5 0 0 1 5.5 0c2.09-1.43 3.01-1.13 3.01-1.13.61 1.54.23 2.68.11 2.96.7.77 1.13 1.75 1.13 2.95 0 4.23-2.56 5.16-4.99 5.43.39.34.73 1.01.73 2.04v3.02c0 .3.2.64.76.53 4.36-1.46 7.5-5.57 7.5-10.42C23.25 5.49 18.27.5 12 .5z"/></svg></span>
+            <span class="icon-bg">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0.5C5.73.5.75 5.49.75 11.76c0 4.85 3.14 8.96 7.5 10.42.55.1.75-.24.75-.53v-1.86c-3.05.66-3.7-1.4-3.7-1.4-.5-1.26-1.22-1.6-1.22-1.6-.99-.68.08-.67.08-.67 1.1.08 1.68 1.13 1.68 1.13.97 1.66 2.54 1.18 3.16.9.1-.7.38-1.18.69-1.45-2.43-.28-4.98-1.22-4.98-5.44 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.42.11-2.96 0 0 .92-.3 3.02 1.13a10.5 10.5 0 0 1 5.5 0c2.09-1.43 3.01-1.13 3.01-1.13.61 1.54.23 2.68.11 2.96.7.77 1.13 1.75 1.13 2.95 0 4.23-2.56 5.16-4.99 5.43.39.34.73 1.01.73 2.04v3.02c0 .3.2.64.76.53 4.36-1.46 7.5-5.57 7.5-10.42C23.25 5.49 18.27.5 12 .5z"/></svg>
+            </span>
           </a>
 
           <a class="social-square" href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">
-            <span class="icon-bg"><svg viewBox="0 0 24 24"><path d="M4.98 3.5C3.88 3.5 3 4.38 3 5.48c0 1.1.88 1.98 1.98 1.98h.02C6.07 7.46 7 6.58 7 5.48 7 4.38 6.07 3.5 4.98 3.5zM3.5 8.98h3v11.52h-3V8.98zM9.5 8.98h2.88v1.57h.04c.4-.76 1.37-1.57 2.82-1.57 3.01 0 3.57 1.98 3.57 4.55v6.97h-3V14.9c0-1.52-.03-3.47-2.12-3.47-2.12 0-2.44 1.65-2.44 3.36v6.18h-3V8.98z"/></svg></span>
+            <span class="icon-bg">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5C3.88 3.5 3 4.38 3 5.48c0 1.1.88 1.98 1.98 1.98h.02C6.07 7.46 7 6.58 7 5.48 7 4.38 6.07 3.5 4.98 3.5zM3.5 8.98h3v11.52h-3V8.98zM9.5 8.98h2.88v1.57h.04c.4-.76 1.37-1.57 2.82-1.57 3.01 0 3.57 1.98 3.57 4.55v6.97h-3V14.9c0-1.52-.03-3.47-2.12-3.47-2.12 0-2.44 1.65-2.44 3.36v6.18h-3V8.98z"/></svg>
+            </span>
           </a>
 
           <a class="social-square" href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener" title="Instagram" aria-label="Instagram">
-            <span class="icon-bg"><svg viewBox="0 0 24 24"><rect x="2.2" y="2.2" width="19.6" height="19.6" rx="5.2" ry="5.2" fill="none" /><circle cx="12" cy="12" r="3.7" /><circle cx="17.5" cy="6.2" r="0.95" /></svg></span>
+            <span class="icon-bg">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <rect x="2.2" y="2.2" width="19.6" height="19.6" rx="5.2" ry="5.2" fill="none" />
+                <circle cx="12" cy="12" r="3.7" />
+                <circle cx="17.5" cy="6.2" r="0.95" />
+              </svg>
+            </span>
           </a>
         </div>
 
@@ -398,21 +361,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     },{threshold:[0.5]});
     sections.forEach(s=>obs.observe(s));
   }
-  // navigation links (both main nav and mobile links) smooth scroll
-  document.querySelectorAll('a[data-target]').forEach(a=>{
-    a.addEventListener('click',e=>{
-      // ignore external links (they don't have data-target attr)
-      const target = a.getAttribute('data-target');
-      if(!target) return;
-      e.preventDefault();
-      smoothScrollToId(target);
-      // close mobile menu if open
-      if(mobileMenu && mobileMenu.classList.contains('show')) {
-        mobileMenu.classList.remove('show');
-        hamburger && hamburger.setAttribute('aria-expanded','false');
-      }
-    });
-  });
+  navLinks.forEach(a=>{ a.addEventListener('click',e=>{ e.preventDefault(); smoothScrollToId(a.getAttribute('data-target')); }); });
 
   /* MOBILE NAV: open/close (also toggles hamburger -> X) */
   if(hamburger && mobileMenu){
@@ -429,7 +378,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       }
     }
     hamburger.addEventListener('click',()=>toggleMobile());
-    // close when a mobile link is clicked (links wired above)
+    // close when a mobile link is clicked (and perform smooth scroll)
     document.querySelectorAll('#mobileMenu a').forEach(a=>{
       a.addEventListener('click',e=>{
         e.preventDefault();
@@ -446,11 +395,21 @@ document.addEventListener('DOMContentLoaded',()=>{
 
     // if viewport is resized to desktop while menu open, ensure it's closed
     window.addEventListener('resize', ()=>{
-      if(window.innerWidth > 820 && mobileMenu.classList.contains('show')){
+      if(window.innerWidth > 520 && mobileMenu.classList.contains('show')){
         toggleMobile(false);
       }
     });
   }
+
+  // Also wire header mobile-link (if any visible)
+  document.querySelectorAll('.mobile-link').forEach(a=>{
+    a.addEventListener('click', e=>{
+      e.preventDefault();
+      smoothScrollToId(a.getAttribute('data-target'));
+    });
+  });
+
+  /* Remove JS moving social icons for mobile - they remain in home section */
 });
 </script>
 </body>

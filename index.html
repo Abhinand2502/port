@@ -121,7 +121,7 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
 .neon-frame { display: inline-block; border-radius: 16px; padding: 3px; background: conic-gradient(from 0deg, #fff, #34e6ff, #ff59d0, #fff); box-shadow: none; -webkit-mask: none; mask: none; overflow: hidden; }
 .neon-image { display: block; width: 100%; height: 440px; object-fit: cover; border-radius: 13px; filter: none; box-shadow: none; }
 
-/* Social row (desktop & mobile inside home section) */
+/* Social row default (desktop inside container) */
 .social-row {
   position: absolute;
   left: calc(50% - 27px);
@@ -131,6 +131,21 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   display: flex;
   gap: 20px;
   pointer-events: auto;
+}
+
+/* class applied when moved out to body for fixed mobile */
+.social-row.fixed-mobile {
+  position: fixed !important;
+  top: calc(var(--header-h) + 8px) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: min(96%, 420px);
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 105 !important;
+  background: transparent;
+  padding: 6px 8px;
+  box-shadow: none;
 }
 
 /* Social tile */
@@ -159,9 +174,20 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
 
 /* Mobile baseline tweaks */
 @media (max-width: 520px) {
-  .social-square { width: 68px; height: 68px; }
-  .social-square .icon-bg { border-radius:12px; }
-  .social-square svg { width:28px; height:28px; }
+  .social-row { gap: 12px; top: 20px; } /* fallback if not moved */
+  .social-square { width: 54px; height: 54px; padding: 2px; border-radius: 12px; }
+  .social-square .icon-bg { border-radius: 9px; }
+  .social-square svg { width: 24px; height: 24px; }
+
+  /* when JS moves social-row just above the image we make it flow normally */
+  .social-row.mobile-above{
+    position: relative !important;
+    left: auto !important;
+    transform: none !important;
+    top: auto !important;
+    margin-bottom: 12px;
+    justify-content: center;
+  }
 }
 
 /* Dark / Light icon visibility */
@@ -171,7 +197,7 @@ html[data-theme="light"] .icon-moon { display:none; }
 html[data-theme="light"] .icon-sun { display:inline-block; font-size:1.5rem; }
 
 /* Tablet / responsive */
-@media (max-width:1100px){.hero-inner{gap:28px}.right{flex:0 0 420px}.neon-image{height:360px;}}
+@media (max-width:1100px){.hero-inner{gap:28px}.right{flex:0 0 420px}.neon-image{height:360px;} }
 @media (max-width:860px){.hero-inner{flex-direction:column-reverse;align-items:center}.left{text-align:center} h1{font-size:48px;} nav{display:none;}}
 
 /* ========== MOBILE-SPECIFIC LAYOUT (ONLY below 520px) ========== */
@@ -182,6 +208,7 @@ html[data-theme="light"] .icon-sun { display:inline-block; font-size:1.5rem; }
   .header-inner{padding:0 14px;align-items:center;}
   nav{display:none !important;}
 
+  /* mobile menu overlay: hidden by default, shown only on mobile and when .show present */
   .mobile-menu{
     position:fixed;
     inset:var(--header-h) 12px auto 12px;
@@ -198,8 +225,18 @@ html[data-theme="light"] .icon-sun { display:inline-block; font-size:1.5rem; }
   .mobile-menu a{padding:12px;border-radius:10px;text-decoration:none;color:var(--text);font-weight:700;border:1px solid rgba(255,255,255,0.03);background:transparent;}
   .mobile-menu a:hover{background:rgba(255,255,255,0.02);color:var(--accent);}
 
-  /* make neon frame sit below header on mobile */
-  .neon-frame { width: 100%; max-width: 420px; padding: 3px; margin-top: 20px; }
+  /* SOCIAL ROW: fallback style — but JS will move it to just above the neon-frame on mobile */
+  .social-row{
+    /* kept intentionally lightweight here — JS handles the placement */
+  }
+
+  /* enlarge icons on mobile and spacing */
+  .social-square { width: 68px; height: 68px; }
+  .social-square .icon-bg { border-radius:12px; }
+  .social-square svg { width:28px; height:28px; }
+
+  /* make neon frame sit below fixed social row */
+  .neon-frame { width: 100%; max-width: 420px; padding: 3px; margin-top: 84px; }
 
   /* fluid image */
   .right{flex-basis:100%;display:flex;flex-direction:column;align-items:center;order:1;width:100%;}
@@ -217,6 +254,7 @@ html[data-theme="light"] .icon-sun { display:inline-block; font-size:1.5rem; }
   .btn.primary{padding:10px 14px;}
   .btn.ghost{padding:10px 14px;}
 
+  /* reduce overall section padding on small phones to avoid overflow */
   section{padding:86px 10px;}
 }
 
@@ -278,7 +316,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 
     <div class="right">
       <div class="neon-frame">
-        <!-- Social row (kept in home section for both desktop & mobile) -->
+        <!-- Social row (desktop: inside frame). On mobile JS will move it to just above the neon-frame (not fixed). -->
         <div class="social-row" role="navigation" aria-label="Social links">
           <a class="social-square" href="mailto:abhinandbabu2502@gmail.com" title="Email" aria-label="Email">
             <span class="icon-bg">
@@ -327,6 +365,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   const ctaContact=document.getElementById('ctaContact');
   const hamburger=document.getElementById('hamburger');
   const mobileMenu=document.getElementById('mobileMenu');
+  const socialRow=document.querySelector('.social-row');
+  const neonFrame=document.querySelector('.neon-frame');
 
   /* THEME */
   function setTheme(theme){
@@ -409,7 +449,47 @@ document.addEventListener('DOMContentLoaded',()=>{
     });
   });
 
-  /* Remove JS moving social icons for mobile - they remain in home section */
+  /* RESPONSIVE: move social-row to sit just ABOVE the neon-frame on small screens (mobile),
+     but NOT fixed in the viewport. On desktop it is restored back to its original place.
+  */
+  let placeholder = null;
+  function updateSocialPlacement(){
+    if(!socialRow || !neonFrame) return;
+
+    if(window.innerWidth <= 520){
+      // mobile: move socialRow just before neonFrame (so it appears above image),
+      // and switch to flow-friendly class 'mobile-above'
+      if(!socialRow.classList.contains('mobile-above')){
+        placeholder = document.createComment('social-placeholder');
+        socialRow.parentNode.insertBefore(placeholder, socialRow);
+        // insert socialRow before neonFrame element (so it's above the image)
+        neonFrame.parentNode.insertBefore(socialRow, neonFrame);
+        socialRow.classList.remove('fixed-mobile');
+        socialRow.classList.add('mobile-above');
+      }
+    } else {
+      // desktop: restore socialRow to original location (where placeholder is)
+      if(placeholder && socialRow.classList.contains('mobile-above')){
+        try {
+          placeholder.parentNode.insertBefore(socialRow, placeholder);
+          placeholder.remove();
+        } catch (e) {
+          // fallback: if placeholder missing or parent removed, do nothing
+        } finally {
+          placeholder = null;
+          socialRow.classList.remove('mobile-above','fixed-mobile');
+        }
+      }
+    }
+  }
+
+  // initial placement and on resize/orientationchange
+  updateSocialPlacement();
+  window.addEventListener('resize', updateSocialPlacement);
+  window.addEventListener('orientationchange', updateSocialPlacement);
+
+  /* small enhancement: if mobile menu opens, ensure social icons remain visible and not obstructing (you can tweak if desired) */
+  // (No-op for now — kept for future tweaks)
 });
 </script>
 </body>

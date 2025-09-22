@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Abhinand — Neon Portfolio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg-dark: linear-gradient(180deg,#070707,#0d0d0d);
+  --bg-light: linear-gradient(180deg,#ffffff,#f4f6f9);
+  --text-dark: #e6eefc;
+  --text-light: #0b1220;
+  --muted-dark: #9aa6bc;
+  --muted-light: #6b7280;
+  --accent: #1f8eff;
+  --frame-radius:26px;
+  --frame-padding:18px;
+  --container:1180px;
+  --header-blur:6px;
+  --header-h:72px;
+}
+
+/* Base */
+*{box-sizing:border-box;}
+body,html{margin:0;padding:0;height:100%;font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+body{background:var(--bg);color:var(--text);}
+
+/* Header */
+header{
+  position:fixed;top:0;left:0;right:0;height:var(--header-h);z-index:100;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(var(--header-blur));
+  transition:background .18s ease, box-shadow .18s ease;
+}
+html[data-theme="dark"] header{background: rgba(255,255,255,0.04);}
+html[data-theme="light"] header{background: rgba(0,0,0,0.06);}
+.header-inner{
+  width:100%;max-width:var(--container);padding:0 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+}
+
+/* Mobile hamburger (hidden on desktop) - simple 3 bars that morph to X */
+.hamburger{
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:10px;
+  border-radius:10px;
+  background:transparent;
+  border:0;
+  cursor:pointer;
+  color:var(--text);
+}
+/* bars: visible as 3 horizontal lines by default */
+.hamburger .bar{
+  width:26px;
+  height:3px;
+  background:currentColor;
+  margin:4px 0;
+  display:block;
+  border-radius:2px;
+  transition: transform .22s ease, opacity .18s ease;
+}
+
+/* when hamburger has .open it becomes an X */
+.hamburger.open .bar:nth-child(1){
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger.open .bar:nth-child(2){
+  opacity:0;
+  transform: scaleX(0);
+}
+.hamburger.open .bar:nth-child(3){
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Navigation */
+nav{display:flex;gap:18px;align-items:center;}
+nav a{
+  position:relative;color:var(--muted-dark);text-decoration:none;
+  padding:8px;border-radius:8px;font-weight:700;transition:color .18s;
+}
+nav a.active, nav a:hover{color:var(--accent);}
+nav a::after{
+  content:"";position:absolute;left:12px;right:12px;bottom:6px;height:2px;background:transparent;transform:scaleX(0);transform-origin:left;transition:transform .22s ease,background .22s ease;border-radius:2px;
+}
+nav a.active::after{background:var(--accent);transform:scaleX(1);}
+
+/* Theme button */
+.theme-btn{
+  display:inline-flex;gap:12px;align-items:center;padding:8px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);
+  background:transparent;color:var(--text);cursor:pointer;font-weight:700;font-size:14px;min-width:56px;justify-content:center;
+}
+.theme-btn .icon{display:none;width:34px;height:34px;}
+html[data-theme="dark"] .theme-btn .icon-moon{display:block;}
+html[data-theme="light"] .theme-btn .icon-sun{display:block;}
+.theme-btn:active{transform:translateY(1px);}
+.theme-btn:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(0,0,0,0.06);}
+
+/* Hero */
+main{height:100vh;scroll-snap-type:y mandatory;scroll-behavior:smooth;overflow-y:auto;}
+section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 20px;scroll-snap-align:start;}
+.hero-inner{display:flex;gap:56px;align-items:center;justify-content:space-between;max-width:var(--container);width:100%;}
+/* left column */
+.left{flex:1;max-width:640px;}
+.eyebrow{color:var(--accent);font-size:13px;letter-spacing:0.22em;text-transform:uppercase;font-weight:800;margin-bottom:18px;}
+h1{font-family:'Playfair Display';font-size:68px;line-height:0.9;margin:0 0 10px;font-weight:900;}
+.underline{width:420px;height:4px;background:linear-gradient(90deg,var(--accent),#1fb3ff);border-radius:2px;margin:16px 0 24px;}
+p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
+.cta{display:flex;gap:14px;margin-top:32px;}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:10px;font-weight:800;text-decoration:none;cursor:pointer;border:2px solid rgba(255,255,255,0.06);transition:transform .12s,box-shadow .12s,opacity .12s;}
+.btn.primary{background: linear-gradient(90deg,var(--accent), #1fb3ff); color:#fff;text-transform:uppercase;box-shadow:0 18px 48px rgba(29,110,255,0.14);}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid rgba(253,252,252,0.06);}
+.btn:hover{transform:translateY(-3px);opacity:0.98;}
+
+/* Neon frame image (no shine) */
+.right { flex: 0 0 560px; position: relative; }
+.neon-frame { display: inline-block; border-radius: 16px; padding: 3px; background: conic-gradient(from 0deg, #fff, #34e6ff, #ff59d0, #fff); box-shadow: none; -webkit-mask: none; mask: none; overflow: hidden; }
+.neon-image { display: block; width: 100%; height: 440px; object-fit: cover; border-radius: 13px; filter: none; box-shadow: none; }
+
+/* Social row default (desktop inside container) */
+.social-row {
+  position: absolute;
+  left: calc(50% - 27px);
+  transform: translateX(-50%);
+  top: 28px;
+  z-index: 6;
+  display: flex;
+  gap: 20px;
+  pointer-events: auto;
+}
+
+/* Social tile */
+.social-square {
+  display: inline-grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  padding: 3px;
+  background: linear-gradient(135deg, #1fb3ff, #ffffff);
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+  overflow: hidden;
+}
+.social-square .icon-bg { width: 100%; height: 100%; border-radius: 11px; display: grid; place-items: center; background: var(--bg); color: var(--text); transition: color 200ms ease; }
+.social-square svg { width: 28px;height: 28px;fill:currentColor;stroke:currentColor;stroke-width:1.6;display:block;pointer-events:none; }
+.social-square:hover { transform: translateY(-6px) scale(1.06); box-shadow: 0 6px 18px rgba(31, 179, 255, 0.15); }
+.social-square:hover .icon-bg { color: #1fb3ff; }
+.social-square:active .icon-bg { color: #0d8adf; transform: scale(0.96); }
+.social-square:focus { outline: none; box-shadow: 0 0 0 3px rgba(31, 179, 255, 0.3); }
+
+/* HIDE mobile menu by default (prevents unwanted links under header on desktop) */
+.mobile-menu { display: none; }
+
+/* Mobile baseline tweaks */
+@media (max-width: 520px) {
+  .social-row { gap: 12px; top: 20px; }
+  .social-square { width: 54px; height: 54px; padding: 2px; border-radius: 12px; }
+  .social-square .icon-bg { border-radius: 9px; }
+  .social-square svg { width: 24px; height: 24px; }
+}
+
+/* Dark / Light icon visibility */
+html[data-theme="dark"] .icon-moon { display:inline-block; font-size:1.5rem; }
+html[data-theme="dark"] .icon-sun { display:none; }
+html[data-theme="light"] .icon-moon { display:none; }
+html[data-theme="light"] .icon-sun { display:inline-block; font-size:1.5rem; }
+
+/* Tablet / responsive */
+@media (max-width:1100px){.hero-inner{gap:28px}.right{flex:0 0 420px}.neon-image{height:360px;}}
+@media (max-width:860px){.hero-inner{flex-direction:column-reverse;align-items:center}.left{text-align:center} h1{font-size:48px;} nav{display:none;}}
+
+/* ========== MOBILE-SPECIFIC LAYOUT (ONLY below 520px) ========== */
+@media (max-width:520px){
+  /* show hamburger at left, theme at right */
+  .hamburger{display:inline-flex;order:0;}
+  .theme-btn{order:2;margin-left:auto;}
+  .header-inner{padding:0 14px;align-items:center;}
+  nav{display:none !important;}
+
+  /* mobile menu overlay: hidden by default, shown only on mobile and when .show present */
+  .mobile-menu{
+    position:fixed;
+    inset:var(--header-h) 12px auto 12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
+    backdrop-filter: blur(8px);
+    border-radius:12px;
+    padding:12px;
+    display:none;            /* mobile-only override - default remains none on desktop */
+    flex-direction:column;
+    gap:10px;
+    z-index:110;
+  }
+  .mobile-menu.show{display:flex;}
+  .mobile-menu a{padding:12px;border-radius:10px;text-decoration:none;color:var(--text);font-weight:700;border:1px solid rgba(255,255,255,0.03);background:transparent;}
+  .mobile-menu a:hover{background:rgba(255,255,255,0.02);color:var(--accent);}
+
+  /* SOCIAL ROW: placed OUTSIDE container — fixed and centered under header */
+  .social-row{
+    position:fixed !important;
+    top: calc(var(--header-h) + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(96%, 420px);
+    z-index:105;
+    justify-content:space-between;
+    gap: 16px;
+    background: transparent;
+    padding: 6px 8px;
+    pointer-events: auto;
+  }
+
+  /* enlarge icons on mobile and spacing */
+  .social-square { width: 68px; height: 68px; }
+  .social-square .icon-bg { border-radius:12px; }
+  .social-square svg { width:28px; height:28px; }
+
+  /* make neon frame sit below fixed social row */
+  .neon-frame { width: 100%; max-width: 420px; padding: 3px; margin-top: 84px; }
+
+  /* fluid image */
+  .right{flex-basis:100%;display:flex;flex-direction:column;align-items:center;order:1;width:100%;}
+  .neon-image{height:auto;max-width:100%;border-radius:11px;object-fit:cover;}
+
+  /* center text & buttons, reduce sizes to fit */
+  .hero-inner{flex-direction:column;align-items:center;gap:12px;padding-top:12px;}
+  .left{order:2;text-align:center;width:100%;max-width:620px;padding:6px 14px;}
+  .eyebrow{font-size:11px;margin-bottom:10px;}
+  h1{font-size:34px;line-height:1.02;margin:0 0 6px;}
+  .underline{width:200px;margin:8px auto 12px;height:4px;}
+  p.lead{padding:0 6px;color:var(--muted);max-width:100%;}
+  .cta{justify-content:center;flex-wrap:wrap;padding-bottom:16px;gap:10px;}
+  .btn{min-width:130px;text-align:center;font-size:14px;padding:10px 14px;}
+  .btn.primary{padding:10px 14px;}
+  .btn.ghost{padding:10px 14px;}
+
+  /* reduce overall section padding on small phones to avoid overflow */
+  section{padding:86px 10px;}
+}
+
+/* Theme variables */
+html[data-theme="dark"]{--bg:var(--bg-dark);--text:var(--text-dark);--muted:var(--muted-dark);}
+html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:var(--muted-light);}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="header-inner">
+    <!-- Hamburger (mobile only) -->
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+      <span class="bar" aria-hidden="true"></span>
+      <span class="bar" aria-hidden="true"></span>
+      <span class="bar" aria-hidden="true"></span>
+    </button>
+
+    <nav>
+      <a href="#home" data-target="home" class="nav-link active">HOME</a>
+      <a href="#about" data-target="about" class="nav-link">ABOUT</a>
+      <a href="#projects" data-target="projects" class="nav-link">PROJECTS</a>
+      <a href="#contact" data-target="contact" class="nav-link">CONTACT</a>
+    </nav>
+
+    <!-- Font Awesome (kept) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Modern theme toggle -->
+    <button id="themeBtn" class="theme-btn" aria-label="Toggle theme">
+      <span class="toggle-bg" aria-hidden="true">
+        <i class="fa-solid fa-moon icon-moon"></i>
+        <i class="fa-solid fa-sun icon-sun"></i>
+      </span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile menu (hidden on desktop by default) -->
+<div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+  <a href="#home" data-target="home" class="mobile-link">HOME</a>
+  <a href="#about" data-target="about" class="mobile-link">ABOUT</a>
+  <a href="#projects" data-target="projects" class="mobile-link">PROJECTS</a>
+  <a href="#contact" data-target="contact" class="mobile-link">CONTACT</a>
+</div>
+
+<main>
+<section id="home">
+  <div class="hero-inner">
+    <div class="left">
+      <div class="eyebrow">HELLO</div>
+      <h1>I'm Abhinand<br>Babu</h1>
+      <div class="underline"></div>
+      <p class="lead">B.Tech Computer Science Engineer with a strong foundation in software development and web technologies.</p>
+      <div class="cta">
+        <a class="btn primary" href="#about">MORE ABOUT ME</a>
+        <a class="btn ghost" href="#contact" id="ctaContact">GET IN TOUCH</a>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="neon-frame">
+        <!-- Social row: on mobile it's fixed outside container; desktop it's inside the frame -->
+        <div class="social-row" role="navigation" aria-label="Social links">
+  <a class="social-square" href="mailto:abhinandbabu2502@gmail.com" title="Email" aria-label="Email">
+    <span class="icon-bg">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2l-8 4.8-8-4.8V6l8 4.8L20 6v2.2z"/></svg>
+    </span>
+  </a>
+
+  <a class="social-square" href="https://github.com/Abhinand2502" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+    <span class="icon-bg">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0.5C5.73.5.75 5.49.75 11.76c0 4.85 3.14 8.96 7.5 10.42.55.1.75-.24.75-.53v-1.86c-3.05.66-3.7-1.4-3.7-1.4-.5-1.26-1.22-1.6-1.22-1.6-.99-.68.08-.67.08-.67 1.1.08 1.68 1.13 1.68 1.13.97 1.66 2.54 1.18 3.16.9.1-.7.38-1.18.69-1.45-2.43-.28-4.98-1.22-4.98-5.44 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.42.11-2.96 0 0 .92-.3 3.02 1.13a10.5 10.5 0 0 1 5.5 0c2.09-1.43 3.01-1.13 3.01-1.13.61 1.54.23 2.68.11 2.96.7.77 1.13 1.75 1.13 2.95 0 4.23-2.56 5.16-4.99 5.43.39.34.73 1.01.73 2.04v3.02c0 .3.2.64.76.53 4.36-1.46 7.5-5.57 7.5-10.42C23.25 5.49 18.27.5 12 .5z"/></svg>
+    </span>
+  </a>
+
+  <a class="social-square" href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">
+    <span class="icon-bg">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5C3.88 3.5 3 4.38 3 5.48c0 1.1.88 1.98 1.98 1.98h.02C6.07 7.46 7 6.58 7 5.48 7 4.38 6.07 3.5 4.98 3.5zM3.5 8.98h3v11.52h-3V8.98zM9.5 8.98h2.88v1.57h.04c.4-.76 1.37-1.57 2.82-1.57 3.01 0 3.57 1.98 3.57 4.55v6.97h-3V14.9c0-1.52-.03-3.47-2.12-3.47-2.12 0-2.44 1.65-2.44 3.36v6.18h-3V8.98z"/></svg>
+    </span>
+  </a>
+
+  <a class="social-square" href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener" title="Instagram" aria-label="Instagram">
+  <span class="icon-bg">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <rect x="2.2" y="2.2" width="19.6" height="19.6" rx="5.2" ry="5.2" fill="none" />
+      <circle cx="12" cy="12" r="3.7" />
+      <circle cx="17.5" cy="6.2" r="0.95" />
+    </svg>
+  </span>
+</a>
+
+</div>
+
+        <img class="neon-image" src="assets/bg.jpg" alt="Portrait">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about"><div style="max-width:var(--container);padding:60px 20px"><h2 style="font-family:Playfair Display;color:var(--text)">About</h2><p style="color:var(--muted-dark)">About content here.</p></div></section>
+<section id="projects"><div style="max-width:var(--container);padding:60px 20px"><h2 style="font-family:Playfair Display;color:var(--text)">Projects</h2></div></section>
+<section id="contact"><div style="max-width:var(--container);padding:60px 20px"><h2 style="font-family:Playfair Display;color:var(--text)">Contact</h2><p style="color:var(--muted-dark)">Contact form / details here.</p></div></section>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  const htmlEl=document.documentElement;
+  const themeBtn=document.getElementById('themeBtn');
+  const ctaContact=document.getElementById('ctaContact');
+  const hamburger=document.getElementById('hamburger');
+  const mobileMenu=document.getElementById('mobileMenu');
+
+  function setTheme(theme){
+    htmlEl.setAttribute('data-theme',theme);
+    localStorage.setItem('site-theme',theme);
+    themeBtn.setAttribute('aria-pressed',String(theme==='light'));
+  }
+
+  const stored=localStorage.getItem('site-theme');
+  if(stored==='light'||stored==='dark'){ setTheme(stored); }
+  else { setTheme(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'); }
+
+  themeBtn.addEventListener('click',()=>{ setTheme(htmlEl.getAttribute('data-theme')==='light'?'dark':'light'); });
+
+  function smoothScrollToId(id){
+    const el=document.getElementById(id); if(!el) return;
+    el.scrollIntoView({behavior:'smooth',block:'start'});
+    el.setAttribute('tabindex','-1'); el.focus({preventScroll:true});
+  }
+
+  if(ctaContact) ctaContact.addEventListener('click',e=>{e.preventDefault();smoothScrollToId('contact');});
+
+  const navLinks=document.querySelectorAll('nav a');
+  const sections=document.querySelectorAll('section');
+  if('IntersectionObserver' in window){
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting && entry.intersectionRatio>0.5){
+          navLinks.forEach(a=>a.classList.remove('active'));
+          const link=document.querySelector(`nav a[data-target="${entry.target.id}"]`);
+          if(link) link.classList.add('active');
+        }
+      });
+    },{threshold:[0.5]});
+    sections.forEach(s=>obs.observe(s));
+  }
+
+  navLinks.forEach(a=>{ a.addEventListener('click',e=>{ e.preventDefault(); smoothScrollToId(a.getAttribute('data-target')); }); });
+
+  // Mobile nav: open/close (also toggles hamburger -> X)
+  if(hamburger && mobileMenu){
+    function toggleMobile(show){
+      const willShow = (typeof show === 'boolean') ? show : !mobileMenu.classList.contains('show');
+      if(willShow){
+        mobileMenu.classList.add('show');
+        mobileMenu.setAttribute('aria-hidden','false');
+        hamburger.classList.add('open');
+        hamburger.setAttribute('aria-expanded','true');
+      } else {
+        mobileMenu.classList.remove('show');
+        mobileMenu.setAttribute('aria-hidden','true');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded','false');
+      }
+    }
+    hamburger.addEventListener('click',()=>toggleMobile());
+    // close when a mobile link is clicked (and perform smooth scroll)
+    document.querySelectorAll('#mobileMenu a').forEach(a=>{
+      a.addEventListener('click',e=>{
+        e.preventDefault();
+        const target=a.getAttribute('data-target');
+        toggleMobile(false);
+        smoothScrollToId(target);
+      });
+    });
+
+    // close on escape
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape' && mobileMenu.classList.contains('show')) toggleMobile(false);
+    });
+
+    // if viewport is resized to desktop while menu open, ensure it's closed
+    window.addEventListener('resize', ()=>{
+      if(window.innerWidth > 520 && mobileMenu.classList.contains('show')){
+        toggleMobile(false);
+      }
+    });
+  }
+
+  // Also wire header mobile-link (if any visible)
+  document.querySelectorAll('.mobile-link').forEach(a=>{
+    a.addEventListener('click', e=>{
+      e.preventDefault();
+      smoothScrollToId(a.getAttribute('data-target'));
+    });
+  });
+});
+</script>
+</body>
+</html>

@@ -189,14 +189,19 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   .social-square .icon-bg { border-radius: 9px; }
   .social-square svg { width: 24px; height: 24px; }
 
- .social-row.mobile-above {
+.social-row.mobile-above {
   position: relative !important;
   left: auto !important;
   transform: none !important;
   top: auto !important;
-  margin-bottom: 16px;  /* space below the row */
-  justify-content: center;
-  gap: 24px; /* increase gap between icons */
+  margin-bottom: 16px; /* space below row */
+  display: flex;
+  justify-content: space-around; /* space evenly across width */
+  width: 100%; /* match neon-image width */
+  max-width: 420px; /* same as neon-frame max width */
+  gap: 24px; /* spacing between icons */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 }

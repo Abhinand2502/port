@@ -246,7 +246,20 @@ html[data-theme="light"] .icon-sun { display:inline-block; font-size:1.5rem; }
   .social-square svg { width:28px; height:28px; }
 
   /* make neon frame sit below fixed social row */
-  .neon-frame { width: 100%; max-width: 420px; padding: 3px; margin-top: 84px; }
+  /* Make image move closer to top on mobile */
+@media (max-width:520px){
+  .neon-frame {
+    width: 100%;
+    max-width: 420px;
+    padding: 3px;
+    margin-top: 0; /* remove extra top space */
+  }
+
+  .hero-inner {
+    padding-top: 0; /* move entire content up */
+  }
+}
+
 
   /* fluid image */
   .right{flex-basis:100%;display:flex;flex-direction:column;align-items:center;order:1;width:100%;}

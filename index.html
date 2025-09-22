@@ -174,7 +174,17 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
 
 /* Mobile baseline tweaks */
 @media (max-width: 520px) {
-  .social-row { gap: 12px; top: 20px; } /* fallback if not moved */
+ /* Mobile social row above image */
+.social-row.mobile-above {
+  position: relative !important;
+  left: auto !important;
+  transform: none !important;
+  top: auto !important;
+  margin-bottom: 16px; /* increase space below social row */
+  justify-content: center;
+  gap: 20px; /* more space between icons */
+}
+
   .social-square { width: 54px; height: 54px; padding: 2px; border-radius: 12px; }
   .social-square .icon-bg { border-radius: 9px; }
   .social-square svg { width: 24px; height: 24px; }

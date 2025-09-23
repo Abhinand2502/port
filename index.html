@@ -339,15 +339,22 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
   </div>
 </header>
 
-<!-- Floating section name for mobile -->
-<div id="sectionNameIndicator" style="
+<!-- Mobile menu (hidden on desktop by default) -->
+<div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+  <a href="#home" data-target="home" class="mobile-link">HOME</a>
+  <a href="#about" data-target="about" class="mobile-link">ABOUT</a>
+  <a href="#projects" data-target="works" class="mobile-link">PROJECTS</a>
+  <a href="#contact" data-target="contact" class="mobile-link">CONTACT</a>
+</div>
+<!-- Section name indicator -->
+<div id="mobileSectionIndicator" style="
   position: fixed;
   top: 50%;
   left: 8px;
   transform: translateY(-50%);
   font-weight: 900;
   font-size: 18px;
-  color: #2563eb; /* blue */
+  color: #2563eb;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -355,32 +362,41 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 "></div>
 
 <script>
-  const sections = document.querySelectorAll('section[id]');
-  const indicator = document.getElementById('sectionNameIndicator');
+  const mobileLinks = document.querySelectorAll('#mobileMenu .mobile-link');
+  const sections = Array.from(mobileLinks).map(link => document.querySelector(link.getAttribute('href')));
+  const indicator = document.getElementById('mobileSectionIndicator');
 
-  if (window.innerWidth <= 980) { // Only for mobile
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting) {
-          // Show section name
-          indicator.textContent = entry.target.getAttribute('id').toUpperCase();
-          indicator.style.opacity = '1';
-          indicator.style.transform = 'translateY(-50%) translateX(0)';
-          
-          // Hide after a short delay
-          setTimeout(() => {
-            indicator.style.opacity = '0';
-            indicator.style.transform = 'translateY(-50%) translateX(-10px)';
-          }, 1000); // visible for 1s
-        }
-      });
-    }, { threshold: 0.5 }); // section is half visible
+  function updateIndicator() {
+    if (window.innerWidth > 980) return; // Only mobile
 
-    sections.forEach(section => observer.observe(section));
+    let found = false;
+    const scrollPos = window.scrollY + window.innerHeight / 3;
+
+    sections.forEach(section => {
+      const top = section.offsetTop;
+      const bottom = top + section.offsetHeight;
+      if(scrollPos >= top && scrollPos < bottom){
+        indicator.textContent = section.id.toUpperCase();
+        indicator.style.opacity = '1';
+        indicator.style.transform = 'translateY(-50%) translateX(0)';
+        found = true;
+      }
+    });
+
+    if(!found){
+      indicator.style.opacity = '0';
+      indicator.style.transform = 'translateY(-50%) translateX(-10px)';
+    }
   }
+
+  window.addEventListener('scroll', updateIndicator);
+  window.addEventListener('resize', updateIndicator);
+  window.addEventListener('load', updateIndicator);
 </script>
 
 <main>
+
+
 <section id="home">
   <div class="hero-inner">
     <div class="left">

@@ -275,21 +275,17 @@ html[data-theme="light"] .icon-sun { display:inline-block; font-size:1.5rem; }
   .hero-inner{flex-direction:column;align-items:center;gap:12px;padding-top:12px;}
   .left{order:2;text-align:center;width:100%;max-width:620px;padding:6px 14px;}
   .eyebrow{font-size:11px;margin-bottom:10px;}
- @media (max-width:520px){
-  h1{
-    font-size:34px;
-    line-height:1.02;
-    margin:0 0 6px;
-    white-space: nowrap;  /* prevent wrapping */
-    overflow: hidden;     /* optional: hides overflow if too long */
-    text-overflow: ellipsis; /* optional: adds "..." if it overflows */
-  }
-}
-
+  h1{font-size:34px;line-height:1.02;margin:0 0 6px;}
   .underline{width:200px;margin:8px auto 12px;height:4px;}
   p.lead{padding:0 6px;color:var(--muted);max-width:100%;}
   .cta{justify-content:center;flex-wrap:wrap;padding-bottom:16px;gap:10px;}
-  .btn{min-width:130px;text-align:center;font-size:14px;padding:10px 14px;}
+  .btn {
+  min-width: 130px;
+  text-align: center;
+  font-size: 14px;
+  padding: 10px 14px;
+  margin-top: -0.2cm; /* moves button 0.2 cm up */
+}
   .btn.primary{padding:10px 14px;}
   .btn.ghost{padding:10px 14px;}
 

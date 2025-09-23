@@ -410,22 +410,49 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 <section id="about">
   <style>
     /* ABOUT — improved, scoped, updated for bars + real logos */
-    #about { display:block; }
+   #about {
+  margin-top: 1 !important;
+  padding-top: 1 !important;
+}
     .about-inner { --about-muted: rgba(11,11,11,0.56); }
     html[data-theme="dark"] .about-inner { --about-muted: rgba(255,255,255,0.72); }
 
-   .about-inner {
+.about-inner {
   min-height: auto;
-  padding-top: 4px;   /* minimal gap under header */
+  transform: translateY(-40px);  /* moves section up */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
     .about-container { width:1350%; max-width:1350px; padding:24px; display:grid; grid-template-columns:420px 1fr; gap:28px; align-items:stretch; }
+/* Gradient border for all .themed-card */
+.themed-card {
+  position: relative;       /* ensure pseudo-element positions correctly */
+  z-index: 0;               /* keep content above border */
+  border: none;             /* remove existing solid border */
+}
 
-    .themed-card { border-radius:18px; padding:20px; transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease; background: #fff; border: 2px solid #0b0b0b; color: var(--text); box-shadow: 0 8px 28px rgba(16,24,40,0.06); }
-    html[data-theme="dark"] .themed-card { background: #0b0b0b; border: 2px solid #ffffff; color: var(--text); box-shadow: 0 12px 36px rgba(0,0,0,0.6); }
+.themed-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;                  /* cover entire card */
+  border-radius: 18px;       /* match card rounding */
+  padding: 2px;              /* thickness of border */
+  background: linear-gradient(90deg, #2563eb, #ffffff, #ff66b2); /* blue → white → pink */
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;   /* keep inner content visible */
+  z-index: -1;               /* behind the content */
+}
+
+/* Optional: keep inner content same padding/background */
+.themed-card > * {
+  position: relative;
+  z-index: 1;
+}
 
     .profile-wrap { display:flex; flex-direction:column; gap:18px; align-items:center; justify-content:flex-start; position:relative; overflow:visible; }
     @media (min-width:980px) { .profile-wrap { min-height:520px; padding:28px; } }

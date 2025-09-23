@@ -409,8 +409,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 <section id="about"><div style="max-width:var(--container);padding:60px 20px"><h2 style="font-family:Playfair Display;color:var(--text)">About</h2><p style="color:var(--muted-dark)">About content here.</p></div></section>
 
 
-
-<!-- ===== WORKS: mobile-optimized + improved search theme (paste to replace existing #works section) ===== -->
+<!-- ===== WORKS: mobile-optimized + updated "inverse" search + spacing fixes ===== -->
 <section id="works" aria-labelledby="worksTitle">
   <style>
     :root{
@@ -422,39 +421,55 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       --card-radius:12px;
       --thumb-interval: 1800ms;
       --card-bg: #ffffff; /* card / small UI background */
-      --search-bg: #f6f9ff;
-      --search-border: rgba(2,6,23,0.06);
+
+      /* inverse search theme vars:
+         - LIGHT SITE (default): search bar is black, text white
+         - DARK SITE (body.dark etc): search bar is white, text black
+      */
+      --search-bg-light: #0b0b0b;
+      --search-text-light: #ffffff;
+      --search-border-light: rgba(255,255,255,0.06);
+
+      --search-bg-dark: #ffffff;
+      --search-text-dark: #111111;
+      --search-border-dark: rgba(0,0,0,0.06);
+
+      --search-radius: 14px;
       --search-focus-shadow: 0 10px 30px rgba(42,124,241,0.08);
     }
 
-    /* container */
-    #works { padding-top: calc(var(--header-h) + 10px); padding-bottom: 28px; background: transparent; position: relative; z-index: 1; }
+    /* container & spacing */
+    #works { padding-top: calc(var(--header-h) + 10px); padding-bottom: 48px; background: transparent; position: relative; z-index: 1; }
+    /* extra bottom padding ensures Show more won't collide with the next section */
     #works > .section-inner { height:auto !important; min-height:0 !important; display:block !important; padding-top:0 !important; }
-    #works .box { width:100%; max-width:1200px; margin:0 auto; padding:22px; box-sizing:border-box; }
+    #works .box { width:100%; max-width:1200px; margin:0 auto; padding:22px; box-sizing:border-box; padding-bottom:32px; }
 
-    /* SEARCH - modern theme (applies to desktop & mobile) */
+    /* SEARCH - inverse theme */
     .search-wrap { margin: 8px 0 18px; display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
     .search-left { display:flex; gap:10px; align-items:center; flex:1; min-width:220px; position:relative; }
+
+    /* default = LIGHT SITE: black bg, white text */
     .search-input {
       flex:1;
       padding:12px 14px 12px 44px;
-      border-radius:12px;
-      border:1px solid var(--search-border);
+      border-radius:var(--search-radius);
+      border:1px solid var(--search-border-light);
       font-size:15px;
       box-sizing:border-box;
       outline:none;
-      background: var(--search-bg);
-      color: var(--text);
+      background: var(--search-bg-light);
+      color: var(--search-text-light);
       box-shadow: 0 6px 18px rgba(38,57,90,0.03);
       transition: box-shadow .14s ease, transform .09s ease, border-color .12s ease;
-      position:relative;
     }
-    .search-input::placeholder { color: var(--muted); opacity:0.9; }
+    .search-input::placeholder { color: rgba(255,255,255,0.65); }
+
     .search-input:focus { box-shadow: var(--search-focus-shadow); transform: translateY(-1px); border-color: var(--primary); }
-    .search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); pointer-events:none; opacity:.9; font-weight:700; color:var(--muted); font-size:16px; }
+
+    .search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); pointer-events:none; opacity:.95; font-weight:700; color:var(--muted); font-size:16px; }
     .search-actions { display:flex; gap:8px; align-items:center; }
 
-    /* Clear button now styled as a subtle pill primary action */
+    /* Clear button */
     .search-clear {
       padding:8px 12px;
       border-radius:999px;
@@ -466,8 +481,6 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       color:var(--text);
       transition: background .12s ease, color .12s ease, transform .08s ease;
     }
-    .search-clear:hover { transform: translateY(-1px); }
-    /* primary clear variant on hover / active focus */
     .search-clear.primary {
       background: var(--primary);
       color: #fff;
@@ -475,12 +488,19 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       box-shadow: 0 8px 22px rgba(42,124,241,0.12);
     }
 
-    /* Dark mode overrides for search */
+    /* DARK SITE: invert search to white bg, black text (applies when you add body.dark or similar) */
     body.dark .search-input,
     .dark-mode .search-input,
     [data-theme="dark"] .search-input {
-      background: rgba(255,255,255,0.03);
-      color: #111; /* you requested black text in both modes */
+      background: var(--search-bg-dark) !important;
+      color: var(--search-text-dark) !important;
+      border-color: var(--search-border-dark) !important;
+    }
+    body.dark .search-input::placeholder,
+    .dark-mode .search-input::placeholder,
+    [data-theme="dark"] .search-input::placeholder {
+      color: rgba(0,0,0,0.45) !important;
+      opacity:1 !important;
     }
 
     .result-count { font-weight:700; color:var(--text); font-size:13px; white-space:nowrap; }
@@ -488,105 +508,38 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     /* highlight for matched text */
     .hl { background: rgba(42,124,241,0.18); padding:0 3px; border-radius:3px; color:var(--text); font-weight:800; }
 
-    /* Grid: mobile 1, tablet/desktop 3 columns */
+    /* layout */
     .folio-grid { display:grid; gap:18px; grid-template-columns: 1fr; align-items:stretch; }
     @media (min-width:760px) { .folio-grid { grid-template-columns: repeat(3, 1fr); gap:20px; } }
 
-    /* show first 6 items by default */
     .folio-grid .folio-item { display:block; }
-    .folio-grid .folio-item:nth-child(n+7) { display:none; }  /* <-- show only first 6 */
+    .folio-grid .folio-item:nth-child(n+7) { display:none; }
     .folio-grid.expanded .folio-item { display:block; }
 
-    /* Rectangle card */
     .folio-item { display:block; overflow:visible; border-radius:var(--card-radius); position:relative; border:1px solid var(--glass-strong); transition: transform .18s ease, box-shadow .18s ease; cursor:pointer; background:var(--card-bg); padding:0; }
     .folio-item:focus, .folio-item:hover { transform: translateY(-6px); box-shadow: 0 30px 80px rgba(16,24,40,0.10); outline:none; }
 
-    /* thumb-wrap: rectangle 16:9 - image fills card area */
     .thumb-wrap { width:100%; aspect-ratio: 16/9; position:relative; overflow:hidden; border-radius:var(--card-radius) var(--card-radius) 8px 8px; background:#000; display:block; min-height: 220px; }
-    .thumb-wrap img {
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      object-position:center;
-      opacity:0;
-      transform: scale(1.03) translateZ(0);
-      transition: opacity .45s ease, transform .6s cubic-bezier(.2,.9,.2,1);
-      backface-visibility:hidden;
-      will-change: opacity, transform;
-    }
+    .thumb-wrap img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; opacity:0; transform: scale(1.03) translateZ(0); transition: opacity .45s ease, transform .6s cubic-bezier(.2,.9,.2,1); backface-visibility:hidden; will-change: opacity, transform; }
     .thumb-wrap img.active { opacity:1; transform: scale(1); z-index:1; }
 
-    /* caption overlay: title + view inside the image area (dark overlay) */
     .folio-caption { position:absolute; left:14px; bottom:14px; right:14px; padding:10px 14px; border-radius:12px; background: rgba(0,0,0,0.56); color:#fff; font-weight:900; font-size:15px; display:flex; gap:12px; align-items:center; backdrop-filter: blur(6px); z-index: 10; }
     .folio-caption .title { font-weight:900; letter-spacing:0.2px; color:#fff; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:15px; }
-    /* view control */
-    .folio-caption .view {
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      padding:7px 12px;
-      border-radius:10px;
-      background: rgba(255,255,255,0.06);
-      color:#fff;
-      font-weight:700;
-      font-size:13px;
-      min-width:56px;
-      height:38px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.18);
-      border: 1px solid rgba(255,255,255,0.06);
-    }
+
+    .folio-caption .view { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:7px 12px; border-radius:10px; background: rgba(255,255,255,0.06); color:#fff; font-weight:700; font-size:13px; min-width:56px; height:38px; box-shadow: 0 6px 16px rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.06); }
 
     /* NO RESULTS */
     #works .no-results { color: #111111 !important; }
-    body.dark #works .no-results,
-    html.dark #works .no-results,
-    .dark-mode #works .no-results,
-    .theme-dark #works .no-results,
-    [data-theme="dark"] #works .no-results { color: #ffffff !important; }
+    body.dark #works .no-results, html.dark #works .no-results, .dark-mode #works .no-results, .theme-dark #works .no-results, [data-theme="dark"] #works .no-results { color: #ffffff !important; }
 
-    /* SEARCH INPUT TEXT & PLACEHOLDER: force visible */
-    #works .search-input { color: #111111 !important; background-clip: padding-box; }
-    #works .search-input::placeholder { color: #666666 !important; opacity: 1 !important; }
+    /* ensure search input text color visibility in both modes */
+    #works .search-input { background-clip: padding-box; }
 
-    /* result count */
-    #works .result-count { color: #111111 !important; }
-
-    /* Lightbox overlay */
-    .lightbox {
-      position:fixed;
-      inset:0;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      padding-top: var(--header-h);
-      z-index:3000;
-      background: rgba(6,6,6,0.6);
-      backdrop-filter: blur(6px);
-      opacity:0;
-      pointer-events:none;
-      transition: opacity .22s ease;
-    }
+    /* Lightbox */
+    .lightbox { position:fixed; inset:0; display:flex; align-items:flex-start; justify-content:center; padding-top: var(--header-h); z-index:3000; background: rgba(6,6,6,0.6); backdrop-filter: blur(6px); opacity:0; pointer-events:none; transition: opacity .22s ease; }
     .lightbox.open { opacity:1; pointer-events:auto; }
 
-    /* Solid shell and meta */
-    .lb-shell {
-      width: calc(100vw - 48px);
-      height: calc(100vh - var(--header-h) - 48px);
-      max-width:1100px;
-      max-height:820px;
-      border-radius:12px;
-      overflow:hidden;
-      display:grid;
-      grid-template-columns: 1fr 340px;
-      gap:12px;
-      background: #ffffff;
-      border:1px solid rgba(0,0,0,0.06);
-      box-shadow: 0 40px 120px rgba(2,6,23,0.25);
-      margin-top:8px;
-    }
+    .lb-shell { width: calc(100vw - 48px); height: calc(100vh - var(--header-h) - 48px); max-width:1100px; max-height:820px; border-radius:12px; overflow:hidden; display:grid; grid-template-columns: 1fr 340px; gap:12px; background: #ffffff; border:1px solid rgba(0,0,0,0.06); box-shadow: 0 40px 120px rgba(2,6,23,0.25); margin-top:8px; }
     @media (max-width:980px){ .lb-shell { grid-template-columns: 1fr; width: calc(100vw - 12px); height: calc(100vh - var(--header-h) - 12px); } }
 
     .lb-view { position:relative; background:#111; display:flex; align-items:center; justify-content:center; overflow:hidden; min-height:300px; }
@@ -594,10 +547,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     .lb-slide { flex:0 0 100%; display:flex; align-items:center; justify-content:center; position:relative; height:100%; min-height:300px; padding:12px; box-sizing:border-box; }
     .lb-slide img { max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block; margin:auto; cursor:zoom-in; user-select:none; -webkit-user-drag:none; }
 
-    .lb-close, .lb-prev, .lb-next {
-      position:absolute; z-index:40; width:48px; height:48px; border-radius:12px; display:grid; place-items:center; background: rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.06); color:#fff; font-size:18px; cursor:pointer;
-      transition: transform .12s ease, opacity .12s ease;
-    }
+    .lb-close, .lb-prev, .lb-next { position:absolute; z-index:40; width:48px; height:48px; border-radius:12px; display:grid; place-items:center; background: rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.06); color:#fff; font-size:18px; cursor:pointer; transition: transform .12s ease, opacity .12s ease; }
     .lb-close { right:14px; top:14px; }
     .lb-prev { left:14px; top:50%; transform:translateY(-50%); }
     .lb-next { right:14px; top:50%; transform:translateY(-50%); }
@@ -611,95 +561,43 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     .btn { padding:8px 12px; border-radius:10px; font-weight:800; border:1px solid var(--glass-strong); background:transparent; cursor:pointer; font-size:13px; text-decoration:none; display:inline-block; color:var(--text); }
     .btn.primary { background:var(--primary); color:#fff; border-color:var(--primary); }
 
-    .show-more-wrap { text-align:center; margin-top:12px; }
-    .show-more { display:inline-block; padding:8px 14px; border-radius:999px; border:1px solid var(--glass-strong); background:transparent; font-weight:800; cursor:pointer; color:var(--text); }
+    /* SHOW MORE: spacing fix + full width on small devices to avoid collision */
+    .show-more-wrap { text-align:center; margin-top:12px; margin-bottom:12px; }
+    .show-more { display:inline-block; padding:10px 16px; border-radius:999px; border:1px solid var(--glass-strong); background:transparent; font-weight:800; cursor:pointer; color:var(--text); transition: transform .08s ease; }
+    .show-more:hover { transform: translateY(-2px); }
 
-    /* small-break adjustments */
-    @media (max-width:760px){
-      .folio-caption{ left:10px; bottom:10px; padding:8px 10px; font-size:13px; }
-      .folio-caption .title { font-size:14px; white-space: normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; }
-      .folio-caption .view { padding:6px 8px; min-width:48px; height:34px; font-size:12px; }
-      .lb-meta{ padding:12px }
-      .lb-title{ font-size:18px }
-      .lb-shell { gap:8px; }
-      .thumb-wrap { min-height:200px; }
-      .box { padding:16px; }
-      #works { padding-bottom: 20px; }
-    }
-
-    /* MOBILE (phones 320px - 430px wide) — larger, fitting cards for phones */
     @media (max-width:420px){
+      /* ensure the show-more has adequate spacing and doesn't overlap next section */
+      #works { padding-bottom: 84px; }          /* big enough gap under section */
+      .box { padding-bottom:40px; }
+      .show-more { width:100%; box-sizing:border-box; padding:12px 18px; border-radius:12px; }
+      .show-more-wrap { margin-bottom:18px; }
+
+      /* mobile search / cards adjustments */
       :root { --header-h: 56px; }
-      #works { padding-top: calc(var(--header-h) + 8px); padding-bottom: 18px; }
-      .box { padding:12px; max-width: 100%; }
-      .search-wrap { gap:10px; align-items:flex-start; width:100%; }
-      .search-left { flex:1 1 100%; min-width:0; width:100%; display:flex; align-items:center; }
       .search-input { padding:12px 14px 12px 44px; font-size:15px; border-radius:12px; }
-      .search-icon { left:12px; font-size:16px; }
-      .search-actions { width:100%; display:flex; justify-content:space-between; margin-top:10px; gap:8px; }
-      .result-count { font-size:13px; max-width:60%; overflow:hidden; text-overflow:ellipsis; }
-      .search-clear { padding:8px 12px; font-size:13px; }
-
-      /* make card visually larger and edge-to-edge for mobile */
-      .folio-grid { gap:14px; grid-template-columns: 1fr; }
-      .folio-item { border-radius:12px; margin:0; }
-      .thumb-wrap { aspect-ratio: 16/9; min-height:230px; border-radius:12px; }
-      .thumb-wrap img { transform-origin:center center; }
-
-      .folio-caption { left:10px; right:10px; bottom:10px; padding:8px 10px; border-radius:10px; }
-      .folio-caption .title { font-size:15px; line-height:1.16; -webkit-line-clamp:2; }
-      .folio-caption .view { padding:6px 8px; height:36px; font-size:13px; min-width:52px; }
-
-      .show-more-wrap { margin-top:12px; }
-      .show-more { padding:10px 16px; font-size:14px; width:100%; border-radius:12px; }
-
-      /* lightbox compact full width for phones */
-      .lightbox { padding-top: var(--header-h); }
-      .lb-shell {
-        width: calc(100vw - 10px);
-        height: calc(100vh - var(--header-h) - 10px);
-        max-width: none;
-        max-height: none;
-        border-radius:10px;
-        grid-template-columns: 1fr;
-        gap:8px;
-        margin-top:6px;
-      }
+      .result-count { font-size:13px; }
+      .thumb-wrap { min-height:240px; }
+      .folio-caption .title { font-size:15px; -webkit-line-clamp:2; }
       .lb-view { min-height:260px; }
-      .lb-slide { min-height:260px; padding:10px; }
-      .lb-prev, .lb-next, .lb-close { width:44px; height:44px; font-size:16px; }
-      .lb-meta { padding:12px; max-height:40vh; overflow:auto; }
-      .lb-title { font-size:17px; }
-      .lb-desc { font-size:14px; line-height:1.4; }
-
-      /* hover shadow toned down on phones */
-      .folio-item:focus, .folio-item:hover { box-shadow: 0 12px 40px rgba(16,24,40,0.08); transform: translateY(-3px); }
-
-      /* less aggressive thumb transitions on phones */
-      .thumb-wrap img { transition: opacity .36s ease, transform .45s cubic-bezier(.2,.9,.2,1); }
     }
 
-    /* extra-tight for very small phones */
     @media (max-width:360px){
       .thumb-wrap { min-height:200px; }
-      .folio-caption .title { font-size:14px; -webkit-line-clamp:3; }
       .search-input { font-size:14px; padding-left:42px; }
-      .result-count { display:inline-block; max-width:55%; }
-      .lb-meta { max-height:42vh; padding:8px; }
-      .show-more { font-size:13px; }
+      .show-more { font-size:14px; padding:11px; }
     }
 
     /* force ALL text inside lightbox meta to black (both themes) */
-    .lightbox .lb-meta,
-    .lightbox .lb-meta * { color: #111 !important; }
+    .lightbox .lb-meta, .lightbox .lb-meta * { color: #111 !important; }
     .lightbox .tech-badge { color:#111 !important; border-color: rgba(0,0,0,0.06) !important; }
 
-    /* theme toggling base (adjust if you use a body.dark class) */
+    /* theme toggling base */
     body.dark, .dark-mode {
-      --text: #111;     /* you requested black text in both modes */
+      --text: #111;
       --muted: #666;
-      --card-bg: #0b0b0b; /* card background can be dark while text remains black */
-      --search-bg: rgba(255,255,255,0.02);
+      --card-bg: #0b0b0b;
+      /* when in dark site mode, .search-input colors are overridden above to white bg black text */
     }
 
     .sr-only { position:absolute !important; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
@@ -711,10 +609,12 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 
       <div class="search-wrap" role="search" aria-label="Search projects">
         <div class="search-left">
-          <span class="search-icon">🔎</span>
-          <input id="folioSearch" class="search-input" type="search" placeholder="Search projects — try: 'AI', 'Django', 'YOLOv8'..." aria-label="Search projects" />
+          <span class="search-icon" aria-hidden="true">🔎</span>
+          <input id="folioSearch" class="search-input" type="search"
+                 placeholder="Search projects — try: 'AI', 'Django', 'YOLOv8'..."
+                 aria-label="Search projects" autocomplete="off" />
         </div>
-        <div class="search-actions">
+        <div class="search-actions" aria-hidden="false">
           <div id="resultCount" class="result-count" aria-live="polite"></div>
           <button id="folioSearchClear" class="search-clear" aria-label="Clear search">Clear</button>
         </div>
@@ -723,7 +623,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       <p id="noResults" class="no-results" style="display:none;">No projects found</p>
 
       <div class="folio-grid anim" id="folioGrid" aria-live="polite">
-        <!-- Items: NOTE - .folio-meta removed. Only image + caption overlay remain -->
+        <!-- PROJECT ITEMS (unchanged) -->
         <button class="folio-item"
           data-images="assets/THOME.png,assets/TRESULT.png,assets/TRESULT1.png"
           data-lightbox="assets/TLOGIN (1).png,assets/THOME.png,assets/TPROF.png,assets/TUPLOAD.png,assets/TRESULT.png,assets/TRESULT1.png,assets/THIST.png,assets/THIST2.png,assets/TCOM.png,assets/ALOG.png,assets/AHOME.png,assets/AUSER.png,assets/AHIST.png,assets/ACOMP.png"
@@ -790,7 +690,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           <div class="folio-caption"><span class="title">Portfolio</span><span class="view">View details</span></div>
         </button>
 
-        <!-- hidden ones (shown after Show more) paste projects here -->
+        <!-- hidden ones (shown after Show more) -->
         <button class="folio-item"
           data-images="assets/todo.png,assets/todo.png,assets/todo.png"
           data-lightbox="assets/todo.png,assets/todo.png,assets/todo.png"
@@ -812,7 +712,6 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     <div class="lb-shell" role="document" aria-live="polite">
       <div class="lb-view" id="lbView" aria-hidden="false">
         <div id="lbSlides" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
-
         <button class="lb-prev" id="lbPrev" aria-label="Previous (Left arrow)">◀</button>
         <button class="lb-next" id="lbNext" aria-label="Next (Right arrow)">▶</button>
         <button class="lb-close" id="lbClose" aria-label="Close (Esc)">✕</button>
@@ -852,16 +751,13 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       const showMoreBtn = document.getElementById('showMoreBtn');
       const resultCount = document.getElementById('resultCount');
 
-      // timings (from CSS variables)
       const THUMB_INTERVAL = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thumb-interval')) || 1800;
 
-      // ------------ THUMBNAIL SYNCHRONIZED AUTOPLAY & caption thumbnail setup ------------
+      /* THUMBNAILS */
       items.forEach((it) => {
         const wrap = it.querySelector('.thumb-wrap');
         const images = (it.dataset.images || '').split(',').map(s => s.trim()).filter(Boolean);
         const imgs = images.length ? images : ['assets/bg.jpg'];
-
-        // append image elements for thumbnail autoplay
         imgs.forEach((src, i) => {
           const img = document.createElement('img');
           img.src = src;
@@ -870,7 +766,6 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           if(i === 0) img.classList.add('active');
           wrap.appendChild(img);
         });
-
         it._thumbCount = imgs.length;
         it._thumbIndex = 0;
         it._thumbPaused = false;
@@ -894,7 +789,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       }
       let thumbTimer = setInterval(thumbTick, THUMB_INTERVAL);
 
-      // ------------ LIGHTBOX: GPU-ACCELERATED TRACK SLIDER (NO AUTOPLAY) ------------
+      /* LIGHTBOX */
       let lbTrack = null;
       let lbSlidesArr = [];
       let lbCurrent = 0;
@@ -947,22 +842,15 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       function openAt(index){
         const item = items[index]; if(!item) return;
         lastFocused = document.activeElement;
-
-        // prefer data-lightbox; fallback to data-images
         const slidesRaw = item.dataset.lightbox || item.dataset.images || '';
         const slides = slidesRaw.split(',').map(s=>s.trim()).filter(Boolean);
         const slidesToUse = slides.length ? slides : ['assets/bg.jpg'];
-
         lbTitle.textContent = item.dataset.title || '';
         lbDesc.textContent = item.dataset.desc || '';
         lbLink.href = item.dataset.link || '#';
-
         renderTechBadgesFromData(item.dataset.tech || '');
-
         lbSlides.innerHTML = '';
         lbSlidesArr = [];
-
-        // create track
         lbTrack = document.createElement('div');
         lbTrack.className = 'lb-track';
         slidesToUse.forEach((s, idx) => {
@@ -971,10 +859,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           lbSlidesArr.push(el);
         });
         lbSlides.appendChild(lbTrack);
-
-        // go to first slide instantly to avoid flicker
         showLbSlide(0, true);
-
         lightbox.classList.add('open'); lightbox.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden';
         if(lbClose && typeof lbClose.focus === 'function') lbClose.focus();
       }
@@ -985,7 +870,6 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         if(lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
       }
 
-      // attach open handlers
       items.forEach((it, idx) => {
         it.addEventListener('click', (ev) => { ev.preventDefault(); openAt(idx); });
         it.addEventListener('keydown', (ev) => { if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openAt(idx); }} );
@@ -995,7 +879,6 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       if(lbPrev) lbPrev.addEventListener('click', () => { lbPrevFn(); });
       if(lbNext) lbNext.addEventListener('click', () => { lbNextFn(); });
 
-      // click outside content closes (lightbox background)
       lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLB(); });
 
       document.addEventListener('keydown', (e) => {
@@ -1006,21 +889,18 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         }
       });
 
-      // ------------ SEARCH / FILTER: improved cross-theme search + highlight ------------
+      /* SEARCH / FILTER (immediate key-based + robust normalization + highlight) */
       function escapeRegExp(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       }
-
       function normalizeText(str){
         if(!str) return '';
-        // remove star emoji and non-alphanum (keep hyphen and dot), collapse spaces
         return str.replace(/⭐/g,' ')
                   .replace(/[^\w\-\.\s]/g,' ')
                   .replace(/\s+/g,' ')
                   .trim()
                   .toLowerCase();
       }
-
       function highlightText(node, tokens){
         let txt = node.textContent || '';
         if(!tokens.length){ node.innerHTML = txt; return; }
@@ -1029,20 +909,17 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         const re = new RegExp('(' + parts.join('|') + ')', 'ig');
         node.innerHTML = txt.replace(re, (m) => `<span class="hl">${m}</span>`);
       }
-
       function updateResultCount(){
         const total = items.length;
         const visible = items.filter(it => it.style.display !== 'none').length;
         if(resultCount) resultCount.textContent = ` ${visible} of ${total}`;
       }
-
       function resetHighlights(){
         items.forEach(it => {
           const capTitle = it.querySelector('.folio-caption .title');
           if(capTitle) capTitle.innerHTML = capTitle.textContent || '';
         });
       }
-
       function resetFilterRespectExpanded(){
         if(grid.classList.contains('expanded')){
           items.forEach(it => it.style.display = 'block');
@@ -1055,31 +932,25 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         updateResultCount();
       }
 
-      // New: more forgiving search (normalizes title/desc/tech), AND behavior between tokens.
+      /* Updated behavior: run on input/keyup immediately (no long debounce),
+         keep short 120ms micro-debounce to avoid jitter on fast typers. */
+      let searchTimer = null;
       function applySearch(q){
         q = (q || '').trim().toLowerCase();
         if(!q){
           resetFilterRespectExpanded();
           return;
         }
-
         const tokens = q.split(/\s+/).map(t => t.replace(/[^\w\-\.\s]/g,'').trim()).filter(Boolean);
-        if(!tokens.length){
-          resetFilterRespectExpanded();
-          return;
-        }
-
+        if(!tokens.length){ resetFilterRespectExpanded(); return; }
         showMoreBtn.style.display = 'none';
         let any = false;
-
         items.forEach(it => {
           const title = normalizeText(it.dataset.title || '');
           const desc = normalizeText(it.dataset.desc || '');
           const tech = normalizeText(it.dataset.tech || '');
           const hay = `${title} ${desc} ${tech}`;
-
           const matchedAll = tokens.every(tok => hay.indexOf(tok) !== -1);
-
           it.style.display = matchedAll ? 'block' : 'none';
           if(matchedAll) {
             any = true;
@@ -1090,23 +961,22 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
             if(capTitle) capTitle.innerHTML = capTitle.textContent || '';
           }
         });
-
         noResults.style.display = any ? 'none' : 'block';
         updateResultCount();
       }
 
-      let searchTO = null;
       if(searchInput){
-        searchInput.addEventListener('input', (e) => {
-          clearTimeout(searchTO);
-          searchTO = setTimeout(() => {
-            applySearch(searchInput.value || '');
-            // highlight the clear button when there's active input
-            if(searchInput.value && searchClear) searchClear.classList.add('primary'); else if(searchClear) searchClear.classList.remove('primary');
-          }, 140);
-        });
-        searchInput.addEventListener('keydown', (e) => {
+        /* immediate on input + keyup for prompt responsiveness */
+        function scheduleSearch() {
+          clearTimeout(searchTimer);
+          searchTimer = setTimeout(()=> applySearch(searchInput.value || ''), 120);
+          // toggle clear button style
+          if(searchInput.value && searchClear) searchClear.classList.add('primary'); else if(searchClear) searchClear.classList.remove('primary');
+        }
+        searchInput.addEventListener('input', scheduleSearch, {passive:true});
+        searchInput.addEventListener('keyup', (e) => {
           if(e.key === 'Escape'){ searchInput.value = ''; applySearch(''); if(searchClear) searchClear.classList.remove('primary'); }
+          else scheduleSearch();
         });
       }
 
@@ -1119,7 +989,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         });
       }
 
-      // Show more toggle: expands to show all hidden items; collapse back to six
+      /* Show more toggle, same logic but keep safe spacing */
       showMoreBtn.addEventListener('click', () => {
         if(grid.classList.contains('expanded')){
           grid.classList.remove('expanded');
@@ -1142,18 +1012,14 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         if(first){ const img = new Image(); img.src = first; }
       });
 
-      // ensure page visibility pause (stop global thumbTimer when hidden)
+      // pause thumbnails when page hidden
       document.addEventListener('visibilitychange', () => {
-        if(document.hidden){
-          if(thumbTimer){ clearInterval(thumbTimer); thumbTimer = null; }
-        } else {
-          if(!thumbTimer) thumbTimer = setInterval(thumbTick, THUMB_INTERVAL);
-        }
+        if(document.hidden){ if(thumbTimer){ clearInterval(thumbTimer); thumbTimer = null; } }
+        else { if(!thumbTimer) thumbTimer = setInterval(thumbTick, THUMB_INTERVAL); }
       });
 
-      // update initial result count
+      // initial results
       updateResultCount();
-
     })();
   </script>
 </section>

@@ -405,166 +405,145 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 
 
 
-<!-- ABOUT (fixed: education level bars + proper Django logo)
-     Mobile-only: two buttons inside info container open themed lightboxes -->
+
+
+<!-- ABOUT (fixed: education level bars + proper Django logo) -->
 <section id="about">
   <style>
-    /* base tokens used in your styles (kept local) */
-    #about { --primary: #2563eb; --accent: #ff66b2; --glass: rgba(255,255,255,0.06); --glass-strong: rgba(255,255,255,0.02); --card-shadow: 0 10px 30px rgba(16,24,40,0.06); --text: #0f172a; --card: #ffffff; --muted: rgba(11,11,11,0.56); }
-    html[data-theme="dark"] #about { --card: #071827; --text: #e6f7ff; --muted: rgba(255,255,255,0.72); }
-
     /* ABOUT — improved, scoped, updated for bars + real logos */
-    #about { margin-top: 1rem !important; padding-top: 1rem !important; }
+   #about {
+  margin-top: 1 !important;
+  padding-top: 1 !important;
+}
+    .about-inner { --about-muted: rgba(11,11,11,0.56); }
+    html[data-theme="dark"] .about-inner { --about-muted: rgba(255,255,255,0.72); }
 
-    #about .about-inner { --about-muted: var(--muted); }
-    html[data-theme="dark"] #about .about-inner { --about-muted: var(--muted); }
+.about-inner {
+  min-height: auto;
+  transform: translateY(-40px);  /* moves section up */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Mobile: reduce overlap */
+@media (max-width: 980px) {
+  .about-inner {
+    transform: translateY(-10px);  /* smaller move-up for tablets/mobiles */
+    padding-top: 12px;             /* optional small padding under header */
+  }
+}
 
-    #about .about-inner {
-      min-height: auto;
-      transform: translateY(-40px);  /* moves section up */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    /* Mobile: reduce overlap */
-    @media (max-width: 980px) {
-      #about .about-inner {
-        transform: translateY(-10px);  /* smaller move-up for tablets/mobiles */
-        padding-top: 12px;             /* optional small padding under header */
-      }
-    }
-    @media (max-width: 720px) {
-      #about .about-inner {
-        transform: translateY(0);      /* no overlap on small phones */
-        padding-top: 16px;             /* keep small spacing under header */
-      }
-    }
+@media (max-width: 720px) {
+  .about-inner {
+    transform: translateY(0);      /* no overlap on small phones */
+    padding-top: 16px;             /* keep small spacing under header */
+  }
+}
+    .about-container { width:1350%; max-width:1350px; padding:24px; display:grid; grid-template-columns:420px 1fr; gap:28px; align-items:stretch; }
+/* Gradient border for all .themed-card */
+.themed-card {
+  position: relative;       /* ensure pseudo-element positions correctly */
+  z-index: 0;               /* keep content above border */
+  border: none;             /* remove existing solid border */
+}
 
-    /* Fixed: container width should be 100% not 1350% */
-    #about .about-container { width:100%; max-width:1350px; padding:24px; display:grid; grid-template-columns:420px 1fr; gap:28px; align-items:stretch; }
+.themed-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;                  /* cover entire card */
+  border-radius: 18px;       /* match card rounding */
+  padding: 2px;              /* thickness of border */
+  background: linear-gradient(90deg, #2563eb, #ffffff, #ff66b2); /* blue → white → pink */
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;   /* keep inner content visible */
+  z-index: -1;               /* behind the content */
+}
 
-    /* Gradient border for all .themed-card */
-    #about .themed-card {
-      position: relative;       /* ensure pseudo-element positions correctly */
-      z-index: 0;               /* keep content above border */
-      border: none;             /* remove existing solid border */
-      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.01)); /* subtle base */
-    }
+/* Optional: keep inner content same padding/background */
+.themed-card > * {
+  position: relative;
+  z-index: 1;
+}
 
-    #about .themed-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;                  /* cover entire card */
-      border-radius: 18px;       /* match card rounding */
-      padding: 2px;              /* thickness of border */
-      background: linear-gradient(90deg, var(--primary), #ffffff, var(--accent));
-      -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-      -webkit-mask-composite: destination-out;
-      mask-composite: exclude;   /* keep inner content visible */
-      z-index: -1;               /* behind the content */
-    }
+    .profile-wrap { display:flex; flex-direction:column; gap:18px; align-items:center; justify-content:flex-start; position:relative; overflow:visible; }
+    @media (min-width:980px) { .profile-wrap { min-height:520px; padding:28px; } }
+    @media (max-width:979px) { .profile-wrap { padding:18px; min-height:unset; } }
 
-    /* Optional: keep inner content same padding/background */
-    #about .themed-card > * {
-      position: relative;
-      z-index: 1;
-    }
+    .avatar { width:160px; height:160px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background: linear-gradient(135deg, var(--glass), var(--glass-strong)); position:relative; box-shadow:0 18px 50px rgba(37,99,235,0.08); }
+    .avatar img { width:100%; height:100%; object-fit:cover; display:block; }
+    .avatar::after { content:""; position:absolute; inset:-8px; border-radius:50%; border:6px solid rgba(255,255,255,0.9); box-shadow:0 8px 30px rgba(0,0,0,0.06); }
+    html[data-theme="dark"] .avatar::after { border-color:#00e6ff; box-shadow:0 10px 36px rgba(0,230,255,0.06); }
 
-    /* left column (profile) — kept exactly as you had it */
-    #about .profile-wrap { display:flex; flex-direction:column; gap:18px; align-items:center; justify-content:flex-start; position:relative; overflow:visible; }
-    @media (min-width:980px) { #about .profile-wrap { min-height:520px; padding:28px; } }
-    @media (max-width:979px) { #about .profile-wrap { padding:18px; min-height:unset; } }
+    .profile-name { font-family:'Playfair Display',serif; font-weight:900; font-size:28px; margin:0; color:var(--text); text-align:center; }
+    .profile-role { font-weight:700; font-size:14px; color:var(--about-muted); letter-spacing:0.6px; text-transform:uppercase; }
 
-    #about .avatar { width:160px; height:160px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background: linear-gradient(135deg, var(--glass), var(--glass-strong)); position:relative; box-shadow:0 18px 50px rgba(37,99,235,0.08); }
-    #about .avatar img { width:100%; height:100%; object-fit:cover; display:block; }
-    #about .avatar::after { content:""; position:absolute; inset:-8px; border-radius:50%; border:6px solid rgba(255,255,255,0.9); box-shadow:0 8px 30px rgba(0,0,0,0.06); }
-    html[data-theme="dark"] #about .avatar::after { border-color:#00e6ff; box-shadow:0 10px 36px rgba(0,230,255,0.06); }
+    .degree-pill { width:100%; display:flex; justify-content:center; align-items:center; border-radius:12px; padding:12px 16px; font-weight:900; font-size:16px; letter-spacing:0.4px; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); color:var(--text); }
+    html[data-theme="dark"] .degree-pill { border:1px solid rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
 
-    #about .profile-name { font-family:'Playfair Display',serif; font-weight:900; font-size:28px; margin:0; color:var(--text); text-align:center; }
-    #about .profile-role { font-weight:700; font-size:14px; color:var(--about-muted); letter-spacing:0.6px; text-transform:uppercase; }
+    .meta-row { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:8px; }
+    .badge { display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:999px; font-weight:700; font-size:13px; background:transparent; border:1px solid rgba(0,0,0,0.06); color:var(--text); }
+    html[data-theme="dark"] .badge { border-color: rgba(255,255,255,0.06); }
 
-    #about .degree-pill { width:100%; display:flex; justify-content:center; align-items:center; border-radius:12px; padding:12px 16px; font-weight:900; font-size:16px; letter-spacing:0.4px; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); color:var(--text); }
-    html[data-theme="dark"] #about .degree-pill { border:1px solid rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
+    .stat-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; width:100%; margin-top:14px; }
+    .stat { border-radius:12px; padding:18px 12px; text-align:center; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); }
+    .stat .k { font-size:12px; font-weight:800; color:var(--about-muted); text-transform:uppercase; letter-spacing:0.8px; }
+    .stat .v { font-size:18px; font-weight:900; color:var(--text); margin-top:8px; }
+    html[data-theme="dark"] .stat { border-color: rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
 
-    #about .meta-row { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:8px; }
-    #about .badge { display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:999px; font-weight:700; font-size:13px; background:transparent; border:1px solid rgba(0,0,0,0.06); color:var(--text); }
-    html[data-theme="dark"] #about .badge { border-color: rgba(255,255,255,0.06); }
+    .right-col { display:flex; flex-direction:column; gap:18px; }
+    .right-col > .card { display:flex; flex-direction:column; gap:12px; flex:1; padding:18px; border-radius:14px; box-shadow:var(--card-shadow); }
 
-    #about .stat-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; width:100%; margin-top:14px; }
-    #about .stat { border-radius:12px; padding:18px 12px; text-align:center; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); }
-    #about .stat .k { font-size:12px; font-weight:800; color:var(--about-muted); text-transform:uppercase; letter-spacing:0.8px; }
-    #about .stat .v { font-size:18px; font-weight:900; color:var(--text); margin-top:8px; }
-    html[data-theme="dark"] #about .stat { border-color: rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
-
-    /* right column (kept layout) */
-    #about .right-col { display:flex; flex-direction:column; gap:18px; }
-    #about .right-col > .card { display:flex; flex-direction:column; gap:12px; flex:1; padding:18px; border-radius:14px; box-shadow:var(--card-shadow); }
-
-    #about .section-title { font-family:'Playfair Display',serif; font-size:20px; margin:0 0 6px 0; color:var(--text); font-weight:800; }
+    .section-title { font-family:'Playfair Display',serif; font-size:20px; margin:0 0 6px 0; color:var(--text); font-weight:800; }
 
     /* EDUCATION: level bar */
-    #about .edu-item { display:flex; flex-direction:column; gap:10px; padding:8px 0; }
-    #about .edu-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
-    #about .edu-school { font-weight:800; font-size:14px; color:var(--text); }
-    #about .edu-meta { font-size:13px; color:var(--about-muted); font-weight:700; }
-    #about .edu-row { display:flex; align-items:center; gap:12px; justify-content:space-between; }
-    #about .edu-bar-wrap { flex:1; height:12px; background: rgba(0,0,0,0.06); border-radius:999px; overflow:hidden; border:1px solid rgba(0,0,0,0.04); }
-    html[data-theme="dark"] #about .edu-bar-wrap { background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); }
-    #about .edu-bar { display:block; height:100%; width:0%; border-radius:999px; background: linear-gradient(90deg,var(--primary),var(--accent)); box-shadow:0 10px 30px rgba(37,99,235,0.12); transition: width 900ms cubic-bezier(.2,.9,.2,1); }
+    .edu-item { display:flex; flex-direction:column; gap:10px; padding:8px 0; }
+    .edu-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+    .edu-school { font-weight:800; font-size:14px; color:var(--text); }
+    .edu-meta { font-size:13px; color:var(--about-muted); font-weight:700; }
+    .edu-row { display:flex; align-items:center; gap:12px; justify-content:space-between; }
+    .edu-bar-wrap { flex:1; height:12px; background: rgba(0,0,0,0.06); border-radius:999px; overflow:hidden; border:1px solid rgba(0,0,0,0.04); }
+    html[data-theme="dark"] .edu-bar-wrap { background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); }
+    .edu-bar { display:block; height:100%; width:0%; border-radius:999px; background: linear-gradient(90deg,var(--primary),var(--accent)); box-shadow:0 10px 30px rgba(37,99,235,0.12); transition: width 900ms cubic-bezier(.2,.9,.2,1); }
 
-    #about .edu-percent { font-weight:900; font-size:13px; color:var(--text); min-width:56px; text-align:right; }
+    .edu-percent { font-weight:900; font-size:13px; color:var(--text); min-width:56px; text-align:right; }
 
-    /* SKILLS: real-logo style (kept) */
-    #about .skills-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; }
-    #about .skill { display:flex; gap:12px; align-items:center; padding:10px; border-radius:12px; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); }
-    html[data-theme="dark"] #about .skill { border-color: rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
-    #about .skill .icon { width:46px; height:46px; border-radius:10px; display:grid; place-items:center; background:#fff; box-shadow:0 8px 26px rgba(16,24,40,0.12); }
-    #about .skill .icon img { width:28px; height:28px; object-fit:contain; }
-    #about .skill .icon i { font-size:20px; }
-    #about .skill .label { font-weight:800; font-size:14px; color:var(--text); }
+    /* SKILLS: real-logo style */
+    .skills-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; }
+    .skill { display:flex; gap:12px; align-items:center; padding:10px; border-radius:12px; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); }
+    html[data-theme="dark"] .skill { border-color: rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
+    .skill .icon { width:46px; height:46px; border-radius:10px; display:grid; place-items:center; background:#fff; box-shadow:0 8px 26px rgba(16,24,40,0.12); }
+    .skill .icon img { width:28px; height:28px; object-fit:contain; }
+    .skill .icon i { font-size:20px; }
+    .skill .label { font-weight:800; font-size:14px; color:var(--text); }
 
     /* Force all skill logos/icons into blue */
-    #about .skill .icon i,
-    #about .skill .icon img {
-      filter: brightness(0) saturate(100%) invert(27%) sepia(98%) saturate(2042%) hue-rotate(202deg) brightness(95%) contrast(97%);
-      /* 🔹 This filter makes any logo appear blue (approx #1572B6). */
-    }
-    #about .skill .icon i { color: #1572B6 !important; }
+.skill .icon i,
+.skill .icon img {
+  filter: brightness(0) saturate(100%) invert(27%) sepia(98%) saturate(2042%) hue-rotate(202deg) brightness(95%) contrast(97%);
+  /* 🔹 This filter makes any logo appear blue (#1572B6-like). */
+}
+
+/* OR simpler: if you're only using <i> (FontAwesome) icons */
+.skill .icon i {
+  color: #1572B6 !important;   /* 🔹 Force all icons blue */
+}
+
 
     .themed-card:focus-within, .themed-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(16,24,40,0.10); }
 
-    /* --- MOBILE-SPECIFIC: show two buttons inside the existing info container only on mobile --- */
-    #about .info-actions { display:none; gap:10px; }
-    #about .info-actions .info-btn { padding:10px 12px; border-radius:10px; border:none; font-weight:800; cursor:pointer; background: linear-gradient(90deg,var(--primary),var(--accent)); color:#fff; }
-    #about .info-actions .info-btn.ghost { background:transparent; color:var(--text); border:1px solid rgba(0,0,0,0.06); }
-
-    @media (max-width: 980px) {
-      #about .info-actions { display:flex; align-items:center; margin-top:6px; }
-      /* Make the right column panel compact on mobile and keep alignment same */
-      #about .about-container { grid-template-columns: 1fr; gap:18px; padding:18px; }
-    }
-
-    /* overlay/lightbox (scoped to #about) and use themed-card class for consistent border */
-    #about .overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(2,6,23,0.6); padding:20px; z-index:1400; }
-    #about .overlay.open{ display:flex; }
-    /* give modal a themed-card gradient border by applying themed-card class */
-    #about .modal { width:100%; max-width:920px; border-radius:14px; padding:18px; position:relative; background:var(--card); box-shadow:0 30px 80px rgba(2,6,23,0.5); }
-    #about .modal .close { position:absolute; right:12px; top:12px; border:none; background:transparent; font-weight:800; font-size:18px; cursor:pointer; color:var(--text); }
-
-    /* ensure modal uses the same themed-card border: add the themed-card class to the modal in markup */
-    #about .modal.themed-card { padding:20px; }
-
-    /* small responsive tweaks */
     @media (max-width:980px) {
-      #about .skills-grid { grid-template-columns: repeat(3, 1fr); }
-      #about .stat-grid { grid-template-columns: repeat(3, 1fr); }
-      #about .avatar { width:120px; height:120px; }
+      .about-container { grid-template-columns: 1fr; gap:18px; padding:18px; align-items:stretch; }
+      .right-col { flex-direction:column; }
+      .skills-grid { grid-template-columns: repeat(3, 1fr); }
+      .stat-grid { grid-template-columns: repeat(3, 1fr); }
+      .avatar { width:120px; height:120px; }
     }
     @media (max-width:720px) {
-      #about .skills-grid { grid-template-columns: repeat(2, 1fr); }
-      #about .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .skills-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 
@@ -588,6 +567,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
               <div style="font-size:18px;margin-top:4px;font-weight:900;color:var(--text)">B.Tech — CSE</div>
             </div>
           </div>
+
 
           <div class="stat-grid" role="list" aria-label="Personal stats">
             <div class="stat" role="listitem" tabindex="0">
@@ -619,30 +599,19 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         </div>
       </div>
 
-      <!-- RIGHT: Education and Skills (kept layout and alignment) -->
+      <!-- RIGHT: Education and Skills -->
       <div class="right-col">
-        <div class="card themed-card anim" aria-labelledby="eduTitle" role="region" aria-roledescription="education" style="padding:18px;">
+        <div class="card themed-card anim" aria-labelledby="eduTitle" role="region" aria-roledescription="education">
           <h3 id="eduTitle" class="section-title">Education (Academic Journey)</h3>
 
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
-            <div style="color:var(--about-muted); font-weight:700;">Tap to view details (mobile)</div>
-
-            <!-- INFO ACTIONS: both buttons inside the same info container
-                 Visible only on mobile due to CSS (media query shows .info-actions on <=980px) -->
-            <div class="info-actions" aria-hidden="false">
-              <button class="info-btn" data-open="about-edu-overlay">Education</button>
-              <button class="info-btn ghost" data-open="about-skills-overlay">Skills</button>
-            </div>
-          </div>
-
-          <!-- keep the original edu-list visible on desktop inside the card (no alignment changes) -->
-          <div class="edu-list" style="margin-top:12px;">
+          <div class="edu-list">
             <div class="edu-item">
               <div class="edu-head">
                 <div>
                   <div class="edu-school">B.Tech in CSE — UCE, Thodupuzha</div>
                   <div class="edu-meta">2021 – 2025</div>
                 </div>
+              
               </div>
               <div class="edu-row">
                 <div class="edu-bar-wrap" aria-hidden="true"><div class="edu-bar" data-width="69.9"></div></div>
@@ -656,6 +625,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
                   <div class="edu-school">Higher Secondary — St. Sebastian's HSS, Vazhithala</div>
                   <div class="edu-meta">2019 – 2021</div>
                 </div>
+    
               </div>
               <div class="edu-row">
                 <div class="edu-bar-wrap"><div class="edu-bar" data-width="94"></div></div>
@@ -669,6 +639,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
                   <div class="edu-school">Secondary — Bappuji Public School, Vazhithala</div>
                   <div class="edu-meta">2018 – 2019</div>
                 </div>
+     
               </div>
               <div class="edu-row">
                 <div class="edu-bar-wrap"><div class="edu-bar" data-width="80"></div></div>
@@ -678,10 +649,10 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           </div>
         </div>
 
-        <div class="card themed-card anim" aria-labelledby="skillsTitle" role="region" aria-roledescription="skills" style="padding:18px;">
+        <div class="card themed-card anim" aria-labelledby="skillsTitle" role="region" aria-roledescription="skills">
           <h3 id="skillsTitle" class="section-title">Skills — Modern stack</h3>
 
-          <div class="skills-grid" role="list" aria-label="skills" style="margin-top:12px;">
+          <div class="skills-grid" role="list" aria-label="skills">
             <div class="skill python" role="listitem" tabindex="0">
               <div class="icon"><img src="assets/logos/python.svg" alt="Python logo" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-brands fa-python&quot;></i>'"></div>
               <div class="label">Python</div>
@@ -695,6 +666,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
   </div>
   <div class="label">Django</div>
 </div>
+
 
             <div class="skill html" role="listitem" tabindex="0">
               <div class="icon"><img src="assets/logos/html5.svg" alt="HTML5" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-brands fa-html5&quot;></i>'"></div>
@@ -727,173 +699,63 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
             </div>
           </div>
         </div>
-      </div> <!-- /.right-col -->
+      </div>
     </div>
   </div>
 
-  <!-- Education lightbox (themed: add themed-card to modal to show same gradient border) -->
-  <div class="overlay" id="about-edu-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="about-edu-title">
-    <section class="modal themed-card" role="document" aria-describedby="about-edu-desc">
-      <button class="close" aria-label="Close education" data-close="about-edu-overlay">✕</button>
-      <h3 id="about-edu-title" style="margin:0 0 8px 0; font-family:Playfair Display,serif;">Education — Academic Journey</h3>
-      <div id="about-edu-desc" style="color:var(--muted); margin-bottom:10px;">Animated level bars — same theme as cards.</div>
-
-      <div class="edu-list">
-        <div class="edu-item">
-          <div class="edu-head">
-            <div>
-              <div class="edu-school">B.Tech in CSE — UCE, Thodupuzha</div>
-              <div class="edu-meta">2021 – 2025</div>
-            </div>
-            <div style="font-weight:900">69.9 GPA</div>
-          </div>
-          <div class="edu-row" style="margin-top:6px;">
-            <div class="edu-bar-wrap"><div class="edu-bar" data-width="69.9"></div></div>
-            <div class="edu-percent">Level: <strong>69.9</strong></div>
-          </div>
-        </div>
-
-        <div class="edu-item">
-          <div class="edu-head">
-            <div>
-              <div class="edu-school">Higher Secondary — St. Sebastian's HSS, Vazhithala</div>
-              <div class="edu-meta">2019 – 2021</div>
-            </div>
-            <div style="font-weight:900">94%</div>
-          </div>
-          <div class="edu-row" style="margin-top:6px;">
-            <div class="edu-bar-wrap"><div class="edu-bar" data-width="94"></div></div>
-            <div class="edu-percent">Level: <strong>94%</strong></div>
-          </div>
-        </div>
-
-        <div class="edu-item">
-          <div class="edu-head">
-            <div>
-              <div class="edu-school">Secondary — Bappuji Public School, Vazhithala</div>
-              <div class="edu-meta">2018 – 2019</div>
-            </div>
-            <div style="font-weight:900">80%</div>
-          </div>
-          <div class="edu-row" style="margin-top:6px;">
-            <div class="edu-bar-wrap"><div class="edu-bar" data-width="80"></div></div>
-            <div class="edu-percent">Level: <strong>80%</strong></div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- Skills lightbox (themed) -->
-  <div class="overlay" id="about-skills-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="about-skills-title">
-    <section class="modal themed-card" role="document">
-      <button class="close" aria-label="Close skills" data-close="about-skills-overlay">✕</button>
-      <h3 id="about-skills-title" style="margin:0 0 8px 0; font-family:Playfair Display,serif;">Skills — Modern stack</h3>
-      <div style="color:var(--muted); margin-bottom:10px;">Logo grid — same themed styling as cards.</div>
-
-      <div class="skills-grid" role="list" aria-label="skills">
-        <div class="skill"><div class="icon"><img src="assets/logos/python.svg" alt="Python"></div><div class="label">Python</div></div>
-        <div class="skill"><div class="icon"><img src="assets/logos/django.svg" alt="Django" style="filter: brightness(0) saturate(100%) invert(24%) sepia(93%) saturate(6000%) hue-rotate(200deg) brightness(95%) contrast(105%);"></div><div class="label">Django</div></div>
-        <div class="skill"><div class="icon"><img src="assets/logos/html5.svg" alt="HTML5"></div><div class="label">HTML</div></div>
-        <div class="skill"><div class="icon"><img src="assets/logos/css3.svg" alt="CSS3"></div><div class="label">CSS</div></div>
-        <div class="skill"><div class="icon"><img src="assets/logos/javascript.svg" alt="JavaScript"></div><div class="label">JavaScript</div></div>
-        <div class="skill"><div class="icon"><img src="assets/logos/react.svg" alt="React"></div><div class="label">React</div></div>
-        <div class="skill"><div class="icon"><img src="assets/logos/sql.svg" alt="SQL"></div><div class="label">SQL</div></div>
-        <div class="skill"><div class="icon"><img src="assets/logos/ml.svg" alt="ML"></div><div class="label">ML</div></div>
-      </div>
-    </section>
-  </div>
-
   <script>
+    // reveal + animate bars + immediate set (fix for missing bars)
     (function(){
-      const root = document.getElementById('about');
-      if(!root) return;
-
-      // open/close overlay helpers (scoped to #about)
-      function openOverlay(id){
-        const overlay = root.querySelector('#' + id);
-        if(!overlay) return;
-        overlay.classList.add('open');
-        overlay.setAttribute('aria-hidden', 'false');
-        // focus close button
-        const close = overlay.querySelector('.close');
-        if(close) close.focus();
-        // animate education bars if education overlay opened
-        if(id === 'about-edu-overlay') animateEduBars(overlay);
-      }
-      function closeOverlay(id){
-        const overlay = root.querySelector('#' + id);
-        if(!overlay) return;
-        overlay.classList.remove('open');
-        overlay.setAttribute('aria-hidden', 'true');
-      }
-
-      // wire mobile info buttons (data-open attr)
-      root.querySelectorAll('[data-open]').forEach(btn => {
-        btn.addEventListener('click', e => {
-          const which = e.currentTarget.getAttribute('data-open');
-          if(which) openOverlay(which);
-        });
-      });
-
-      // wire close buttons inside overlays
-      root.querySelectorAll('[data-close]').forEach(btn => {
-        btn.addEventListener('click', e => {
-          const which = e.currentTarget.getAttribute('data-close');
-          if(which) closeOverlay(which);
-        });
-      });
-
-      // clicking overlay background closes it
-      root.querySelectorAll('.overlay').forEach(o => {
-        o.addEventListener('click', e => {
-          if(e.target === o){ o.classList.remove('open'); o.setAttribute('aria-hidden','true'); }
-        });
-      });
-
-      // ESC closes any open overlays
-      document.addEventListener('keydown', e => {
-        if(e.key === 'Escape') {
-          root.querySelectorAll('.overlay.open').forEach(o => { o.classList.remove('open'); o.setAttribute('aria-hidden','true'); });
-        }
-      });
-
-      // animate education bars (set to 0 then expand)
-      function animateEduBars(container){
-        container.querySelectorAll('.edu-bar').forEach(b => {
-          const w = Number(b.getAttribute('data-width') || 0);
-          b.style.width = '0%';
-          setTimeout(() => b.style.width = Math.max(0, Math.min(100, w)) + '%', 80);
-        });
-      }
-
-      // set bars to intended width on load (desktop preview) — keeps original behavior
-      window.addEventListener('load', () => {
-        root.querySelectorAll('.edu-bar').forEach(b => {
-          const w = Number(b.getAttribute('data-width') || 0);
-          b.style.width = Math.max(0, Math.min(100, w)) + '%';
-        });
-      });
-
-      // existing intersection observer behavior (unchanged)
-      const animItems = root.querySelectorAll('.anim');
-      if('IntersectionObserver' in window && animItems.length){
-        const obs = new IntersectionObserver((entries, o) => {
-          entries.forEach(entry => {
+      const animItems = document.querySelectorAll('#about .anim');
+      if('IntersectionObserver' in window){
+        const obs = new IntersectionObserver((entries, o)=>{
+          entries.forEach(entry=>{
             if(entry.isIntersecting){
               entry.target.classList.add('in-view');
               o.unobserve(entry.target);
             }
           });
-        }, { threshold: 0.12 });
+        }, {threshold: 0.12});
         animItems.forEach(i => obs.observe(i));
-      } else {
-        animItems.forEach(i => i.classList.add('in-view'));
+      } else { animItems.forEach(i => i.classList.add('in-view')); }
+
+      function setEduBarsImmediate(){
+        document.querySelectorAll('#about .edu-bar').forEach(b => {
+          const w = Number(b.getAttribute('data-width') || 0);
+          b.style.width = Math.max(0, Math.min(100, w)) + '%';
+        });
       }
+
+      // Progressively animate bars when edu items enter view (accessible)
+      const eduItems = document.querySelectorAll('#about .edu-item');
+      if('IntersectionObserver' in window){
+        const obs2 = new IntersectionObserver((entries, o)=>{
+          entries.forEach(entry=>{
+            if(entry.isIntersecting){
+              const bar = entry.target.querySelector('.edu-bar');
+              if(bar){
+                const w = Number(bar.getAttribute('data-width') || 0);
+                // set to 0 first to ensure transition shows
+                bar.style.width = '0%';
+                // small timeout to trigger transition
+                setTimeout(()=> bar.style.width = Math.max(0, Math.min(100, w)) + '%', 80);
+              }
+              o.unobserve(entry.target);
+            }
+          });
+        }, {threshold: 0.12});
+        eduItems.forEach(i => obs2.observe(i));
+      } else {
+        setEduBarsImmediate();
+      }
+
+      // Also call immediate set after DOM ready in case observer doesn't fire
+      window.addEventListener('load', () => setEduBarsImmediate());
+      // ensure immediate set also on DOMContentLoaded
+      document.addEventListener('DOMContentLoaded', () => setEduBarsImmediate());
     })();
   </script>
 </section>
-
 
 
 
@@ -1523,8 +1385,366 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 
 
 
+<!-- =========================
+     #contact (updated - matches site + gradient border)
+========================= -->
+<section id="contact" class="contact-section" aria-labelledby="contact-heading">
+  <div class="contact-container gradient-border">
 
-<section id="contact"><div style="max-width:var(--container);padding:60px 20px"><h2 style="font-family:Playfair Display;color:var(--text)">Contact</h2><p style="color:var(--muted-dark)">Contact form / details here.</p></div></section>
+    <!-- Heading -->
+    <h1 id="contact-heading">Contact Me</h1>
+    <div class="divider" aria-hidden="true"></div>
+
+    <p class="contact-text">
+      Let's connect! Reach out via my social profiles below or view my resume.
+    </p>
+
+    <!-- Social Icons (below paragraph) -->
+    <div class="socials gradient-border" role="list" aria-label="Social links">
+      <a href="#" id="email-link" title="Email" onclick="openGmailCompose(event)" role="listitem" class="social-link" aria-label="Email">
+        <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+        <span class="sr-only">Email</span>
+      </a>
+
+      <a href="https://github.com/Abhinand2502" target="_blank" rel="noopener noreferrer" title="GitHub" class="social-link" role="listitem" aria-label="GitHub">
+        <i class="fa-brands fa-github" aria-hidden="true"></i>
+        <span class="sr-only">GitHub</span>
+      </a>
+
+      <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="social-link" role="listitem" aria-label="LinkedIn">
+        <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+        <span class="sr-only">LinkedIn</span>
+      </a>
+
+      <a href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener noreferrer" title="Instagram" class="social-link" role="listitem" aria-label="Instagram">
+        <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+        <span class="sr-only">Instagram</span>
+      </a>
+    </div>
+
+    <!-- CV Block -->
+    <div class="contact-grid">
+      <div class="cv-box gradient-border" aria-describedby="resume-note">
+        <h3>My Resume</h3>
+        <p id="resume-note" class="resume-note">View or download my resume.</p>
+
+        <div class="resume-btns">
+          <button type="button" class="btn-primary" id="view-resume-btn" aria-haspopup="dialog" aria-controls="resume-modal">
+            <i class="fa-solid fa-eye" aria-hidden="true"></i> View Resume
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal / Lightbox (hidden by default) -->
+<div id="resume-modal" class="resume-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="resume-modal-title">
+  <div class="resume-modal-inner gradient-border" role="document">
+    <header class="modal-header">
+      <h2 id="resume-modal-title">Resume — Abhinand Babu</h2>
+
+      <div class="modal-actions">
+        <a id="modal-download" class="modal-btn modal-download" href="assets/Resume.pdf" download title="Download Resume (PDF)">
+          <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
+          <span class="modal-btn-text">Download</span>
+        </a>
+
+        <a id="modal-open" class="modal-btn modal-open" href="assets/Resume.pdf" target="_blank" rel="noopener noreferrer" title="Open Resume (PDF)">
+          <i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i>
+          <span class="modal-btn-text">Open</span>
+        </a>
+
+        <button id="close-resume-btn" class="modal-close" aria-label="Close resume viewer">&times;</button>
+      </div>
+    </header>
+
+    <div class="modal-body">
+      <div class="iframe-wrap" id="iframe-wrap">
+        <div id="pdf-loading" class="pdf-loading" role="status" aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          Loading resume...
+        </div>
+
+        <!-- IMAGE (lazy-loaded) placed inside the lightbox -->
+        <img id="resume-image"
+             data-src="assets/resume.jpg"
+             alt="Resume preview — Abhinand Babu"
+             style="visibility:hidden; display:block; margin:auto;" />
+
+      </div>
+
+      <div id="pdf-fallback" class="pdf-fallback" aria-hidden="false">
+        If the resume doesn't display, <a id="fallback-link" href="assets/Resume.pdf" target="_blank" rel="noopener noreferrer">open it in a new tab</a> or use the Download button above.
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer id="site-footer">© <span id="yr"></span> Abhinand Babu</footer>
+
+<!-- ======= Scoped styles (modern, matches site) ======= -->
+<style>
+  /* Prefer site variables if present; fallback values provided */
+  :root{
+    --accent-main: var(--accent, #1f8eff);
+    --accent-2: #ff59d0;
+    --accent-mid: #ffffff;
+    --text-default: var(--text, #e6eefc);
+    --muted-default: var(--muted, #9aa6bc);
+    --container-w: var(--container, 1180px);
+  }
+
+  /* reusable gradient-border (blue → white → pink) for containers */
+  .gradient-border {
+    position:relative;
+    border-radius: 16px;
+    /* two-layer background trick: inner background then border gradient */
+    border: 2px solid transparent;
+    background-image:
+      linear-gradient( rgba(255,255,255,0.02), rgba(0,0,0,0.02) ), /* inner surface (keeps theme) */
+      linear-gradient(90deg, var(--accent-main), var(--accent-mid) 45%, var(--accent-2)); /* outer border gradient */
+    background-origin: padding-box, border-box;
+    background-clip: padding-box, border-box;
+    /* keep overflow visible for thin glows */
+    box-sizing: border-box;
+  }
+
+  /* Section wrapper */
+  .contact-section{
+    padding: 48px 20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    /* base page tone; your overall site theme will still apply */
+    background: linear-gradient(180deg, #05060a, #071022 30%);
+  }
+
+  .contact-container{
+    width: min(94%, var(--container-w));
+    padding: 42px;
+    display:flex;
+    flex-direction:column;
+    gap: 18px;
+    align-items:center;
+    color: var(--text-default);
+    box-shadow: 0 12px 40px rgba(2,6,23,0.5);
+  }
+
+  /* heading styles (matches other sections) */
+  #contact-heading {
+    font-family:'Playfair Display', Georgia, serif;
+    font-size: 32px;
+    margin:0;
+    font-weight:900;
+    color: var(--text-default);
+  }
+  .divider {
+    width:64px; height:4px; border-radius:4px; margin-top:10px;
+    background: linear-gradient(90deg, var(--accent-main), var(--accent-mid));
+    box-shadow: 0 6px 18px rgba(31,129,255,0.08);
+  }
+  .contact-text{ color: var(--muted-default); text-align:center; max-width:900px; margin:8px 0 0; }
+
+  /* socials */
+  .socials {
+    display:flex; gap:14px; align-items:center; justify-content:center;
+    padding:10px 14px; border-radius:999px; margin-top:18px;
+  }
+
+  .social-link {
+    width:64px; height:64px; display:inline-grid; place-items:center;
+    border-radius:12px; font-size:1.3rem; color:var(--muted-default);
+    background: transparent; border:1px solid rgba(255,255,255,0.03);
+    transition: transform .16s ease, box-shadow .16s ease, color .16s ease, background .16s ease;
+  }
+  .social-link i{ pointer-events:none; }
+
+  .social-link:hover{
+    transform: translateY(-6px);
+    color: var(--accent-main);
+    background: linear-gradient(180deg, rgba(31,129,255,0.04), rgba(255,89,208,0.02));
+    box-shadow: 0 12px 30px rgba(31,129,255,0.06);
+    border-color: rgba(255,255,255,0.04);
+  }
+
+  /* resume card */
+  .contact-grid{ width:100%; display:flex; justify-content:center; margin-top:26px; }
+  .cv-box{
+    width: min(700px, 70%);
+    padding:32px; display:flex; flex-direction:column; gap:14px; align-items:center;
+    border-radius:12px;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.38);
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));
+  }
+  .cv-box h3{ margin:0; font-size:20px; font-weight:800; color:var(--text-default); }
+  .resume-note{ color:var(--muted-default); margin:0; text-align:center; max-width:560px; }
+
+  /* CTA button */
+  .resume-btns{ margin-top:6px; }
+  .btn-primary{
+    background: linear-gradient(90deg, var(--accent-main), var(--accent-mid));
+    color:#fff; border:0; padding:12px 20px; border-radius:999px; font-weight:800; cursor:pointer;
+    box-shadow: 0 12px 36px rgba(31,129,255,0.12); transition: transform .14s, box-shadow .14s;
+  }
+  .btn-primary:hover{ transform: translateY(-3px); box-shadow: 0 18px 48px rgba(31,129,255,0.16); }
+
+  /* modal */
+  .resume-modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(2,6,23,0.66); z-index:1300; padding:18px; }
+  .resume-modal[aria-hidden="false"]{ display:flex; }
+  .resume-modal-inner{
+    width:100%; max-width:1100px; height:84vh; border-radius:12px; overflow:hidden;
+    display:flex; flex-direction:column; color:var(--text-default);
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));
+    box-shadow: 0 28px 80px rgba(2,6,23,0.6);
+  }
+  .modal-header{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.03); }
+  .modal-header h2{ margin:0; font-size:1rem; font-weight:700; }
+  .modal-actions{ display:flex; gap:8px; align-items:center; }
+  .modal-download{ background: linear-gradient(90deg, var(--accent-main), var(--accent-mid)); color:#fff; padding:8px 12px; border-radius:8px; text-decoration:none; font-weight:700; }
+  .modal-open{ background:transparent; color:var(--accent-main); border-radius:8px; padding:8px 10px; text-decoration:none; border:1px solid rgba(255,255,255,0.04); font-weight:700; }
+  .modal-close{ background:transparent; border:0; font-size:1.6rem; cursor:pointer; color:var(--text-default); padding:6px 8px; line-height:1; }
+
+  .modal-body{ flex:1 1 auto; position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:12px; }
+  .iframe-wrap{ flex:1 1 auto; position:relative; display:flex; min-height:120px; align-items:center; justify-content:center; padding:6px 12px; box-sizing:border-box; overflow:hidden; }
+
+  .pdf-loading{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:10px; align-items:center; color:var(--muted-default); font-weight:700; z-index:5; }
+  .spinner{ width:18px; height:18px; border-radius:50%; border:3px solid rgba(255,255,255,0.06); border-top-color:var(--accent-main); animation:spin 1s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .pdf-fallback{ padding:12px 16px; text-align:center; background: transparent; color:var(--muted-default); font-weight:700; display:none; }
+
+  #resume-image{
+    display:block; width: 92vw; max-width:1100px; height:auto; max-height: calc(100vh - 120px); object-fit:contain;
+    transition: transform .18s ease, filter .18s ease; filter: contrast(1.02) saturate(1.02);
+  }
+
+  /* responsive */
+  @media (max-width:980px){
+    .contact-container{ padding:28px; }
+    .cv-box{ width: 92%; padding:22px; }
+    .social-link{ width:56px; height:56px; font-size:1.1rem; }
+    .resume-modal-inner{ max-width:100%; height:100vh; border-radius:0; }
+  }
+
+  @media (max-width:520px){
+    .contact-section{ padding:28px 12px; }
+    .socials{ gap:10px; padding:8px; }
+    .social-link{ width:50px; height:50px; border-radius:10px; }
+    #resume-image{ max-height: calc(100vh - 140px); }
+  }
+
+  /* theme overrides: respect your html[data-theme] variable if set */
+  html[data-theme="light"] .contact-section { background: linear-gradient(180deg,#f7f9fc,#ffffff); }
+  html[data-theme="light"] .contact-container { color:#0b1220; box-shadow: 0 12px 40px rgba(12,12,24,0.06); }
+  html[data-theme="light"] .contact-text { color:#475569; }
+  html[data-theme="light"] .social-link { border-color: rgba(0,0,0,0.06); color:#344054; background: rgba(0,0,0,0.02); }
+  html[data-theme="light"] .cv-box { background:#fbfcff; box-shadow: 0 8px 20px rgba(12,12,24,0.04); }
+
+  html[data-theme="dark"] .contact-section { background: linear-gradient(180deg, #05060a, #071022 30%); }
+  html[data-theme="dark"] .contact-container { color:var(--text-default); }
+  html[data-theme="dark"] .social-link { border-color: rgba(255,255,255,0.04); color:var(--muted-default); background: transparent; }
+</style>
+
+<!-- ======= Scripts (unchanged behaviour) ======= -->
+<script>
+  // Update year
+  (function(){ const yrEl = document.getElementById("yr"); if(yrEl) yrEl.textContent = new Date().getFullYear(); })();
+
+  /* Gmail compose helper (same behaviour) */
+  const CONTACT_EMAIL = 'abhinandbabu2502@gmail.com';
+  const DEFAULT_SUBJECT = 'Hello — Inquiry from your portfolio';
+  const DEFAULT_BODY = 'Hi Abhinand,\n\nI would like to connect regarding...';
+  function encode(s){ return encodeURIComponent(s || ''); }
+
+  function openGmailCompose(e){
+    if(e) e.preventDefault();
+    const to = encode(CONTACT_EMAIL);
+    const subject = encode(DEFAULT_SUBJECT);
+    const body = encode(DEFAULT_BODY);
+    const webGmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`;
+    const gmailScheme = `googlegmail://co?to=${to}&subject=${subject}&body=${body}`;
+    const androidIntent = `intent://compose?to=${to}&subject=${subject}&body=${body}#Intent;package=com.google.android.gm;scheme=mailto;end`;
+    try { window.location.href = gmailScheme; } catch(e){}
+    const fallbackTimer = setTimeout(()=>{
+      const ua = navigator.userAgent || '';
+      if(/android/i.test(ua)){ window.location.href = androidIntent; setTimeout(()=> { window.location.href = webGmail; }, 900); }
+      else { window.location.href = webGmail; }
+    }, 700);
+    function onVis(){ if(document.hidden) clearTimeout(fallbackTimer); }
+    document.addEventListener('visibilitychange', onVis, { once:true });
+    setTimeout(()=> { clearTimeout(fallbackTimer); document.removeEventListener('visibilitychange', onVis); }, 3000);
+  }
+
+  /* Modal / IMAGE viewer logic (lazy-load image) */
+  (function(){
+    const modal = document.getElementById("resume-modal");
+    const viewBtn = document.getElementById("view-resume-btn");
+    const closeBtn = document.getElementById("close-resume-btn");
+    const img = document.getElementById("resume-image");
+    const loading = document.getElementById("pdf-loading");
+    const fallbackLink = document.getElementById("fallback-link");
+    if(!img) return;
+    const imgPath = img.getAttribute('data-src') || 'assets/resume.jpg';
+    const pdfPath = 'assets/Resume.pdf';
+    const modalDownload = document.getElementById('modal-download');
+    const modalOpen = document.getElementById('modal-open');
+    if(modalDownload) modalDownload.setAttribute('href', pdfPath);
+    if(modalOpen) modalOpen.setAttribute('href', pdfPath);
+    if(fallbackLink) fallbackLink.setAttribute('href', pdfPath);
+
+    function showLoading(){ if(loading) loading.style.display = 'flex'; if(img) { img.style.visibility = 'hidden'; img.style.display = 'none'; } }
+    function hideLoading(){ if(loading) loading.style.display = 'none'; if(img) { img.style.visibility = 'visible'; img.style.display = 'block'; } }
+
+    function openModal(){
+      if(!modal) return;
+      modal.setAttribute('aria-hidden','false');
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+      if(!img.src || !img.src.includes(imgPath)){
+        showLoading();
+        img.src = imgPath;
+      } else {
+        hideLoading();
+      }
+      setTimeout(()=> closeBtn && closeBtn.focus(), 120);
+    }
+
+    function closeModal(){
+      if(!modal) return;
+      modal.setAttribute('aria-hidden','true');
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      viewBtn && viewBtn.focus();
+    }
+
+    img.addEventListener('load', function(){ hideLoading(); });
+    img.addEventListener('error', function(){
+      if(img){ img.style.display = 'none'; img.style.visibility = 'hidden'; }
+      if(loading) loading.style.display = 'none';
+      const pf = document.getElementById('pdf-fallback');
+      if(pf) pf.style.display = 'block';
+    });
+
+    if(viewBtn) viewBtn.addEventListener('click', function(){
+      openModal();
+      setTimeout(()=> {
+        if(loading && loading.style.display !== 'none'){
+          loading.style.display = 'none';
+          const pf = document.getElementById('pdf-fallback');
+          if(pf) pf.style.display = 'block';
+        }
+      }, 4000);
+    });
+
+    closeBtn && closeBtn.addEventListener('click', closeModal);
+    modal && modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && modal && modal.getAttribute('aria-hidden') === 'false') closeModal(); });
+
+    const pf = document.getElementById('pdf-fallback'); if(pf) pf.style.display = 'none';
+    if(loading) loading.style.display = 'none';
+  })();
+</script>
 
 
 

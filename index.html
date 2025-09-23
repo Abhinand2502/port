@@ -411,7 +411,8 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 
 
 
-<!-- ===== WORKS: mobile-optimized + neon-image-aligned thumbs + better key search ===== -->
+
+<!-- ===== WORKS: updated — lightbox uses data-lightbox separately from thumbnails ===== -->
 <section id="works" aria-labelledby="worksTitle">
   <style>
     :root{
@@ -419,32 +420,25 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       --primary:#2a7cf1;
       --text:#111;
       --muted:#7a7a7a;
-      --header-h:72px; /* desktop header height */
-      --card-radius:11px; /* match neon-image border-radius */
+      --header-h:72px; /* adjust to your header height */
+      --card-radius:12px;
       --thumb-interval: 1800ms;
       --card-bg: #ffffff; /* card / small UI background */
     }
 
-    /* MOBILE OVERRIDES (mobile-first mindset) */
-    @media (max-width:760px){
-      :root{
-        --header-h:56px;       /* smaller header on mobile */
-      }
-    }
-
     /* container */
-    #works { padding-top: calc(var(--header-h) + 8px); padding-bottom: 20px; background: transparent; position: relative; z-index: 1; }
+    #works { padding-top: calc(var(--header-h) + 10px); padding-bottom: 48px; background: transparent; position: relative; z-index: 1; }
     #works > .section-inner { height:auto !important; min-height:0 !important; display:block !important; padding-top:0 !important; }
-    #works .box { width:100%; max-width:1200px; margin:0 auto; padding:16px; box-sizing:border-box; }
+    #works .box { width:100%; max-width:1400px; margin:0 auto; padding:24px; box-sizing:border-box; }
 
-    /* SEARCH - compact for mobile */
-    .search-wrap { margin: 8px 0 12px; display:flex; gap:8px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
-    .search-left { display:flex; gap:8px; align-items:center; flex:1; min-width:0; } /* min-width removed to avoid overflow */
+    /* SEARCH - stronger black border and modern style */
+    .search-wrap { margin: 8px 0 18px; display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    .search-left { display:flex; gap:10px; align-items:center; flex:1; min-width:220px; }
     .search-input {
       flex:1;
-      padding:10px 12px 10px 36px;
-      border-radius:10px;
-      border:2px solid #000;            /* stronger black border */
+      padding:12px 14px 12px 40px;
+      border-radius:12px;
+      border:2px solid #000;            /* stronger black border per request */
       font-size:14px;
       box-sizing:border-box;
       outline:none;
@@ -453,13 +447,20 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       box-shadow: 0 6px 18px rgba(38,57,90,0.03);
       transition: box-shadow .12s ease, transform .09s ease, border-color .12s ease;
       position:relative;
-      min-width:0;
     }
     .search-input::placeholder { color: var(--muted); }
-    .search-input:focus { box-shadow: 0 10px 24px rgba(42,124,241,0.06); transform: translateY(-1px); border-color: rgba(0,0,0,0.9); }
-    .search-icon { position:relative; left:26px; margin-right: -26px; pointer-events:none; opacity:.9; font-weight:700; color:var(--muted); font-size:14px; }
-    .search-actions { display:flex; gap:8px; align-items:center; margin-left:8px; }
-    .search-clear { padding:6px 10px; border-radius:10px; border:1px solid var(--glass-strong); background:transparent; cursor:pointer; font-weight:800; font-size:13px; color:var(--text); }
+    .search-input:focus { box-shadow: 0 12px 30px rgba(42,124,241,0.06); transform: translateY(-1px); border-color: rgba(0,0,0,0.9); }
+    .search-icon { position:relative; left:34px; margin-right: -34px; pointer-events:none; opacity:.9; font-weight:700; color:var(--muted); font-size:14px; }
+    .search-actions { display:flex; gap:8px; align-items:center; }
+    .search-clear { padding:8px 12px; border-radius:10px; border:1px solid var(--glass-strong); background:transparent; cursor:pointer; font-weight:800; font-size:13px; color:var(--text); }
+    /* Dark mode border override for search-clear */
+body.dark .search-clear,
+html.dark .search-clear,
+.dark-mode .search-clear,
+.theme-dark .search-clear,
+[data-theme="dark"] .search-clear {
+  border-color: #ffffff !important; /* white border in dark mode */
+}
 
     .result-count { font-weight:700; color:var(--text); font-size:13px; white-space:nowrap; }
 
@@ -467,82 +468,100 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     .hl { background: rgba(42,124,241,0.18); padding:0 3px; border-radius:3px; color:var(--text); font-weight:800; }
 
     /* Grid: mobile 1, tablet/desktop 3 columns */
-    .folio-grid { display:grid; gap:12px; grid-template-columns: 1fr; align-items:stretch; }
-    @media (min-width:760px) { .folio-grid { grid-template-columns: repeat(3, 1fr); gap:16px; } }
+    .folio-grid { display:grid; gap:16px; grid-template-columns: 1fr; align-items:stretch; }
+    @media (min-width:760px) { .folio-grid { grid-template-columns: repeat(3, 1fr); } }
 
     /* show first 6 items by default */
     .folio-grid .folio-item { display:block; }
-    .folio-grid .folio-item:nth-child(n+7) { display:none; }  /* show only first 6 unless expanded */
+    .folio-grid .folio-item:nth-child(n+7) { display:none; }  /* <-- show only first 6 */
     .folio-grid.expanded .folio-item { display:block; }
 
     /* Rectangle card */
-    .folio-item { display:block; overflow:visible; border-radius:var(--card-radius); position:relative; border:1px solid var(--glass-strong); transition: transform .14s ease, box-shadow .14s ease; cursor:pointer; background:var(--card-bg); padding:0; }
-    .folio-item:focus, .folio-item:hover { transform: translateY(-4px); box-shadow: 0 18px 46px rgba(16,24,40,0.08); outline:none; }
+    .folio-item { display:block; overflow:visible; border-radius:var(--card-radius); position:relative; border:1px solid var(--glass-strong); transition: transform .18s ease, box-shadow .18s ease; cursor:pointer; background:var(--card-bg); padding:0; }
+    .folio-item:focus, .folio-item:hover { transform: translateY(-6px); box-shadow: 0 22px 60px rgba(16,24,40,0.10); outline:none; }
 
-    /* thumb-wrap: match neon-image style: same rounding and cover behavior */
-    .thumb-wrap { width:100%; position:relative; overflow:hidden; border-radius:var(--card-radius); background:#000; display:block; }
-    /* We'll keep aspect-ratio to keep consistent card heights but images will be cropped using object-fit:cover */
-    .thumb-wrap { aspect-ratio: 16/9; }
-
-    /* make images align visually like `.neon-image` (max-width/height behavior + rounded corners) */
+    /* thumb-wrap: rectangle 16:9 - image fills card area */
+    .thumb-wrap { width:100%; aspect-ratio: 16/9; position:relative; overflow:hidden; border-radius:var(--card-radius) var(--card-radius) 8px 8px; background:#000; display:block; }
     .thumb-wrap img {
       position:absolute;
       inset:0;
       width:100%;
       height:100%;
-      object-fit:cover;             /* same framing as neon-image */
+      object-fit:cover;
       object-position:center;
-      border-radius:inherit;        /* same radius as neon-image */
       opacity:0;
-      transform: scale(1.02) translateZ(0);
-      transition: opacity .38s ease, transform .45s cubic-bezier(.2,.9,.2,1);
+      transform: scale(1.03) translateZ(0);
+      transition: opacity .45s ease, transform .6s cubic-bezier(.2,.9,.2,1);
       backface-visibility:hidden;
       will-change: opacity, transform;
-      display:block;
     }
     .thumb-wrap img.active { opacity:1; transform: scale(1); z-index:1; }
 
-    /* Make thumbs slightly shorter on tiny phones */
-    @media (max-width:420px){
-      .thumb-wrap { aspect-ratio: 4/3; height:180px; }
-    }
-    @media (min-width:421px) and (max-width:760px){
-      .thumb-wrap { aspect-ratio: 16/9; height:200px; }
-    }
-
-    /* caption overlay: title + view inside the image area (compact) */
-    .folio-caption { position:absolute; left:10px; bottom:10px; right:10px; padding:6px 10px; border-radius:8px; background: rgba(0,0,0,0.56); color:#fff; font-weight:900; font-size:13px; display:flex; gap:10px; align-items:center; backdrop-filter: blur(4px); z-index: 10; }
-    .folio-caption .title { font-weight:900; letter-spacing:0.2px; color:#fff; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:13px; }
+    /* caption overlay: title + view inside the image area (dark overlay) */
+    .folio-caption { position:absolute; left:12px; bottom:12px; right:12px; padding:8px 12px; border-radius:10px; background: rgba(0,0,0,0.52); color:#fff; font-weight:900; font-size:14px; display:flex; gap:12px; align-items:center; backdrop-filter: blur(6px); z-index: 10; }
+    .folio-caption .title { font-weight:900; letter-spacing:0.2px; color:#fff; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:14px; }
+    /* view control: pill-style, smaller on mobile, consistent across breakpoints */
     .folio-caption .view {
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap:6px;
-      padding:6px 8px;
-      border-radius:8px;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:10px;
       background: rgba(255,255,255,0.06);
       color:#fff;
       font-weight:700;
-      font-size:12px;
-      min-width:44px;
-      height:32px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.14);
+      font-size:13px;
+      min-width:54px;
+      height:36px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.18);
       border: 1px solid rgba(255,255,255,0.06);
     }
+    @media (max-width:760px){
+      .folio-caption { padding:6px 10px; bottom:8px; left:8px; right:8px; }
+      .folio-caption .title { font-size:13px; }
+      .folio-caption .view { padding:6px 8px; min-width:44px; height:32px; font-size:12px; }
+    }
 
-    /* NO RESULTS */
-    #works .no-results { color: #111111 !important; margin:8px 0; display:none; font-size:14px; }
-    body.dark #works .no-results,
-    html.dark #works .no-results,
-    .dark-mode #works .no-results,
-    .theme-dark #works .no-results,
-    [data-theme="dark"] #works .no-results { color:#fff !important; }
+    /* removed the white meta tab – keep these gone */
+    /* .folio-meta and children intentionally removed from layout */
 
-    /* SEARCH INPUT TEXT & PLACEHOLDER */
-    #works .search-input { color: #111111 !important; background-clip: padding-box; }
-    #works .search-input::placeholder { color: #666666 !important; opacity: 1 !important; }
+    /* no results */
+    /* replace previous .no-results rule with this */
+/* ===== minimal overrides — paste at the END of your #works <style> block ===== */
 
-    /* Lightbox overlay: mobile-friendly (full screen) */
+/* NO RESULTS: black in light, white in dark (many dark-mode selectors covered) */
+#works .no-results {
+  color: #111111 !important;    /* default: black */
+}
+
+/* dark-mode variants (common patterns) */
+body.dark #works .no-results,
+html.dark #works .no-results,
+.dark-mode #works .no-results,
+.theme-dark #works .no-results,
+[data-theme="dark"] #works .no-results {
+  color: #ffffff !important;    /* dark mode: white */
+}
+
+/* SEARCH INPUT TEXT & PLACEHOLDER: force visible (dark on both themes) */
+#works .search-input {
+  color: #111111 !important;           /* typed text */
+  background-clip: padding-box;        /* keep BG behavior unchanged */
+}
+
+/* placeholder (all common browsers) */
+#works .search-input::placeholder { color: #666666 !important; opacity: 1 !important; }
+#works .search-input::-webkit-input-placeholder { color: #666666 !important; opacity: 1 !important; }
+#works .search-input:-ms-input-placeholder { color: #666666 !important; opacity: 1 !important; }
+#works .search-input::-ms-input-placeholder { color: #666666 !important; opacity: 1 !important; }
+
+
+
+/* result count (makes "Showing X of Y" readable when you force text colors) */
+#works .result-count { color: #111111 !important; }
+
+    /* Lightbox overlay (unchanged) */
     .lightbox {
       position:fixed;
       inset:0;
@@ -551,7 +570,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       justify-content:center;
       padding-top: var(--header-h);
       z-index:3000;
-      background: rgba(6,6,6,0.65);
+      background: rgba(6,6,6,0.6);
       backdrop-filter: blur(6px);
       opacity:0;
       pointer-events:none;
@@ -559,46 +578,39 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     }
     .lightbox.open { opacity:1; pointer-events:auto; }
 
-    /* Solid shell and meta */
+    /* Solid shell and meta (minor rounded corners) */
     .lb-shell {
       width: calc(100vw - 48px);
       height: calc(100vh - var(--header-h) - 48px);
-      max-width:1100px;
-      max-height:820px;
+      max-width:1200px;
+      max-height:880px;
       border-radius:10px;
       overflow:hidden;
       display:grid;
-      grid-template-columns: 1fr 320px;
-      gap:10px;
+      grid-template-columns: 1fr 360px;
+      gap:12px;
       background: #ffffff;
       border:1px solid rgba(0,0,0,0.06);
-      box-shadow: 0 36px 100px rgba(2,6,23,0.22);
+      box-shadow: 0 40px 120px rgba(2,6,23,0.25);
       margin-top:8px;
     }
-    @media (max-width:980px){
-      .lb-shell { grid-template-columns: 1fr; width: calc(100vw - 12px); height: calc(100vh - var(--header-h) - 12px); max-width:none; max-height:none; border-radius:8px; gap:6px; margin-top:6px; }
-      .lb-meta { padding:12px; }
-    }
-    @media (max-width:420px){
-      .lb-shell { width:100vw; height:calc(100vh - var(--header-h)); margin-top:0; border-radius:0; }
-      .lb-view { min-height: calc(100vh * 0.55); }
-    }
+    @media (max-width:980px){ .lb-shell { grid-template-columns: 1fr; width: calc(100vw - 12px); height: calc(100vh - var(--header-h) - 12px); } }
 
-    .lb-view { position:relative; background:#111; display:flex; align-items:center; justify-content:center; overflow:hidden; min-height:340px; }
-    .lb-track { display:flex; width:100%; height:100%; will-change: transform; transition: transform .45s cubic-bezier(.2,.9,.2,1); }
-    .lb-slide { flex:0 0 100%; display:flex; align-items:center; justify-content:center; position:relative; height:100%; padding:10px; box-sizing:border-box; }
+    .lb-view { position:relative; background:#111; display:flex; align-items:center; justify-content:center; overflow:hidden; min-height:320px; }
+    .lb-track { display:flex; width:100%; height:100%; will-change: transform; transition: transform .55s cubic-bezier(.2,.9,.2,1); }
+    .lb-slide { flex:0 0 100%; display:flex; align-items:center; justify-content:center; position:relative; height:100%; min-height:320px; padding:12px; box-sizing:border-box; }
     .lb-slide img { max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block; margin:auto; cursor:zoom-in; user-select:none; -webkit-user-drag:none; }
 
     .lb-close, .lb-prev, .lb-next {
-      position:absolute; z-index:40; width:40px; height:40px; border-radius:8px; display:grid; place-items:center; background: rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.06); color:#fff; font-size:16px; cursor:pointer;
+      position:absolute; z-index:40; width:44px; height:44px; border-radius:10px; display:grid; place-items:center; background: rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.06); color:#fff; font-size:18px; cursor:pointer;
       transition: transform .12s ease, opacity .12s ease;
     }
-    .lb-close { right:10px; top:10px; }
-    .lb-prev { left:10px; top:50%; transform:translateY(-50%); }
-    .lb-next { right:10px; top:50%; transform:translateY(-50%); }
+    .lb-close { right:12px; top:12px; }
+    .lb-prev { left:12px; top:50%; transform:translateY(-50%); }
+    .lb-next { right:12px; top:50%; transform:translateY(-50%); }
 
-    .lb-meta { padding:18px; display:flex; flex-direction:column; gap:10px; overflow:auto; color:#111; background: #ffffff; }
-    .lb-title { font-family:'Playfair Display', serif; font-size:18px; font-weight:900; margin:0; color:#111; }
+    .lb-meta { padding:18px; display:flex; flex-direction:column; gap:12px; overflow:auto; color:#111; background: #ffffff; }
+    .lb-title { font-family:'Playfair Display', serif; font-size:20px; font-weight:900; margin:0; color:#111; }
     .lb-desc { color:var(--muted); font-size:13px; line-height:1.45; margin:0; min-height:48px; color:#111; }
     .lb-tech { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; align-items:center; }
     .tech-badge { display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:10px; border:1px solid var(--glass-strong); background:transparent; font-weight:700; font-size:13px; color:var(--text); }
@@ -606,18 +618,129 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     .btn { padding:8px 12px; border-radius:10px; font-weight:800; border:1px solid var(--glass-strong); background:transparent; cursor:pointer; font-size:13px; text-decoration:none; display:inline-block; color:var(--text); }
     .btn.primary { background:var(--primary); color:#fff; border-color:var(--primary); }
 
-    .show-more-wrap { text-align:center; margin-top:10px; }
-    .show-more { display:inline-block; padding:10px 14px; border-radius:999px; border:1px solid var(--glass-strong); background:transparent; font-weight:800; cursor:pointer; color:var(--text); width:100%; max-width:360px; }
+    .show-more-wrap { text-align:center; margin-top:12px; }
+    .show-more { display:inline-block; padding:8px 14px; border-radius:999px; border:1px solid var(--glass-strong); background:transparent; font-weight:800; cursor:pointer; color:var(--text); }
+/* Dark mode border override */
+body.dark .btn,
+html.dark .btn,
+.dark-mode .btn,
+.theme-dark .btn,
+[data-theme="dark"] .btn,
+body.dark .show-more,
+html.dark .show-more,
+.dark-mode .show-more,
+.theme-dark .show-more,
+[data-theme="dark"] .show-more {
+  border-color: #ffffff !important; /* white border in dark mode */
+}
 
-    /* smaller touches */
-    .folio-caption .title { letter-spacing:0.1px; }
-    .thumb-wrap img { -webkit-transform: translateZ(0); transform: translateZ(0); }
+    @media (max-width:760px){
+      .folio-caption{ left:8px; bottom:8px; padding:6px 8px; font-size:12px; }
+      .lb-meta{ padding:12px }
+      .lb-title{ font-size:17px }
+      .lb-shell { gap:8px; }
+    }
 
-    /* dark mode border override for small controls */
-    body.dark .search-clear, body.dark .btn, body.dark .show-more { border-color:#fff !important; }
+    /* force ALL text inside lightbox meta to black (both themes) */
+    .lightbox .lb-meta,
+    .lightbox .lb-meta * {
+      color: #111 !important;
+    }
+    .lightbox .tech-badge { color:#111 !important; border-color: rgba(0,0,0,0.06) !important; }
+
+    /* theme toggling base (adjust if you use a body.dark class) */
+    body.dark, .dark-mode {
+      --text: #111;     /* you requested black text in both modes */
+      --muted: #666;
+      --card-bg: #0b0b0b; /* card background can be dark while text remains black */
+    }
 
     .sr-only { position:absolute !important; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
-  </style>
+ /* ------------------ Mobile improvements (5"–9" phones) ------------------ */
+/* Paste this at the END of your #works <style> block so it overrides earlier rules */
+
+@media (max-width: 420px) {
+  /* slightly smaller header footprint on phones */
+  :root { --header-h: 56px; }
+
+  /* container spacing */
+  #works { padding-top: calc(var(--header-h) + 6px); }
+  .box { padding: 14px; }
+
+  /* search: stack and resize */
+  .search-wrap { gap: 8px; align-items: flex-start; }
+  .search-left { flex: 1 1 100%; min-width: 0; width: 100%; display: flex; align-items: center; }
+  .search-input {
+    padding: 10px 12px 10px 40px; /* keep space for icon */
+    font-size: 13px;
+    border-radius: 10px;
+  }
+  .search-icon { left: 10px; margin-right: -10px; font-size: 14px; }
+  .search-actions { width: 100%; display: flex; justify-content: space-between; margin-top: 8px; }
+  .result-count { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .search-clear { padding: 7px 10px; font-size: 12px; }
+
+  /* grid/card sizing */
+  .folio-grid { gap: 12px; grid-template-columns: 1fr; }
+  .folio-item { border-radius: 10px; }
+  .thumb-wrap { aspect-ratio: 16/9; min-height: 140px; border-radius: 10px; }
+  .thumb-wrap img { will-change: opacity, transform; transform-origin: center center; }
+
+  /* caption: allow wrapping and smaller fonts for mobile */
+  .folio-caption { left: 8px; right: 8px; bottom: 8px; padding: 6px 8px; border-radius: 8px; }
+  .folio-caption .title {
+    white-space: normal;        /* allow multi-line title on small screens */
+    font-size: 14px;
+    line-height: 1.18;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .folio-caption .view { padding: 5px 8px; height: 32px; font-size: 12px; min-width: 44px; }
+
+  /* show-more button */
+  .show-more-wrap { margin-top: 10px; }
+  .show-more { padding: 8px 12px; font-size: 13px; }
+
+  /* lightbox: become fullscreen-ish with smaller chrome */
+  .lightbox { padding-top: var(--header-h); }
+  .lb-shell {
+    width: calc(100vw - 12px);
+    height: calc(100vh - var(--header-h) - 12px);
+    max-width: none;
+    max-height: none;
+    border-radius: 8px;
+    grid-template-columns: 1fr; /* stack meta under image */
+    gap: 8px;
+    box-shadow: 0 20px 80px rgba(2,6,23,0.28);
+  }
+  .lb-view { min-height: 220px; }
+  .lb-prev, .lb-next, .lb-close { width: 40px; height: 40px; font-size: 15px; }
+  .lb-meta { padding: 12px; max-height: 36vh; overflow: auto; }
+  .lb-title { font-size: 16px; }
+  .lb-desc { font-size: 13px; line-height: 1.35; }
+  .lb-tech { gap: 6px; }
+  .tech-badge { padding: 6px 8px; font-size: 12px; }
+
+  /* ensure result-count is visible but compact */
+  #resultCount { display: inline-block; max-width: 60%; overflow: hidden; text-overflow: ellipsis; }
+
+  /* reduce heavy shadows on phones for performance */
+  .folio-item:focus, .folio-item:hover { box-shadow: 0 10px 30px rgba(16,24,40,0.08); transform: translateY(-4px); }
+}
+
+/* optional extra compact tweaks for very small phones */
+@media (max-width: 360px) {
+  .thumb-wrap { min-height: 120px; }
+  .folio-caption .title { font-size: 13px; -webkit-line-clamp: 3; }
+  .search-input { font-size: 12px; padding-left: 38px; }
+  .search-icon { left: 8px; }
+  .lb-meta { max-height: 40vh; padding: 10px; }
+}
+
+ </style>
 
   <div class="section-inner">
     <div class="box">
@@ -626,7 +749,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       <div class="search-wrap" role="search" aria-label="Search projects">
         <div class="search-left">
           <span class="search-icon">🔎</span>
-          <input id="folioSearch" class="search-input" type="search" placeholder="Search projects (use #tag or tech:term / title:term). Press / to focus." aria-label="Search projects" />
+          <input id="folioSearch" class="search-input" type="search" placeholder="Search projects (title, description, tech)..." aria-label="Search projects" />
         </div>
         <div class="search-actions">
           <div id="resultCount" class="result-count" aria-live="polite"></div>
@@ -638,36 +761,38 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       <p class="anim">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 
       <div class="folio-grid anim" id="folioGrid" aria-live="polite">
-        <!-- Items: image thumbnails fill the card area, captions overlay compact -->
-        <button class="folio-item"
-          data-images="assets/THOME.png,assets/TRESULT.png,assets/TRESULT1.png"
-          data-lightbox="assets/TLOGIN (1).png,assets/THOME.png,assets/TPROF.png,assets/TUPLOAD.png,assets/TRESULT.png,assets/TRESULT1.png,assets/THIST.png,assets/THIST2.png,assets/TCOM.png,assets/ALOG.png,assets/AHOME.png,assets/AUSER.png,assets/AHIST.png,assets/ACOMP.png"
-          data-link="https://github.com/Abhinand2502/DetexAI"
-          data-title="DetexAI"
-          data-desc="DetexAI is an AI-powered system using YOLOv8 to detect and classify trash in both land and aquatic environments."
-          data-tech="Python,Django,HTML,CSS,JavaScript,YOLOv8,SQLite">
-          <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">DetexAI – AI Trash Detection</span><span class="view">View details</span></div>
-        </button>
+        <!-- Items: NOTE - .folio-meta removed. Only image + caption overlay remain -->
+      <button class="folio-item"
+  data-images="assets/THOME.png,assets/TRESULT.png,assets/TRESULT1.png"
+  data-lightbox="assets/TLOGIN (1).png,assets/THOME.png,assets/TPROF.png,assets/TUPLOAD.png,assets/TRESULT.png,assets/TRESULT1.png,assets/THIST.png,assets/THIST2.png,assets/TCOM.png,assets/ALOG.png,assets/AHOME.png,assets/AUSER.png,assets/AHIST.png,assets/ACOMP.png"
+  data-link="https://github.com/Abhinand2502/DetexAI"
+  data-title="DetexAI"
+  data-desc=" DetexAI is an AI-powered system using YOLOv8 to detect and classify trash in both land and aquatic environments, enabling real-time identification for smarter, faster cleanup."
+  data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐YOLOv8,⭐SQLite">
+  <span class="thumb-wrap" aria-hidden="true"></span>
+  <div class="folio-caption"><span class="title">DetexAI – AI Trash Detection</span><span class="view">View details</span></div>
+</button>
 
-        <button class="folio-item"
+
+<button class="folio-item"
           data-images="assets/face.jpg,assets/face1.png,assets/face2.png"
           data-lightbox="assets/face.jpg,assets/face1.png,assets/face2.png,assets/face3.png,assets/face4.png,assets/face5.png,assets/face6.png"
           data-link="https://github.com/Abhinand2502/Face-recognition"
           data-title="Face recognition"
-          data-desc="Face recognition Attendance Register automatically marks student attendance using face recognition."
-          data-tech="Python,Django,OpenCV,FaceRecognition">
+          data-desc="Face recognition Attendance Register is an automated student attendance system that uses face recognition technology to mark attendance."
+          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">Face recognition - Attendance Register</span><span class="view">View details</span></div>
         </button>
+
 
         <button class="folio-item"
           data-images="assets/login.png,assets/signup.png,assets/home.png"
           data-lightbox="assets/login.png,assets/signup.png,assets/home.png,assets/cash.png,assets/admin.png,assets/product.png,assets/orders.png"
           data-link="https://github.com/Abhinand2502/Ai-Assist-Cart"
           data-title="AI-AssistCart"
-          data-desc="AI-AssistCart automates product recommendations and admin tools to improve e-commerce UX."
-          data-tech="Python,Django,HTML,CSS,JavaScript,AJAX,SQLite">
+          data-desc="AI-AssistCart is an AI-powered e-commerce platform that automates product recommendations, streamlines checkout, and provides advanced admin management tools to enhance the online shopping experience. Developed using Django, it leverages TF-IDF to deliver personalized product suggestions, making shopping faster, smarter, and more intuitive."
+          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐AJAX,⭐SQLite">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">AI-AssistCart - AI Shopping Site</span><span class="view">View details</span></div>
         </button>
@@ -677,8 +802,8 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           data-lightbox="assets/chat1 (1).png,assets/chat1 (2).png"
           data-link="https://github.com/Abhinand2502/AiChatbot"
           data-title="AI-Chatbot"
-          data-desc="Bilingual chatbot built with Django using a local dataset with fuzzy matching and Cohere integration."
-          data-tech="Python,Django,Cohere,NLU">
+          data-desc="An AI-powered bilingual chatbot built with Django, designed to communicate in both English and Malayalam. It uses a local dataset with fuzzy matching for quick responses, regex-based name recognition for personalization, and seamlessly integrates with Cohere’s AI model to handle complex queries with natural and intelligent replies."
+          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐Cohere API">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">AI-Chatbot</span><span class="view">View details</span></div>
         </button>
@@ -687,36 +812,41 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           data-images="assets/tic (2).png,assets/tic (3).png,assets/tic (1).png"
           data-lightbox="assets/tic (2).png,assets/tic (3).png,assets/tic (1).png"
           data-link="https://github.com/Abhinand2502/tic_tac_toe"
-          data-title="Tic-Tac-Toe"
-          data-desc="Neon Tic-Tac-Toe with real-time multiplayer using Django Channels (WebSockets)."
-          data-tech="Python,Django,WebSockets,HTML,CSS,JS">
+          data-title=" Tic-Tac-Toe"
+          data-desc="✨ A futuristic neon glassmorphism Tic-Tac-Toe game with real-time multiplayer using Django Channels (WebSockets). Players compete in a best-of-3 format with glowing winning tiles, smooth animations, and responsive design for desktop & mobile."
+          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐WebSockets">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Tic-Tac-Toe</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title"> Tic-Tac-Toe</span><span class="view">View details</span></div>
         </button>
 
+        
         <button class="folio-item"
           data-images="assets/porto.png,assets/portfolio.jpg"
           data-lightbox="assets/porto.png,assets/portfolio.jpg"
           data-link="https://github.com/Abhinand2502/portofolio"
           data-title="Portfolio"
           data-desc="My personal portfolio website."
-          data-tech="HTML,CSS,JavaScript">
+          data-tech="⭐HTML,⭐CSS,⭐JavaScript">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">Portfolio</span><span class="view">View details</span></div>
         </button>
 
-        <!-- hidden ones (shown after Show more) -->
-        <button class="folio-item"
+        <!-- hidden ones (shown after Show more)paste  projects here -->
+
+         <button class="folio-item"
           data-images="assets/todo.png,assets/todo.png,assets/todo.png"
           data-lightbox="assets/todo.png,assets/todo.png,assets/todo.png"
           data-link="https://github.com/Abhinand2502/to_do_app"
           data-title="To-Do List app"
-          data-desc="Minimal futuristic To-Do app with real-time search and manage tasks."
-          data-tech="Python,Django,HTML,CSS,JavaScript">
+          data-desc="To-Do App is a simple yet futuristic task management application designed to help users stay organized and productive. With its sleek black-themed interface and transparent panels, it combines functionality with a modern aesthetic.Users can easily add, edit, delete, and complete tasks while enjoying real-time search filtering. The app provides a minimal and futuristic experience that makes task management engaging and efficient."
+          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">To-Do List app</span><span class="view">View details</span></div>
         </button>
 
+
+
+        
       </div>
 
       <div class="show-more-wrap"><button id="showMoreBtn" class="show-more">Show more</button></div>
@@ -742,6 +872,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 
         <div class="lb-actions">
           <a id="lbLink" class="btn primary" href="#" target="_blank" rel="noopener">Open Project</a>
+    
         </div>
       </div>
     </div>
@@ -761,20 +892,23 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       const lbClose = document.getElementById('lbClose');
       const lbPrev = document.getElementById('lbPrev');
       const lbNext = document.getElementById('lbNext');
-
+    
       const searchInput = document.getElementById('folioSearch');
       const searchClear = document.getElementById('folioSearchClear');
       const noResults = document.getElementById('noResults');
       const showMoreBtn = document.getElementById('showMoreBtn');
       const resultCount = document.getElementById('resultCount');
 
+      // timings (from CSS variables)
       const THUMB_INTERVAL = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--thumb-interval')) || 1800;
 
-      /* thumbnail autoplay setup */
+      // ------------ THUMBNAIL SYNCHRONIZED AUTOPLAY & caption thumbnail setup ------------
       items.forEach((it) => {
         const wrap = it.querySelector('.thumb-wrap');
         const images = (it.dataset.images || '').split(',').map(s => s.trim()).filter(Boolean);
         const imgs = images.length ? images : ['assets/bg.jpg'];
+
+        // append image elements for thumbnail autoplay
         imgs.forEach((src, i) => {
           const img = document.createElement('img');
           img.src = src;
@@ -783,6 +917,16 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           if(i === 0) img.classList.add('active');
           wrap.appendChild(img);
         });
+
+        // keep "View details" as a pill, NOT a bottom white tab. (No more meta block.)
+        const viewEl = it.querySelector('.folio-caption .view');
+        if(viewEl){
+          const firstThumb = imgs[0] || '';
+          if(firstThumb){
+            // left in place in case you want to style the pill with the first thumb later
+          }
+        }
+
         it._thumbCount = imgs.length;
         it._thumbIndex = 0;
         it._thumbPaused = false;
@@ -806,7 +950,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       }
       let thumbTimer = setInterval(thumbTick, THUMB_INTERVAL);
 
-      /* LIGHTBOX */
+      // ------------ LIGHTBOX: GPU-ACCELERATED TRACK SLIDER (NO AUTOPLAY) ------------
       let lbTrack = null;
       let lbSlidesArr = [];
       let lbCurrent = 0;
@@ -860,6 +1004,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         const item = items[index]; if(!item) return;
         lastFocused = document.activeElement;
 
+        // <-- NEW: prefer data-lightbox; fallback to data-images
         const slidesRaw = item.dataset.lightbox || item.dataset.images || '';
         const slides = slidesRaw.split(',').map(s=>s.trim()).filter(Boolean);
         const slidesToUse = slides.length ? slides : ['assets/bg.jpg'];
@@ -867,11 +1012,13 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         lbTitle.textContent = item.dataset.title || '';
         lbDesc.textContent = item.dataset.desc || '';
         lbLink.href = item.dataset.link || '#';
+
         renderTechBadgesFromData(item.dataset.tech || '');
 
         lbSlides.innerHTML = '';
         lbSlidesArr = [];
 
+        // create track
         lbTrack = document.createElement('div');
         lbTrack.className = 'lb-track';
         slidesToUse.forEach((s, idx) => {
@@ -880,6 +1027,8 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           lbSlidesArr.push(el);
         });
         lbSlides.appendChild(lbTrack);
+
+        // go to first slide instantly to avoid flicker
         showLbSlide(0, true);
 
         lightbox.classList.add('open'); lightbox.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden';
@@ -892,6 +1041,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         if(lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
       }
 
+      // attach open handlers
       items.forEach((it, idx) => {
         it.addEventListener('click', (ev) => { ev.preventDefault(); openAt(idx); });
         it.addEventListener('keydown', (ev) => { if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openAt(idx); }} );
@@ -901,6 +1051,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       if(lbPrev) lbPrev.addEventListener('click', () => { lbPrevFn(); });
       if(lbNext) lbNext.addEventListener('click', () => { lbNextFn(); });
 
+      // click outside content closes (lightbox background)
       lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLB(); });
 
       document.addEventListener('keydown', (e) => {
@@ -908,16 +1059,13 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           if(e.key === 'Escape') closeLB();
           if(e.key === 'ArrowRight') { lbNextFn(); }
           if(e.key === 'ArrowLeft') { lbPrevFn(); }
-        } else {
-          // keyboard shortcut: press "/" to focus search (only when LB isn't open and not typing)
-          if(e.key === '/' && document.activeElement !== searchInput && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) {
-            e.preventDefault(); if(searchInput) searchInput.focus();
-          }
         }
       });
 
-      /* SEARCH / FILTER - improved key search */
-      function escapeRegExp(string) { return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+      // ------------ SEARCH / FILTER: efficient + highlight ------------
+      function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
 
       function highlightText(node, tokens){
         let txt = node.textContent || '';
@@ -933,7 +1081,12 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         if(resultCount) resultCount.textContent = ` ${visible} of ${total}`;
       }
 
-      function resetHighlights(){ items.forEach(it => { const capTitle = it.querySelector('.folio-caption .title'); if(capTitle) capTitle.innerHTML = capTitle.textContent || ''; }); }
+      function resetHighlights(){
+        items.forEach(it => {
+          const capTitle = it.querySelector('.folio-caption .title');
+          if(capTitle) capTitle.innerHTML = capTitle.textContent || '';
+        });
+      }
 
       function resetFilterRespectExpanded(){
         if(grid.classList.contains('expanded')){
@@ -947,63 +1100,30 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         updateResultCount();
       }
 
-      /**
-       * Better key-search behaviors:
-       * - tokens starting with "#" or "tech:" search tech tags only
-       * - tokens starting with "title:" search only titles
-       * - normal tokens search title (weight 3), tech (weight 2), desc (weight 1)
-       * - Enter opens first visible result
-       */
       function applySearch(q){
         q = q.trim().toLowerCase();
-        if(!q){ resetFilterRespectExpanded(); return; }
-
+        if(!q){
+          resetFilterRespectExpanded();
+          return;
+        }
         showMoreBtn.style.display = 'none';
         let any = false;
         const tokens = q.split(/\s+/).filter(Boolean);
-
         items.forEach(it => {
           const title = (it.dataset.title || '').toLowerCase();
           const desc = (it.dataset.desc || '').toLowerCase();
           const tech = (it.dataset.tech || '').toLowerCase();
-          let score = 0;
-
-          tokens.forEach(tok => {
-            if(tok.startsWith('#') || tok.startsWith('tech:')){
-              const term = tok.replace(/^#|^tech:/,'');
-              if(term && tech.includes(term)) score += 2;
-            } else if(tok.startsWith('title:')){
-              const term = tok.replace(/^title:/,'');
-              if(term && title.includes(term)) score += 4;
-            } else {
-              // general token: title strong, tech medium, desc weak
-              if(title.includes(tok)) score += 3;
-              if(tech.includes(tok)) score += 2;
-              if(desc.includes(tok)) score += 1;
-            }
-          });
-
-          if(score > 0){
-            it.style.display = 'block';
+          const match = tokens.every(tok => title.includes(tok) || desc.includes(tok) || tech.includes(tok));
+          it.style.display = match ? 'block' : 'none';
+          if(match) {
             any = true;
-            // highlight tokens in title
             const capTitle = it.querySelector('.folio-caption .title');
             if(capTitle) highlightText(capTitle, tokens);
-            it.dataset._score = score;
           } else {
-            it.style.display = 'none';
             const capTitle = it.querySelector('.folio-caption .title');
             if(capTitle) capTitle.innerHTML = capTitle.textContent || '';
-            it.dataset._score = 0;
           }
         });
-
-        // optional: stable sort visible items by score (descending), keep non-matching after
-        // We'll rearrange DOM nodes so top-matches appear first — nice UX for search.
-        const visibleWithScore = items.filter(i => i.style.display !== 'none').sort((a,b) => (parseInt(b.dataset._score||0) - parseInt(a.dataset._score||0)));
-        // re-append in order (keeps their original object references)
-        visibleWithScore.forEach(n => grid.appendChild(n));
-
         noResults.style.display = any ? 'none' : 'block';
         updateResultCount();
       }
@@ -1012,27 +1132,12 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       if(searchInput){
         searchInput.addEventListener('input', (e) => {
           clearTimeout(searchTO);
-          searchTO = setTimeout(() => { applySearch(searchInput.value || ''); }, 140);
+          searchTO = setTimeout(() => {
+            applySearch(searchInput.value || '');
+          }, 140);
         });
-
-        // keyboard shortcuts while focused in search
         searchInput.addEventListener('keydown', (e) => {
-          if(e.key === 'Escape'){ searchInput.value = ''; applySearch(''); searchInput.blur(); }
-          if(e.key === 'Enter'){
-            // open first visible item
-            const first = items.find(it => it.style.display !== 'none');
-            if(first){
-              // emulate click (open lightbox)
-              const idx = items.indexOf(first);
-              if(idx >= 0){ openAt(idx); }
-            }
-          }
-          // ArrowDown focuses first visible project (for keyboard nav)
-          if(e.key === 'ArrowDown'){
-            e.preventDefault();
-            const first = items.find(it => it.style.display !== 'none');
-            if(first) first.focus();
-          }
+          if(e.key === 'Escape'){ searchInput.value = ''; applySearch(''); }
         });
       }
 
@@ -1044,7 +1149,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         });
       }
 
-      // Show more toggle
+      // Show more toggle: expands to show all hidden items; collapse back to six
       showMoreBtn.addEventListener('click', () => {
         if(grid.classList.contains('expanded')){
           grid.classList.remove('expanded');
@@ -1052,7 +1157,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           showMoreBtn.textContent = 'Show more';
         } else {
           grid.classList.add('expanded');
-          items.forEach(it => it.style.display = 'block');
+          items.forEach(it => it.style.display = 'block'); // show all
           showMoreBtn.textContent = 'Show less';
         }
         updateResultCount();
@@ -1061,13 +1166,13 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       // initialize
       resetFilterRespectExpanded();
 
-      // preload first image for each card
+      // preload first image for each card to reduce flicker
       items.forEach(it => {
         const first = (it.dataset.images || '').split(',').map(s=>s.trim()).filter(Boolean)[0];
         if(first){ const img = new Image(); img.src = first; }
       });
 
-      // page visibility pause for thumbs
+      // ensure page visibility pause (stop global thumbTimer when hidden)
       document.addEventListener('visibilitychange', () => {
         if(document.hidden){
           if(thumbTimer){ clearInterval(thumbTimer); thumbTimer = null; }
@@ -1083,6 +1188,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
   </script>
 </section>
 <!-- ===== end WORKS ===== -->
+
 
 
 

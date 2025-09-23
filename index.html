@@ -346,6 +346,46 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
   <a href="#projects" data-target="works" class="mobile-link">PROJECTS</a>
   <a href="#contact" data-target="contact" class="mobile-link">CONTACT</a>
 </div>
+<!-- Floating section name for mobile -->
+<div id="sectionNameIndicator" style="
+  position: fixed;
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%);
+  font-weight: 900;
+  font-size: 18px;
+  color: #2563eb; /* blue */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 9999;
+"></div>
+
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const indicator = document.getElementById('sectionNameIndicator');
+
+  if (window.innerWidth <= 980) { // Only for mobile
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          // Show section name
+          indicator.textContent = entry.target.getAttribute('id').toUpperCase();
+          indicator.style.opacity = '1';
+          indicator.style.transform = 'translateY(-50%) translateX(0)';
+          
+          // Hide after a short delay
+          setTimeout(() => {
+            indicator.style.opacity = '0';
+            indicator.style.transform = 'translateY(-50%) translateX(-10px)';
+          }, 1000); // visible for 1s
+        }
+      });
+    }, { threshold: 0.5 }); // section is half visible
+
+    sections.forEach(section => observer.observe(section));
+  }
+</script>
 
 <main>
 <section id="home">

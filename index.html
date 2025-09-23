@@ -343,7 +343,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
   <a href="#home" data-target="home" class="mobile-link">HOME</a>
   <a href="#about" data-target="about" class="mobile-link">ABOUT</a>
-  <a href="#projects" data-target="projects" class="mobile-link">PROJECTS</a>
+  <a href="#projects" data-target="works" class="mobile-link">PROJECTS</a>
   <a href="#contact" data-target="contact" class="mobile-link">CONTACT</a>
 </div>
 
@@ -407,7 +407,6 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 
 <!-- sections -->
 <section id="about"><div style="max-width:var(--container);padding:60px 20px"><h2 style="font-family:Playfair Display;color:var(--text)">About</h2><p style="color:var(--muted-dark)">About content here.</p></div></section>
-
 
 
 
@@ -656,6 +655,85 @@ html.dark .show-more,
     }
 
     .sr-only { position:absolute !important; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
+
+    /* ===== MOBILE OVERRIDES (integrated) ===== */
+    @media (max-width: 760px) {
+      /* container / spacing */
+      #works { padding-top: calc(var(--header-h) + 6px); padding-bottom: 24px; }
+      #works .box { padding: 16px; }
+
+      /* search area stacked & full width */
+      .search-wrap { gap:8px; align-items:flex-start; }
+      .search-left { flex-basis:100%; min-width:0; }
+      .search-actions { width:100%; justify-content:flex-start; margin-top:8px; gap:10px; }
+      .search-clear { padding:8px 10px; }
+
+      /* search input touch targets */
+      .search-input { padding: 12px 14px 12px 44px; font-size:15px; }
+
+      /* grid spacing, single column already set but tighten gaps */
+      .folio-grid { gap:12px; }
+      .folio-item { padding: 0; border-radius:10px; }
+
+      /* thumbnails: a little taller on phones for better crop */
+      .thumb-wrap { aspect-ratio: 4/3; border-radius: 12px 12px 10px 10px; }
+      .thumb-wrap img { transform-origin:center center; }
+
+      /* caption: allow wrapping on small screens (2 lines) */
+      .folio-caption { left:8px; right:8px; bottom:8px; padding:6px 10px; gap:8px; }
+      .folio-caption .title {
+        white-space: normal;                 /* allow wrap */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;               /* limit to 2 lines */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 13px;
+      }
+
+      /* smaller view pill */
+      .folio-caption .view { padding:6px 8px; min-width:44px; height:32px; font-size:12px; }
+
+      /* show-more and primary action full width for easier tapping */
+      .show-more { width:100%; box-sizing:border-box; padding:10px 12px; font-size:14px; display:block; }
+      .btn, .btn.primary { width:100%; display:block; text-align:center; padding:10px 12px; }
+
+      /* reduce heavy hover transforms on touch */
+      .folio-item:focus, .folio-item:hover { transform:none; box-shadow: 0 10px 30px rgba(16,24,40,0.06); }
+
+      /* lightbox: make shell fill mobile viewport nicely */
+      .lb-shell {
+        width: calc(100vw - 12px);
+        height: calc(100vh - var(--header-h) - 12px);
+        max-width: none;
+        max-height: none;
+        border-radius: 10px;
+        grid-template-columns: 1fr;
+        gap:8px;
+        margin: 6px;
+      }
+      .lb-view { min-height: 220px; }
+      .lb-close, .lb-prev, .lb-next { width:40px; height:40px; border-radius:8px; font-size:16px; }
+      .lb-meta { padding:12px; max-height: 36vh; overflow:auto; }
+
+      /* tech badges & meta are slightly smaller */
+      .tech-badge { font-size:12px; padding:6px 8px; border-radius:8px; }
+
+      /* reduce heavy box-shadow on lightbox for mobile */
+      .lb-shell { box-shadow: 0 20px 60px rgba(2,6,23,0.18); }
+
+      /* ensure no hidden scrollbar caused layout shift */
+      html, body { -webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; text-size-adjust: 100%; }
+    }
+
+    /* tiny devices - tighten further */
+    @media (max-width: 420px) {
+      .search-input { font-size:14px; padding-left:42px; }
+      .folio-caption .title { -webkit-line-clamp: 2; font-size:12.5px; }
+      .lb-meta { max-height: 40vh; }
+      .show-more { padding:10px; font-size:14px; }
+    }
+
   </style>
 
   <div class="section-inner">
@@ -674,7 +752,7 @@ html.dark .show-more,
       </div>
 
       <p id="noResults" class="no-results">No projects found</p>
-      <p class="anim">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+     <p class="anim">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 
       <div class="folio-grid anim" id="folioGrid" aria-live="polite">
         <!-- Items: NOTE - .folio-meta removed. Only image + caption overlay remain -->
@@ -760,9 +838,7 @@ html.dark .show-more,
           <div class="folio-caption"><span class="title">To-Do List app</span><span class="view">View details</span></div>
         </button>
 
-
-
-        
+      
       </div>
 
       <div class="show-more-wrap"><button id="showMoreBtn" class="show-more">Show more</button></div>
@@ -1101,10 +1177,50 @@ html.dark .show-more,
       updateResultCount();
 
     })();
+
+    /* ===== MOBILE JS HELPERS (integrated) ===== */
+    (function(){
+      // helper: make show-more button easier to tap on small screens
+      const sm = document.getElementById('showMoreBtn');
+      if(sm && window.innerWidth <= 760){
+        sm.style.width = '100%';
+        sm.style.display = 'block';
+        sm.style.boxSizing = 'border-box';
+        sm.style.fontSize = '15px';
+        sm.style.padding = '10px 12px';
+      }
+
+      // Touch swipe for lightbox (uses the visible buttons so no need to touch original functions)
+      const lbView = document.getElementById('lbView');
+      const btnPrev = document.getElementById('lbPrev');
+      const btnNext = document.getElementById('lbNext');
+      if(lbView && (btnPrev || btnNext)){
+        let startX = 0, startY = 0;
+        lbView.addEventListener('touchstart', (e) => {
+          const t = e.touches[0];
+          startX = t.clientX; startY = t.clientY;
+        }, {passive:true});
+        lbView.addEventListener('touchend', (e) => {
+          const t = e.changedTouches[0];
+          const dx = t.clientX - startX;
+          const dy = t.clientY - startY;
+          // only horizontal swipes and with a decent threshold
+          if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)){
+            if(dx < 0){ if(btnNext) btnNext.click(); } // swipe left -> next
+            else { if(btnPrev) btnPrev.click(); }       // swipe right -> prev
+          }
+        }, {passive:true});
+      }
+
+      // Improve clickable area for thumbs on VERY small screens
+      document.querySelectorAll('.folio-item .thumb-wrap').forEach(w => {
+        if(window.innerWidth <= 420) w.style.minHeight = '150px';
+      });
+
+    })();
   </script>
 </section>
 <!-- ===== end WORKS ===== -->
-
 
 
 

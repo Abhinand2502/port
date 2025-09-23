@@ -414,7 +414,14 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     .about-inner { --about-muted: rgba(11,11,11,0.56); }
     html[data-theme="dark"] .about-inner { --about-muted: rgba(255,255,255,0.72); }
 
-    .about-inner { min-height:calc(100vh - var(--header-h)); padding-top:var(--header-h); display:flex; align-items:center; justify-content:center; }
+   .about-inner {
+  min-height: auto;
+  padding-top: 4px;   /* minimal gap under header */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
     .about-container { width:1350%; max-width:1350px; padding:24px; display:grid; grid-template-columns:420px 1fr; gap:28px; align-items:stretch; }
 
     .themed-card { border-radius:18px; padding:20px; transition: background-color .18s ease, border-color .18s ease, box-shadow .18s ease; background: #fff; border: 2px solid #0b0b0b; color: var(--text); box-shadow: 0 8px 28px rgba(16,24,40,0.06); }

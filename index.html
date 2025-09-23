@@ -1383,369 +1383,125 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 
 
 
-
-
 <!-- =========================
-     #contact (updated - matches site + gradient border)
+     Simple Contact
 ========================= -->
-<section id="contact" class="contact-section" aria-labelledby="contact-heading">
-  <div class="contact-container gradient-border">
+<section id="contact" class="simple-contact-section" aria-labelledby="contact-heading">
+  <div class="simple-contact-container">
 
     <!-- Heading -->
-    <h1 id="contact-heading">Contact Me</h1>
-    <div class="divider" aria-hidden="true"></div>
+    <h1 id="contact-heading">Get in Touch</h1>
+    <div class="simple-divider" aria-hidden="true"></div>
 
-    <p class="contact-text">
-      Let's connect! Reach out via my social profiles below or view my resume.
+    <p class="simple-contact-text">
+      Feel free to reach out via social links below.
     </p>
 
-    <!-- Social Icons (below paragraph) -->
-    <div class="socials gradient-border" role="list" aria-label="Social links">
-      <a href="#" id="email-link" title="Email" onclick="openGmailCompose(event)" role="listitem" class="social-link" aria-label="Email">
-        <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+    <!-- Social Icons -->
+    <div class="simple-socials" role="list" aria-label="Social links">
+      <a href="mailto:abhinandbabu2502@gmail.com" title="Email" role="listitem" class="simple-social-link" aria-label="Email">
+        <i class="fa-solid fa-envelope"></i>
         <span class="sr-only">Email</span>
       </a>
 
-      <a href="https://github.com/Abhinand2502" target="_blank" rel="noopener noreferrer" title="GitHub" class="social-link" role="listitem" aria-label="GitHub">
-        <i class="fa-brands fa-github" aria-hidden="true"></i>
+      <a href="https://github.com/Abhinand2502" target="_blank" rel="noopener noreferrer" title="GitHub" class="simple-social-link" role="listitem" aria-label="GitHub">
+        <i class="fa-brands fa-github"></i>
         <span class="sr-only">GitHub</span>
       </a>
 
-      <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="social-link" role="listitem" aria-label="LinkedIn">
-        <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+      <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="simple-social-link" role="listitem" aria-label="LinkedIn">
+        <i class="fa-brands fa-linkedin"></i>
         <span class="sr-only">LinkedIn</span>
       </a>
 
-      <a href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener noreferrer" title="Instagram" class="social-link" role="listitem" aria-label="Instagram">
-        <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+      <a href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener noreferrer" title="Instagram" class="simple-social-link" role="listitem" aria-label="Instagram">
+        <i class="fa-brands fa-instagram"></i>
         <span class="sr-only">Instagram</span>
       </a>
     </div>
 
-    <!-- CV Block -->
-    <div class="contact-grid">
-      <div class="cv-box gradient-border" aria-describedby="resume-note">
-        <h3>My Resume</h3>
-        <p id="resume-note" class="resume-note">View or download my resume.</p>
-
-        <div class="resume-btns">
-          <button type="button" class="btn-primary" id="view-resume-btn" aria-haspopup="dialog" aria-controls="resume-modal">
-            <i class="fa-solid fa-eye" aria-hidden="true"></i> View Resume
-          </button>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- Modal / Lightbox (hidden by default) -->
-<div id="resume-modal" class="resume-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="resume-modal-title">
-  <div class="resume-modal-inner gradient-border" role="document">
-    <header class="modal-header">
-      <h2 id="resume-modal-title">Resume — Abhinand Babu</h2>
-
-      <div class="modal-actions">
-        <a id="modal-download" class="modal-btn modal-download" href="assets/Resume.pdf" download title="Download Resume (PDF)">
-          <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
-          <span class="modal-btn-text">Download</span>
-        </a>
-
-        <a id="modal-open" class="modal-btn modal-open" href="assets/Resume.pdf" target="_blank" rel="noopener noreferrer" title="Open Resume (PDF)">
-          <i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i>
-          <span class="modal-btn-text">Open</span>
-        </a>
-
-        <button id="close-resume-btn" class="modal-close" aria-label="Close resume viewer">&times;</button>
-      </div>
-    </header>
-
-    <div class="modal-body">
-      <div class="iframe-wrap" id="iframe-wrap">
-        <div id="pdf-loading" class="pdf-loading" role="status" aria-live="polite">
-          <div class="spinner" aria-hidden="true"></div>
-          Loading resume...
-        </div>
-
-        <!-- IMAGE (lazy-loaded) placed inside the lightbox -->
-        <img id="resume-image"
-             data-src="assets/resume.jpg"
-             alt="Resume preview — Abhinand Babu"
-             style="visibility:hidden; display:block; margin:auto;" />
-
-      </div>
-
-      <div id="pdf-fallback" class="pdf-fallback" aria-hidden="false">
-        If the resume doesn't display, <a id="fallback-link" href="assets/Resume.pdf" target="_blank" rel="noopener noreferrer">open it in a new tab</a> or use the Download button above.
-      </div>
-    </div>
-  </div>
-</div>
-
-<footer id="site-footer">© <span id="yr"></span> Abhinand Babu</footer>
-
-<!-- ======= Scoped styles (modern, matches site) ======= -->
 <style>
-  /* Prefer site variables if present; fallback values provided */
-  :root{
-    --accent-main: var(--accent, #1f8eff);
-    --accent-2: #ff59d0;
-    --accent-mid: #ffffff;
-    --text-default: var(--text, #e6eefc);
-    --muted-default: var(--muted, #9aa6bc);
-    --container-w: var(--container, 1180px);
-  }
-
-  /* reusable gradient-border (blue → white → pink) for containers */
-  .gradient-border {
-    position:relative;
-    border-radius: 16px;
-    /* two-layer background trick: inner background then border gradient */
-    border: 2px solid transparent;
-    background-image:
-      linear-gradient( rgba(255,255,255,0.02), rgba(0,0,0,0.02) ), /* inner surface (keeps theme) */
-      linear-gradient(90deg, var(--accent-main), var(--accent-mid) 45%, var(--accent-2)); /* outer border gradient */
-    background-origin: padding-box, border-box;
-    background-clip: padding-box, border-box;
-    /* keep overflow visible for thin glows */
-    box-sizing: border-box;
-  }
-
-  /* Section wrapper */
-  .contact-section{
+  .simple-contact-section {
     padding: 48px 20px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    /* base page tone; your overall site theme will still apply */
-    background: linear-gradient(180deg, #05060a, #071022 30%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  .contact-container{
-    width: min(94%, var(--container-w));
-    padding: 42px;
-    display:flex;
-    flex-direction:column;
-    gap: 18px;
-    align-items:center;
-    color: var(--text-default);
-    box-shadow: 0 12px 40px rgba(2,6,23,0.5);
+  .simple-contact-container {
+    width: min(94%, 800px);
+    padding: 32px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    background: #ffffff;
+    color: #000000;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    text-align: center;
   }
 
-  /* heading styles (matches other sections) */
-  #contact-heading {
-    font-family:'Playfair Display', Georgia, serif;
-    font-size: 32px;
-    margin:0;
-    font-weight:900;
-    color: var(--text-default);
-  }
-  .divider {
-    width:64px; height:4px; border-radius:4px; margin-top:10px;
-    background: linear-gradient(90deg, var(--accent-main), var(--accent-mid));
-    box-shadow: 0 6px 18px rgba(31,129,255,0.08);
-  }
-  .contact-text{ color: var(--muted-default); text-align:center; max-width:900px; margin:8px 0 0; }
-
-  /* socials */
-  .socials {
-    display:flex; gap:14px; align-items:center; justify-content:center;
-    padding:10px 14px; border-radius:999px; margin-top:18px;
+  .simple-divider {
+    width: 60px;
+    height: 4px;
+    border-radius: 4px;
+    margin-top: 8px;
+    background: linear-gradient(90deg, #1f8eff, #ff59d0);
   }
 
-  .social-link {
-    width:64px; height:64px; display:inline-grid; place-items:center;
-    border-radius:12px; font-size:1.3rem; color:var(--muted-default);
-    background: transparent; border:1px solid rgba(255,255,255,0.03);
-    transition: transform .16s ease, box-shadow .16s ease, color .16s ease, background .16s ease;
-  }
-  .social-link i{ pointer-events:none; }
-
-  .social-link:hover{
-    transform: translateY(-6px);
-    color: var(--accent-main);
-    background: linear-gradient(180deg, rgba(31,129,255,0.04), rgba(255,89,208,0.02));
-    box-shadow: 0 12px 30px rgba(31,129,255,0.06);
-    border-color: rgba(255,255,255,0.04);
+  .simple-contact-text {
+    color: #555555;
+    font-size: 1rem;
+    max-width: 600px;
   }
 
-  /* resume card */
-  .contact-grid{ width:100%; display:flex; justify-content:center; margin-top:26px; }
-  .cv-box{
-    width: min(700px, 70%);
-    padding:32px; display:flex; flex-direction:column; gap:14px; align-items:center;
-    border-radius:12px;
-    box-shadow: 0 10px 30px rgba(2,6,23,0.38);
-    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));
-  }
-  .cv-box h3{ margin:0; font-size:20px; font-weight:800; color:var(--text-default); }
-  .resume-note{ color:var(--muted-default); margin:0; text-align:center; max-width:560px; }
-
-  /* CTA button */
-  .resume-btns{ margin-top:6px; }
-  .btn-primary{
-    background: linear-gradient(90deg, var(--accent-main), var(--accent-mid));
-    color:#fff; border:0; padding:12px 20px; border-radius:999px; font-weight:800; cursor:pointer;
-    box-shadow: 0 12px 36px rgba(31,129,255,0.12); transition: transform .14s, box-shadow .14s;
-  }
-  .btn-primary:hover{ transform: translateY(-3px); box-shadow: 0 18px 48px rgba(31,129,255,0.16); }
-
-  /* modal */
-  .resume-modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(2,6,23,0.66); z-index:1300; padding:18px; }
-  .resume-modal[aria-hidden="false"]{ display:flex; }
-  .resume-modal-inner{
-    width:100%; max-width:1100px; height:84vh; border-radius:12px; overflow:hidden;
-    display:flex; flex-direction:column; color:var(--text-default);
-    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));
-    box-shadow: 0 28px 80px rgba(2,6,23,0.6);
-  }
-  .modal-header{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.03); }
-  .modal-header h2{ margin:0; font-size:1rem; font-weight:700; }
-  .modal-actions{ display:flex; gap:8px; align-items:center; }
-  .modal-download{ background: linear-gradient(90deg, var(--accent-main), var(--accent-mid)); color:#fff; padding:8px 12px; border-radius:8px; text-decoration:none; font-weight:700; }
-  .modal-open{ background:transparent; color:var(--accent-main); border-radius:8px; padding:8px 10px; text-decoration:none; border:1px solid rgba(255,255,255,0.04); font-weight:700; }
-  .modal-close{ background:transparent; border:0; font-size:1.6rem; cursor:pointer; color:var(--text-default); padding:6px 8px; line-height:1; }
-
-  .modal-body{ flex:1 1 auto; position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:12px; }
-  .iframe-wrap{ flex:1 1 auto; position:relative; display:flex; min-height:120px; align-items:center; justify-content:center; padding:6px 12px; box-sizing:border-box; overflow:hidden; }
-
-  .pdf-loading{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); display:flex; gap:10px; align-items:center; color:var(--muted-default); font-weight:700; z-index:5; }
-  .spinner{ width:18px; height:18px; border-radius:50%; border:3px solid rgba(255,255,255,0.06); border-top-color:var(--accent-main); animation:spin 1s linear infinite; }
-  @keyframes spin{ to{ transform:rotate(360deg); } }
-
-  .pdf-fallback{ padding:12px 16px; text-align:center; background: transparent; color:var(--muted-default); font-weight:700; display:none; }
-
-  #resume-image{
-    display:block; width: 92vw; max-width:1100px; height:auto; max-height: calc(100vh - 120px); object-fit:contain;
-    transition: transform .18s ease, filter .18s ease; filter: contrast(1.02) saturate(1.02);
+  .simple-socials {
+    display: flex;
+    gap: 14px;
+    margin-top: 18px;
   }
 
-  /* responsive */
-  @media (max-width:980px){
-    .contact-container{ padding:28px; }
-    .cv-box{ width: 92%; padding:22px; }
-    .social-link{ width:56px; height:56px; font-size:1.1rem; }
-    .resume-modal-inner{ max-width:100%; height:100vh; border-radius:0; }
+  .simple-social-link {
+    width: 56px;
+    height: 56px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 12px;
+    font-size: 1.3rem;
+    color: #555555;
+    background: #f0f0f0;
+    transition: transform .16s, background .16s, color .16s;
+    text-decoration: none;
   }
 
-  @media (max-width:520px){
-    .contact-section{ padding:28px 12px; }
-    .socials{ gap:10px; padding:8px; }
-    .social-link{ width:50px; height:50px; border-radius:10px; }
-    #resume-image{ max-height: calc(100vh - 140px); }
+  .simple-social-link:hover {
+    transform: translateY(-4px);
+    background: #1f8eff;
+    color: #ffffff;
   }
 
-  /* theme overrides: respect your html[data-theme] variable if set */
-  html[data-theme="light"] .contact-section { background: linear-gradient(180deg,#f7f9fc,#ffffff); }
-  html[data-theme="light"] .contact-container { color:#0b1220; box-shadow: 0 12px 40px rgba(12,12,24,0.06); }
-  html[data-theme="light"] .contact-text { color:#475569; }
-  html[data-theme="light"] .social-link { border-color: rgba(0,0,0,0.06); color:#344054; background: rgba(0,0,0,0.02); }
-  html[data-theme="light"] .cv-box { background:#fbfcff; box-shadow: 0 8px 20px rgba(12,12,24,0.04); }
+  /* Dark mode */
+  html[data-theme="dark"] .simple-contact-container {
+    background: #000000;
+    color: #ffffff;
+    box-shadow: 0 8px 24px rgba(255,255,255,0.08);
+  }
 
-  html[data-theme="dark"] .contact-section { background: linear-gradient(180deg, #05060a, #071022 30%); }
-  html[data-theme="dark"] .contact-container { color:var(--text-default); }
-  html[data-theme="dark"] .social-link { border-color: rgba(255,255,255,0.04); color:var(--muted-default); background: transparent; }
+  html[data-theme="dark"] .simple-contact-text { color: #bbbbbb; }
+  html[data-theme="dark"] .simple-social-link {
+    background: #111111;
+    color: #bbbbbb;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  html[data-theme="dark"] .simple-social-link:hover {
+    background: #ff59d0;
+    color: #ffffff;
+  }
 </style>
-
-<!-- ======= Scripts (unchanged behaviour) ======= -->
-<script>
-  // Update year
-  (function(){ const yrEl = document.getElementById("yr"); if(yrEl) yrEl.textContent = new Date().getFullYear(); })();
-
-  /* Gmail compose helper (same behaviour) */
-  const CONTACT_EMAIL = 'abhinandbabu2502@gmail.com';
-  const DEFAULT_SUBJECT = 'Hello — Inquiry from your portfolio';
-  const DEFAULT_BODY = 'Hi Abhinand,\n\nI would like to connect regarding...';
-  function encode(s){ return encodeURIComponent(s || ''); }
-
-  function openGmailCompose(e){
-    if(e) e.preventDefault();
-    const to = encode(CONTACT_EMAIL);
-    const subject = encode(DEFAULT_SUBJECT);
-    const body = encode(DEFAULT_BODY);
-    const webGmail = `https://mail.google.com/mail/?view=cm&fs=1&to=${to}&su=${subject}&body=${body}`;
-    const gmailScheme = `googlegmail://co?to=${to}&subject=${subject}&body=${body}`;
-    const androidIntent = `intent://compose?to=${to}&subject=${subject}&body=${body}#Intent;package=com.google.android.gm;scheme=mailto;end`;
-    try { window.location.href = gmailScheme; } catch(e){}
-    const fallbackTimer = setTimeout(()=>{
-      const ua = navigator.userAgent || '';
-      if(/android/i.test(ua)){ window.location.href = androidIntent; setTimeout(()=> { window.location.href = webGmail; }, 900); }
-      else { window.location.href = webGmail; }
-    }, 700);
-    function onVis(){ if(document.hidden) clearTimeout(fallbackTimer); }
-    document.addEventListener('visibilitychange', onVis, { once:true });
-    setTimeout(()=> { clearTimeout(fallbackTimer); document.removeEventListener('visibilitychange', onVis); }, 3000);
-  }
-
-  /* Modal / IMAGE viewer logic (lazy-load image) */
-  (function(){
-    const modal = document.getElementById("resume-modal");
-    const viewBtn = document.getElementById("view-resume-btn");
-    const closeBtn = document.getElementById("close-resume-btn");
-    const img = document.getElementById("resume-image");
-    const loading = document.getElementById("pdf-loading");
-    const fallbackLink = document.getElementById("fallback-link");
-    if(!img) return;
-    const imgPath = img.getAttribute('data-src') || 'assets/resume.jpg';
-    const pdfPath = 'assets/Resume.pdf';
-    const modalDownload = document.getElementById('modal-download');
-    const modalOpen = document.getElementById('modal-open');
-    if(modalDownload) modalDownload.setAttribute('href', pdfPath);
-    if(modalOpen) modalOpen.setAttribute('href', pdfPath);
-    if(fallbackLink) fallbackLink.setAttribute('href', pdfPath);
-
-    function showLoading(){ if(loading) loading.style.display = 'flex'; if(img) { img.style.visibility = 'hidden'; img.style.display = 'none'; } }
-    function hideLoading(){ if(loading) loading.style.display = 'none'; if(img) { img.style.visibility = 'visible'; img.style.display = 'block'; } }
-
-    function openModal(){
-      if(!modal) return;
-      modal.setAttribute('aria-hidden','false');
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden';
-      if(!img.src || !img.src.includes(imgPath)){
-        showLoading();
-        img.src = imgPath;
-      } else {
-        hideLoading();
-      }
-      setTimeout(()=> closeBtn && closeBtn.focus(), 120);
-    }
-
-    function closeModal(){
-      if(!modal) return;
-      modal.setAttribute('aria-hidden','true');
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-      viewBtn && viewBtn.focus();
-    }
-
-    img.addEventListener('load', function(){ hideLoading(); });
-    img.addEventListener('error', function(){
-      if(img){ img.style.display = 'none'; img.style.visibility = 'hidden'; }
-      if(loading) loading.style.display = 'none';
-      const pf = document.getElementById('pdf-fallback');
-      if(pf) pf.style.display = 'block';
-    });
-
-    if(viewBtn) viewBtn.addEventListener('click', function(){
-      openModal();
-      setTimeout(()=> {
-        if(loading && loading.style.display !== 'none'){
-          loading.style.display = 'none';
-          const pf = document.getElementById('pdf-fallback');
-          if(pf) pf.style.display = 'block';
-        }
-      }, 4000);
-    });
-
-    closeBtn && closeBtn.addEventListener('click', closeModal);
-    modal && modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
-    document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && modal && modal.getAttribute('aria-hidden') === 'false') closeModal(); });
-
-    const pf = document.getElementById('pdf-fallback'); if(pf) pf.style.display = 'none';
-    if(loading) loading.style.display = 'none';
-  })();
-</script>
-
 
 
 

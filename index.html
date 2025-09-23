@@ -411,8 +411,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 
 
 
-
-<!-- ===== WORKS: updated — lightbox uses data-lightbox separately from thumbnails ===== -->
+<!-- ===== WORKS: updated — mobile-optimized full section (paste to replace existing #works section) ===== -->
 <section id="works" aria-labelledby="worksTitle">
   <style>
     :root{
@@ -427,17 +426,17 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     }
 
     /* container */
-    #works { padding-top: calc(var(--header-h) + 10px); padding-bottom: 48px; background: transparent; position: relative; z-index: 1; }
+    #works { padding-top: calc(var(--header-h) + 10px); padding-bottom: 28px; background: transparent; position: relative; z-index: 1; }
     #works > .section-inner { height:auto !important; min-height:0 !important; display:block !important; padding-top:0 !important; }
-    #works .box { width:100%; max-width:1400px; margin:0 auto; padding:24px; box-sizing:border-box; }
+    #works .box { width:100%; max-width:1100px; margin:0 auto; padding:20px; box-sizing:border-box; }
 
     /* SEARCH - stronger black border and modern style */
-    .search-wrap { margin: 8px 0 18px; display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    .search-wrap { margin: 8px 0 14px; display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
     .search-left { display:flex; gap:10px; align-items:center; flex:1; min-width:220px; }
     .search-input {
       flex:1;
-      padding:12px 14px 12px 40px;
-      border-radius:12px;
+      padding:10px 12px 10px 40px;
+      border-radius:10px;
       border:2px solid #000;            /* stronger black border per request */
       font-size:14px;
       box-sizing:border-box;
@@ -454,13 +453,13 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     .search-actions { display:flex; gap:8px; align-items:center; }
     .search-clear { padding:8px 12px; border-radius:10px; border:1px solid var(--glass-strong); background:transparent; cursor:pointer; font-weight:800; font-size:13px; color:var(--text); }
     /* Dark mode border override for search-clear */
-body.dark .search-clear,
-html.dark .search-clear,
-.dark-mode .search-clear,
-.theme-dark .search-clear,
-[data-theme="dark"] .search-clear {
-  border-color: #ffffff !important; /* white border in dark mode */
-}
+    body.dark .search-clear,
+    html.dark .search-clear,
+    .dark-mode .search-clear,
+    .theme-dark .search-clear,
+    [data-theme="dark"] .search-clear {
+      border-color: #ffffff !important; /* white border in dark mode */
+    }
 
     .result-count { font-weight:700; color:var(--text); font-size:13px; white-space:nowrap; }
 
@@ -468,8 +467,8 @@ html.dark .search-clear,
     .hl { background: rgba(42,124,241,0.18); padding:0 3px; border-radius:3px; color:var(--text); font-weight:800; }
 
     /* Grid: mobile 1, tablet/desktop 3 columns */
-    .folio-grid { display:grid; gap:16px; grid-template-columns: 1fr; align-items:stretch; }
-    @media (min-width:760px) { .folio-grid { grid-template-columns: repeat(3, 1fr); } }
+    .folio-grid { display:grid; gap:14px; grid-template-columns: 1fr; align-items:stretch; }
+    @media (min-width:760px) { .folio-grid { grid-template-columns: repeat(3, 1fr); gap:16px; } }
 
     /* show first 6 items by default */
     .folio-grid .folio-item { display:block; }
@@ -481,7 +480,7 @@ html.dark .search-clear,
     .folio-item:focus, .folio-item:hover { transform: translateY(-6px); box-shadow: 0 22px 60px rgba(16,24,40,0.10); outline:none; }
 
     /* thumb-wrap: rectangle 16:9 - image fills card area */
-    .thumb-wrap { width:100%; aspect-ratio: 16/9; position:relative; overflow:hidden; border-radius:var(--card-radius) var(--card-radius) 8px 8px; background:#000; display:block; }
+    .thumb-wrap { width:100%; aspect-ratio: 16/9; position:relative; overflow:hidden; border-radius:var(--card-radius) var(--card-radius) 8px 8px; background:#000; display:block; min-height: 180px; }
     .thumb-wrap img {
       position:absolute;
       inset:0;
@@ -517,51 +516,28 @@ html.dark .search-clear,
       box-shadow: 0 6px 16px rgba(0,0,0,0.18);
       border: 1px solid rgba(255,255,255,0.06);
     }
-    @media (max-width:760px){
-      .folio-caption { padding:6px 10px; bottom:8px; left:8px; right:8px; }
-      .folio-caption .title { font-size:13px; }
-      .folio-caption .view { padding:6px 8px; min-width:44px; height:32px; font-size:12px; }
-    }
 
     /* removed the white meta tab – keep these gone */
-    /* .folio-meta and children intentionally removed from layout */
 
-    /* no results */
-    /* replace previous .no-results rule with this */
-/* ===== minimal overrides — paste at the END of your #works <style> block ===== */
+    /* NO RESULTS: black in light, white in dark (many dark-mode selectors covered) */
+    #works .no-results { color: #111111 !important; }
+    body.dark #works .no-results,
+    html.dark #works .no-results,
+    .dark-mode #works .no-results,
+    .theme-dark #works .no-results,
+    [data-theme="dark"] #works .no-results { color: #ffffff !important; }
 
-/* NO RESULTS: black in light, white in dark (many dark-mode selectors covered) */
-#works .no-results {
-  color: #111111 !important;    /* default: black */
-}
+    /* SEARCH INPUT TEXT & PLACEHOLDER: force visible (dark on both themes) */
+    #works .search-input { color: #111111 !important; background-clip: padding-box; }
+    #works .search-input::placeholder { color: #666666 !important; opacity: 1 !important; }
+    #works .search-input::-webkit-input-placeholder { color: #666666 !important; opacity: 1 !important; }
+    #works .search-input:-ms-input-placeholder { color: #666666 !important; opacity: 1 !important; }
+    #works .search-input::-ms-input-placeholder { color: #666666 !important; opacity: 1 !important; }
 
-/* dark-mode variants (common patterns) */
-body.dark #works .no-results,
-html.dark #works .no-results,
-.dark-mode #works .no-results,
-.theme-dark #works .no-results,
-[data-theme="dark"] #works .no-results {
-  color: #ffffff !important;    /* dark mode: white */
-}
+    /* result count (makes "Showing X of Y" readable when you force text colors) */
+    #works .result-count { color: #111111 !important; }
 
-/* SEARCH INPUT TEXT & PLACEHOLDER: force visible (dark on both themes) */
-#works .search-input {
-  color: #111111 !important;           /* typed text */
-  background-clip: padding-box;        /* keep BG behavior unchanged */
-}
-
-/* placeholder (all common browsers) */
-#works .search-input::placeholder { color: #666666 !important; opacity: 1 !important; }
-#works .search-input::-webkit-input-placeholder { color: #666666 !important; opacity: 1 !important; }
-#works .search-input:-ms-input-placeholder { color: #666666 !important; opacity: 1 !important; }
-#works .search-input::-ms-input-placeholder { color: #666666 !important; opacity: 1 !important; }
-
-
-
-/* result count (makes "Showing X of Y" readable when you force text colors) */
-#works .result-count { color: #111111 !important; }
-
-    /* Lightbox overlay (unchanged) */
+    /* Lightbox overlay */
     .lightbox {
       position:fixed;
       inset:0;
@@ -582,12 +558,12 @@ html.dark #works .no-results,
     .lb-shell {
       width: calc(100vw - 48px);
       height: calc(100vh - var(--header-h) - 48px);
-      max-width:1200px;
-      max-height:880px;
+      max-width:1000px;
+      max-height:820px;
       border-radius:10px;
       overflow:hidden;
       display:grid;
-      grid-template-columns: 1fr 360px;
+      grid-template-columns: 1fr 320px;
       gap:12px;
       background: #ffffff;
       border:1px solid rgba(0,0,0,0.06);
@@ -596,9 +572,9 @@ html.dark #works .no-results,
     }
     @media (max-width:980px){ .lb-shell { grid-template-columns: 1fr; width: calc(100vw - 12px); height: calc(100vh - var(--header-h) - 12px); } }
 
-    .lb-view { position:relative; background:#111; display:flex; align-items:center; justify-content:center; overflow:hidden; min-height:320px; }
+    .lb-view { position:relative; background:#111; display:flex; align-items:center; justify-content:center; overflow:hidden; min-height:260px; }
     .lb-track { display:flex; width:100%; height:100%; will-change: transform; transition: transform .55s cubic-bezier(.2,.9,.2,1); }
-    .lb-slide { flex:0 0 100%; display:flex; align-items:center; justify-content:center; position:relative; height:100%; min-height:320px; padding:12px; box-sizing:border-box; }
+    .lb-slide { flex:0 0 100%; display:flex; align-items:center; justify-content:center; position:relative; height:100%; min-height:260px; padding:12px; box-sizing:border-box; }
     .lb-slide img { max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block; margin:auto; cursor:zoom-in; user-select:none; -webkit-user-drag:none; }
 
     .lb-close, .lb-prev, .lb-next {
@@ -609,7 +585,7 @@ html.dark #works .no-results,
     .lb-prev { left:12px; top:50%; transform:translateY(-50%); }
     .lb-next { right:12px; top:50%; transform:translateY(-50%); }
 
-    .lb-meta { padding:18px; display:flex; flex-direction:column; gap:12px; overflow:auto; color:#111; background: #ffffff; }
+    .lb-meta { padding:16px; display:flex; flex-direction:column; gap:12px; overflow:auto; color:#111; background: #ffffff; }
     .lb-title { font-family:'Playfair Display', serif; font-size:20px; font-weight:900; margin:0; color:#111; }
     .lb-desc { color:var(--muted); font-size:13px; line-height:1.45; margin:0; min-height:48px; color:#111; }
     .lb-tech { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; align-items:center; }
@@ -620,32 +596,96 @@ html.dark #works .no-results,
 
     .show-more-wrap { text-align:center; margin-top:12px; }
     .show-more { display:inline-block; padding:8px 14px; border-radius:999px; border:1px solid var(--glass-strong); background:transparent; font-weight:800; cursor:pointer; color:var(--text); }
-/* Dark mode border override */
-body.dark .btn,
-html.dark .btn,
-.dark-mode .btn,
-.theme-dark .btn,
-[data-theme="dark"] .btn,
-body.dark .show-more,
-html.dark .show-more,
-.dark-mode .show-more,
-.theme-dark .show-more,
-[data-theme="dark"] .show-more {
-  border-color: #ffffff !important; /* white border in dark mode */
-}
+    /* Dark mode border override for btn/show-more */
+    body.dark .btn,
+    html.dark .btn,
+    .dark-mode .btn,
+    .theme-dark .btn,
+    [data-theme="dark"] .btn,
+    body.dark .show-more,
+    html.dark .show-more,
+    .dark-mode .show-more,
+    .theme-dark .show-more,
+    [data-theme="dark"] .show-more {
+      border-color: #ffffff !important; /* white border in dark mode */
+    }
 
+    /* small-break adjustments */
     @media (max-width:760px){
       .folio-caption{ left:8px; bottom:8px; padding:6px 8px; font-size:12px; }
+      .folio-caption .title { font-size:13px; white-space: normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; }
+      .folio-caption .view { padding:6px 8px; min-width:44px; height:32px; font-size:12px; }
       .lb-meta{ padding:12px }
       .lb-title{ font-size:17px }
       .lb-shell { gap:8px; }
+      .thumb-wrap { min-height:150px; }
+      .box { padding:14px; }
+      #works { padding-bottom: 20px; }
+    }
+
+    /* MOBILE (tight layout: phones 320px - 430px wide) — reduces container and card size for compact view */
+    @media (max-width:420px){
+      :root { --header-h: 56px; }
+      #works { padding-top: calc(var(--header-h) + 6px); padding-bottom: 16px; }
+      .box { padding:10px; max-width: 100%; }
+      .search-wrap { gap:8px; align-items:flex-start; }
+      .search-left { flex:1 1 100%; min-width:0; width:100%; display:flex; align-items:center; }
+      .search-input { padding:9px 12px 9px 38px; font-size:13px; border-radius:10px; }
+      .search-icon { left:10px; margin-right:-10px; font-size:14px; }
+      .search-actions { width:100%; display:flex; justify-content:space-between; margin-top:8px; gap:6px; }
+      .result-count { font-size:12px; max-width:60%; overflow:hidden; text-overflow:ellipsis; }
+      .search-clear { padding:6px 10px; font-size:12px; }
+
+      .folio-grid { gap:10px; grid-template-columns: 1fr; }
+      .folio-item { border-radius:10px; }
+      .thumb-wrap { aspect-ratio: 16/9; min-height:120px; border-radius:10px; }
+      .thumb-wrap img { transform-origin:center center; }
+
+      .folio-caption { left:8px; right:8px; bottom:8px; padding:6px 8px; border-radius:8px; }
+      .folio-caption .title { font-size:13px; line-height:1.16; -webkit-line-clamp:2; }
+      .folio-caption .view { padding:5px 8px; height:32px; font-size:12px; min-width:46px; }
+
+      .show-more-wrap { margin-top:10px; }
+      .show-more { padding:8px 12px; font-size:13px; }
+
+      /* lightbox compact */
+      .lightbox { padding-top: var(--header-h); }
+      .lb-shell {
+        width: calc(100vw - 12px);
+        height: calc(100vh - var(--header-h) - 12px);
+        max-width: none;
+        max-height: none;
+        border-radius:8px;
+        grid-template-columns: 1fr;
+        gap:8px;
+        margin-top:6px;
+      }
+      .lb-view { min-height:200px; }
+      .lb-slide { min-height:200px; padding:8px; }
+      .lb-prev, .lb-next, .lb-close { width:40px; height:40px; font-size:15px; }
+      .lb-meta { padding:10px; max-height:36vh; overflow:auto; }
+      .lb-title { font-size:16px; }
+      .lb-desc { font-size:13px; line-height:1.35; }
+
+      /* reduce heavy hover shadow for performance on phones */
+      .folio-item:focus, .folio-item:hover { box-shadow: 0 8px 26px rgba(16,24,40,0.08); transform: translateY(-3px); }
+
+      /* reduce autoplay movement on small screens to avoid jank */
+      .thumb-wrap img { transition: opacity .36s ease, transform .45s cubic-bezier(.2,.9,.2,1); }
+    }
+
+    /* extra-tight for very small phones */
+    @media (max-width:360px){
+      .thumb-wrap { min-height:100px; }
+      .folio-caption .title { font-size:12.5px; -webkit-line-clamp:3; }
+      .search-input { font-size:12px; padding-left:36px; }
+      .result-count { display:inline-block; max-width:55%; }
+      .lb-meta { max-height:40vh; padding:8px; }
     }
 
     /* force ALL text inside lightbox meta to black (both themes) */
     .lightbox .lb-meta,
-    .lightbox .lb-meta * {
-      color: #111 !important;
-    }
+    .lightbox .lb-meta * { color: #111 !important; }
     .lightbox .tech-badge { color:#111 !important; border-color: rgba(0,0,0,0.06) !important; }
 
     /* theme toggling base (adjust if you use a body.dark class) */
@@ -656,91 +696,7 @@ html.dark .show-more,
     }
 
     .sr-only { position:absolute !important; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
- /* ------------------ Mobile improvements (5"–9" phones) ------------------ */
-/* Paste this at the END of your #works <style> block so it overrides earlier rules */
-
-@media (max-width: 420px) {
-  /* slightly smaller header footprint on phones */
-  :root { --header-h: 56px; }
-
-  /* container spacing */
-  #works { padding-top: calc(var(--header-h) + 6px); }
-  .box { padding: 14px; }
-
-  /* search: stack and resize */
-  .search-wrap { gap: 8px; align-items: flex-start; }
-  .search-left { flex: 1 1 100%; min-width: 0; width: 100%; display: flex; align-items: center; }
-  .search-input {
-    padding: 10px 12px 10px 40px; /* keep space for icon */
-    font-size: 13px;
-    border-radius: 10px;
-  }
-  .search-icon { left: 10px; margin-right: -10px; font-size: 14px; }
-  .search-actions { width: 100%; display: flex; justify-content: space-between; margin-top: 8px; }
-  .result-count { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .search-clear { padding: 7px 10px; font-size: 12px; }
-
-  /* grid/card sizing */
-  .folio-grid { gap: 12px; grid-template-columns: 1fr; }
-  .folio-item { border-radius: 10px; }
-  .thumb-wrap { aspect-ratio: 16/9; min-height: 140px; border-radius: 10px; }
-  .thumb-wrap img { will-change: opacity, transform; transform-origin: center center; }
-
-  /* caption: allow wrapping and smaller fonts for mobile */
-  .folio-caption { left: 8px; right: 8px; bottom: 8px; padding: 6px 8px; border-radius: 8px; }
-  .folio-caption .title {
-    white-space: normal;        /* allow multi-line title on small screens */
-    font-size: 14px;
-    line-height: 1.18;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .folio-caption .view { padding: 5px 8px; height: 32px; font-size: 12px; min-width: 44px; }
-
-  /* show-more button */
-  .show-more-wrap { margin-top: 10px; }
-  .show-more { padding: 8px 12px; font-size: 13px; }
-
-  /* lightbox: become fullscreen-ish with smaller chrome */
-  .lightbox { padding-top: var(--header-h); }
-  .lb-shell {
-    width: calc(100vw - 12px);
-    height: calc(100vh - var(--header-h) - 12px);
-    max-width: none;
-    max-height: none;
-    border-radius: 8px;
-    grid-template-columns: 1fr; /* stack meta under image */
-    gap: 8px;
-    box-shadow: 0 20px 80px rgba(2,6,23,0.28);
-  }
-  .lb-view { min-height: 220px; }
-  .lb-prev, .lb-next, .lb-close { width: 40px; height: 40px; font-size: 15px; }
-  .lb-meta { padding: 12px; max-height: 36vh; overflow: auto; }
-  .lb-title { font-size: 16px; }
-  .lb-desc { font-size: 13px; line-height: 1.35; }
-  .lb-tech { gap: 6px; }
-  .tech-badge { padding: 6px 8px; font-size: 12px; }
-
-  /* ensure result-count is visible but compact */
-  #resultCount { display: inline-block; max-width: 60%; overflow: hidden; text-overflow: ellipsis; }
-
-  /* reduce heavy shadows on phones for performance */
-  .folio-item:focus, .folio-item:hover { box-shadow: 0 10px 30px rgba(16,24,40,0.08); transform: translateY(-4px); }
-}
-
-/* optional extra compact tweaks for very small phones */
-@media (max-width: 360px) {
-  .thumb-wrap { min-height: 120px; }
-  .folio-caption .title { font-size: 13px; -webkit-line-clamp: 3; }
-  .search-input { font-size: 12px; padding-left: 38px; }
-  .search-icon { left: 8px; }
-  .lb-meta { max-height: 40vh; padding: 10px; }
-}
-
- </style>
+  </style>
 
   <div class="section-inner">
     <div class="box">
@@ -758,23 +714,22 @@ html.dark .show-more,
       </div>
 
       <p id="noResults" class="no-results">No projects found</p>
-      <p class="anim">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+      
 
       <div class="folio-grid anim" id="folioGrid" aria-live="polite">
         <!-- Items: NOTE - .folio-meta removed. Only image + caption overlay remain -->
-      <button class="folio-item"
-  data-images="assets/THOME.png,assets/TRESULT.png,assets/TRESULT1.png"
-  data-lightbox="assets/TLOGIN (1).png,assets/THOME.png,assets/TPROF.png,assets/TUPLOAD.png,assets/TRESULT.png,assets/TRESULT1.png,assets/THIST.png,assets/THIST2.png,assets/TCOM.png,assets/ALOG.png,assets/AHOME.png,assets/AUSER.png,assets/AHIST.png,assets/ACOMP.png"
-  data-link="https://github.com/Abhinand2502/DetexAI"
-  data-title="DetexAI"
-  data-desc=" DetexAI is an AI-powered system using YOLOv8 to detect and classify trash in both land and aquatic environments, enabling real-time identification for smarter, faster cleanup."
-  data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐YOLOv8,⭐SQLite">
-  <span class="thumb-wrap" aria-hidden="true"></span>
-  <div class="folio-caption"><span class="title">DetexAI – AI Trash Detection</span><span class="view">View details</span></div>
-</button>
+        <button class="folio-item"
+          data-images="assets/THOME.png,assets/TRESULT.png,assets/TRESULT1.png"
+          data-lightbox="assets/TLOGIN (1).png,assets/THOME.png,assets/TPROF.png,assets/TUPLOAD.png,assets/TRESULT.png,assets/TRESULT1.png,assets/THIST.png,assets/THIST2.png,assets/TCOM.png,assets/ALOG.png,assets/AHOME.png,assets/AUSER.png,assets/AHIST.png,assets/ACOMP.png"
+          data-link="https://github.com/Abhinand2502/DetexAI"
+          data-title="DetexAI"
+          data-desc=" DetexAI is an AI-powered system using YOLOv8 to detect and classify trash in both land and aquatic environments, enabling real-time identification for smarter, faster cleanup."
+          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐YOLOv8,⭐SQLite">
+          <span class="thumb-wrap" aria-hidden="true"></span>
+          <div class="folio-caption"><span class="title">DetexAI – AI Trash Detection</span><span class="view">View details</span></div>
+        </button>
 
-
-<button class="folio-item"
+        <button class="folio-item"
           data-images="assets/face.jpg,assets/face1.png,assets/face2.png"
           data-lightbox="assets/face.jpg,assets/face1.png,assets/face2.png,assets/face3.png,assets/face4.png,assets/face5.png,assets/face6.png"
           data-link="https://github.com/Abhinand2502/Face-recognition"
@@ -784,7 +739,6 @@ html.dark .show-more,
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">Face recognition - Attendance Register</span><span class="view">View details</span></div>
         </button>
-
 
         <button class="folio-item"
           data-images="assets/login.png,assets/signup.png,assets/home.png"
@@ -819,7 +773,6 @@ html.dark .show-more,
           <div class="folio-caption"><span class="title"> Tic-Tac-Toe</span><span class="view">View details</span></div>
         </button>
 
-        
         <button class="folio-item"
           data-images="assets/porto.png,assets/portfolio.jpg"
           data-lightbox="assets/porto.png,assets/portfolio.jpg"
@@ -831,9 +784,8 @@ html.dark .show-more,
           <div class="folio-caption"><span class="title">Portfolio</span><span class="view">View details</span></div>
         </button>
 
-        <!-- hidden ones (shown after Show more)paste  projects here -->
-
-         <button class="folio-item"
+        <!-- hidden ones (shown after Show more) paste projects here -->
+        <button class="folio-item"
           data-images="assets/todo.png,assets/todo.png,assets/todo.png"
           data-lightbox="assets/todo.png,assets/todo.png,assets/todo.png"
           data-link="https://github.com/Abhinand2502/to_do_app"
@@ -843,10 +795,6 @@ html.dark .show-more,
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">To-Do List app</span><span class="view">View details</span></div>
         </button>
-
-
-
-        
       </div>
 
       <div class="show-more-wrap"><button id="showMoreBtn" class="show-more">Show more</button></div>
@@ -872,7 +820,6 @@ html.dark .show-more,
 
         <div class="lb-actions">
           <a id="lbLink" class="btn primary" href="#" target="_blank" rel="noopener">Open Project</a>
-    
         </div>
       </div>
     </div>
@@ -892,7 +839,7 @@ html.dark .show-more,
       const lbClose = document.getElementById('lbClose');
       const lbPrev = document.getElementById('lbPrev');
       const lbNext = document.getElementById('lbNext');
-    
+
       const searchInput = document.getElementById('folioSearch');
       const searchClear = document.getElementById('folioSearchClear');
       const noResults = document.getElementById('noResults');
@@ -917,15 +864,6 @@ html.dark .show-more,
           if(i === 0) img.classList.add('active');
           wrap.appendChild(img);
         });
-
-        // keep "View details" as a pill, NOT a bottom white tab. (No more meta block.)
-        const viewEl = it.querySelector('.folio-caption .view');
-        if(viewEl){
-          const firstThumb = imgs[0] || '';
-          if(firstThumb){
-            // left in place in case you want to style the pill with the first thumb later
-          }
-        }
 
         it._thumbCount = imgs.length;
         it._thumbIndex = 0;
@@ -1004,7 +942,7 @@ html.dark .show-more,
         const item = items[index]; if(!item) return;
         lastFocused = document.activeElement;
 
-        // <-- NEW: prefer data-lightbox; fallback to data-images
+        // prefer data-lightbox; fallback to data-images
         const slidesRaw = item.dataset.lightbox || item.dataset.images || '';
         const slides = slidesRaw.split(',').map(s=>s.trim()).filter(Boolean);
         const slidesToUse = slides.length ? slides : ['assets/bg.jpg'];

@@ -346,57 +346,9 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
   <a href="#projects" data-target="works" class="mobile-link">PROJECTS</a>
   <a href="#contact" data-target="contact" class="mobile-link">CONTACT</a>
 </div>
-<!-- Section name indicator -->
-<div id="mobileSectionIndicator" style="
-  position: fixed;
-  top: 50%;
-  left: 8px;
-  transform: translateY(-50%);
-  font-weight: 900;
-  font-size: 18px;
-  color: #2563eb;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  z-index: 9999;
-"></div>
-
-<script>
-  const mobileLinks = document.querySelectorAll('#mobileMenu .mobile-link');
-  const sections = Array.from(mobileLinks).map(link => document.querySelector(link.getAttribute('href')));
-  const indicator = document.getElementById('mobileSectionIndicator');
-
-  function updateIndicator() {
-    if (window.innerWidth > 980) return; // Only mobile
-
-    let found = false;
-    const scrollPos = window.scrollY + window.innerHeight / 3;
-
-    sections.forEach(section => {
-      const top = section.offsetTop;
-      const bottom = top + section.offsetHeight;
-      if(scrollPos >= top && scrollPos < bottom){
-        indicator.textContent = section.id.toUpperCase();
-        indicator.style.opacity = '1';
-        indicator.style.transform = 'translateY(-50%) translateX(0)';
-        found = true;
-      }
-    });
-
-    if(!found){
-      indicator.style.opacity = '0';
-      indicator.style.transform = 'translateY(-50%) translateX(-10px)';
-    }
-  }
-
-  window.addEventListener('scroll', updateIndicator);
-  window.addEventListener('resize', updateIndicator);
-  window.addEventListener('load', updateIndicator);
-</script>
 
 <main>
-
-
+  
 <section id="home">
   <div class="hero-inner">
     <div class="left">
@@ -453,145 +405,166 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 
 
 
-
-
-<!-- ABOUT (fixed: education level bars + proper Django logo) -->
+<!-- ABOUT (fixed: education level bars + proper Django logo)
+     Mobile-only: two buttons inside info container open themed lightboxes -->
 <section id="about">
   <style>
+    /* base tokens used in your styles (kept local) */
+    #about { --primary: #2563eb; --accent: #ff66b2; --glass: rgba(255,255,255,0.06); --glass-strong: rgba(255,255,255,0.02); --card-shadow: 0 10px 30px rgba(16,24,40,0.06); --text: #0f172a; --card: #ffffff; --muted: rgba(11,11,11,0.56); }
+    html[data-theme="dark"] #about { --card: #071827; --text: #e6f7ff; --muted: rgba(255,255,255,0.72); }
+
     /* ABOUT — improved, scoped, updated for bars + real logos */
-   #about {
-  margin-top: 1 !important;
-  padding-top: 1 !important;
-}
-    .about-inner { --about-muted: rgba(11,11,11,0.56); }
-    html[data-theme="dark"] .about-inner { --about-muted: rgba(255,255,255,0.72); }
+    #about { margin-top: 1rem !important; padding-top: 1rem !important; }
 
-.about-inner {
-  min-height: auto;
-  transform: translateY(-40px);  /* moves section up */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-/* Mobile: reduce overlap */
-@media (max-width: 980px) {
-  .about-inner {
-    transform: translateY(-10px);  /* smaller move-up for tablets/mobiles */
-    padding-top: 12px;             /* optional small padding under header */
-  }
-}
+    #about .about-inner { --about-muted: var(--muted); }
+    html[data-theme="dark"] #about .about-inner { --about-muted: var(--muted); }
 
-@media (max-width: 720px) {
-  .about-inner {
-    transform: translateY(0);      /* no overlap on small phones */
-    padding-top: 16px;             /* keep small spacing under header */
-  }
-}
-    .about-container { width:1350%; max-width:1350px; padding:24px; display:grid; grid-template-columns:420px 1fr; gap:28px; align-items:stretch; }
-/* Gradient border for all .themed-card */
-.themed-card {
-  position: relative;       /* ensure pseudo-element positions correctly */
-  z-index: 0;               /* keep content above border */
-  border: none;             /* remove existing solid border */
-}
+    #about .about-inner {
+      min-height: auto;
+      transform: translateY(-40px);  /* moves section up */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Mobile: reduce overlap */
+    @media (max-width: 980px) {
+      #about .about-inner {
+        transform: translateY(-10px);  /* smaller move-up for tablets/mobiles */
+        padding-top: 12px;             /* optional small padding under header */
+      }
+    }
+    @media (max-width: 720px) {
+      #about .about-inner {
+        transform: translateY(0);      /* no overlap on small phones */
+        padding-top: 16px;             /* keep small spacing under header */
+      }
+    }
 
-.themed-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;                  /* cover entire card */
-  border-radius: 18px;       /* match card rounding */
-  padding: 2px;              /* thickness of border */
-  background: linear-gradient(90deg, #2563eb, #ffffff, #ff66b2); /* blue → white → pink */
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box, 
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: destination-out;
-  mask-composite: exclude;   /* keep inner content visible */
-  z-index: -1;               /* behind the content */
-}
+    /* Fixed: container width should be 100% not 1350% */
+    #about .about-container { width:100%; max-width:1350px; padding:24px; display:grid; grid-template-columns:420px 1fr; gap:28px; align-items:stretch; }
 
-/* Optional: keep inner content same padding/background */
-.themed-card > * {
-  position: relative;
-  z-index: 1;
-}
+    /* Gradient border for all .themed-card */
+    #about .themed-card {
+      position: relative;       /* ensure pseudo-element positions correctly */
+      z-index: 0;               /* keep content above border */
+      border: none;             /* remove existing solid border */
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.01)); /* subtle base */
+    }
 
-    .profile-wrap { display:flex; flex-direction:column; gap:18px; align-items:center; justify-content:flex-start; position:relative; overflow:visible; }
-    @media (min-width:980px) { .profile-wrap { min-height:520px; padding:28px; } }
-    @media (max-width:979px) { .profile-wrap { padding:18px; min-height:unset; } }
+    #about .themed-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;                  /* cover entire card */
+      border-radius: 18px;       /* match card rounding */
+      padding: 2px;              /* thickness of border */
+      background: linear-gradient(90deg, var(--primary), #ffffff, var(--accent));
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;   /* keep inner content visible */
+      z-index: -1;               /* behind the content */
+    }
 
-    .avatar { width:160px; height:160px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background: linear-gradient(135deg, var(--glass), var(--glass-strong)); position:relative; box-shadow:0 18px 50px rgba(37,99,235,0.08); }
-    .avatar img { width:100%; height:100%; object-fit:cover; display:block; }
-    .avatar::after { content:""; position:absolute; inset:-8px; border-radius:50%; border:6px solid rgba(255,255,255,0.9); box-shadow:0 8px 30px rgba(0,0,0,0.06); }
-    html[data-theme="dark"] .avatar::after { border-color:#00e6ff; box-shadow:0 10px 36px rgba(0,230,255,0.06); }
+    /* Optional: keep inner content same padding/background */
+    #about .themed-card > * {
+      position: relative;
+      z-index: 1;
+    }
 
-    .profile-name { font-family:'Playfair Display',serif; font-weight:900; font-size:28px; margin:0; color:var(--text); text-align:center; }
-    .profile-role { font-weight:700; font-size:14px; color:var(--about-muted); letter-spacing:0.6px; text-transform:uppercase; }
+    /* left column (profile) — kept exactly as you had it */
+    #about .profile-wrap { display:flex; flex-direction:column; gap:18px; align-items:center; justify-content:flex-start; position:relative; overflow:visible; }
+    @media (min-width:980px) { #about .profile-wrap { min-height:520px; padding:28px; } }
+    @media (max-width:979px) { #about .profile-wrap { padding:18px; min-height:unset; } }
 
-    .degree-pill { width:100%; display:flex; justify-content:center; align-items:center; border-radius:12px; padding:12px 16px; font-weight:900; font-size:16px; letter-spacing:0.4px; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); color:var(--text); }
-    html[data-theme="dark"] .degree-pill { border:1px solid rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
+    #about .avatar { width:160px; height:160px; border-radius:50%; overflow:hidden; display:grid; place-items:center; background: linear-gradient(135deg, var(--glass), var(--glass-strong)); position:relative; box-shadow:0 18px 50px rgba(37,99,235,0.08); }
+    #about .avatar img { width:100%; height:100%; object-fit:cover; display:block; }
+    #about .avatar::after { content:""; position:absolute; inset:-8px; border-radius:50%; border:6px solid rgba(255,255,255,0.9); box-shadow:0 8px 30px rgba(0,0,0,0.06); }
+    html[data-theme="dark"] #about .avatar::after { border-color:#00e6ff; box-shadow:0 10px 36px rgba(0,230,255,0.06); }
 
-    .meta-row { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:8px; }
-    .badge { display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:999px; font-weight:700; font-size:13px; background:transparent; border:1px solid rgba(0,0,0,0.06); color:var(--text); }
-    html[data-theme="dark"] .badge { border-color: rgba(255,255,255,0.06); }
+    #about .profile-name { font-family:'Playfair Display',serif; font-weight:900; font-size:28px; margin:0; color:var(--text); text-align:center; }
+    #about .profile-role { font-weight:700; font-size:14px; color:var(--about-muted); letter-spacing:0.6px; text-transform:uppercase; }
 
-    .stat-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; width:100%; margin-top:14px; }
-    .stat { border-radius:12px; padding:18px 12px; text-align:center; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); }
-    .stat .k { font-size:12px; font-weight:800; color:var(--about-muted); text-transform:uppercase; letter-spacing:0.8px; }
-    .stat .v { font-size:18px; font-weight:900; color:var(--text); margin-top:8px; }
-    html[data-theme="dark"] .stat { border-color: rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
+    #about .degree-pill { width:100%; display:flex; justify-content:center; align-items:center; border-radius:12px; padding:12px 16px; font-weight:900; font-size:16px; letter-spacing:0.4px; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); color:var(--text); }
+    html[data-theme="dark"] #about .degree-pill { border:1px solid rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
 
-    .right-col { display:flex; flex-direction:column; gap:18px; }
-    .right-col > .card { display:flex; flex-direction:column; gap:12px; flex:1; padding:18px; border-radius:14px; box-shadow:var(--card-shadow); }
+    #about .meta-row { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:8px; }
+    #about .badge { display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:999px; font-weight:700; font-size:13px; background:transparent; border:1px solid rgba(0,0,0,0.06); color:var(--text); }
+    html[data-theme="dark"] #about .badge { border-color: rgba(255,255,255,0.06); }
 
-    .section-title { font-family:'Playfair Display',serif; font-size:20px; margin:0 0 6px 0; color:var(--text); font-weight:800; }
+    #about .stat-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; width:100%; margin-top:14px; }
+    #about .stat { border-radius:12px; padding:18px 12px; text-align:center; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); }
+    #about .stat .k { font-size:12px; font-weight:800; color:var(--about-muted); text-transform:uppercase; letter-spacing:0.8px; }
+    #about .stat .v { font-size:18px; font-weight:900; color:var(--text); margin-top:8px; }
+    html[data-theme="dark"] #about .stat { border-color: rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
+
+    /* right column (kept layout) */
+    #about .right-col { display:flex; flex-direction:column; gap:18px; }
+    #about .right-col > .card { display:flex; flex-direction:column; gap:12px; flex:1; padding:18px; border-radius:14px; box-shadow:var(--card-shadow); }
+
+    #about .section-title { font-family:'Playfair Display',serif; font-size:20px; margin:0 0 6px 0; color:var(--text); font-weight:800; }
 
     /* EDUCATION: level bar */
-    .edu-item { display:flex; flex-direction:column; gap:10px; padding:8px 0; }
-    .edu-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
-    .edu-school { font-weight:800; font-size:14px; color:var(--text); }
-    .edu-meta { font-size:13px; color:var(--about-muted); font-weight:700; }
-    .edu-row { display:flex; align-items:center; gap:12px; justify-content:space-between; }
-    .edu-bar-wrap { flex:1; height:12px; background: rgba(0,0,0,0.06); border-radius:999px; overflow:hidden; border:1px solid rgba(0,0,0,0.04); }
-    html[data-theme="dark"] .edu-bar-wrap { background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); }
-    .edu-bar { display:block; height:100%; width:0%; border-radius:999px; background: linear-gradient(90deg,var(--primary),var(--accent)); box-shadow:0 10px 30px rgba(37,99,235,0.12); transition: width 900ms cubic-bezier(.2,.9,.2,1); }
+    #about .edu-item { display:flex; flex-direction:column; gap:10px; padding:8px 0; }
+    #about .edu-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+    #about .edu-school { font-weight:800; font-size:14px; color:var(--text); }
+    #about .edu-meta { font-size:13px; color:var(--about-muted); font-weight:700; }
+    #about .edu-row { display:flex; align-items:center; gap:12px; justify-content:space-between; }
+    #about .edu-bar-wrap { flex:1; height:12px; background: rgba(0,0,0,0.06); border-radius:999px; overflow:hidden; border:1px solid rgba(0,0,0,0.04); }
+    html[data-theme="dark"] #about .edu-bar-wrap { background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); }
+    #about .edu-bar { display:block; height:100%; width:0%; border-radius:999px; background: linear-gradient(90deg,var(--primary),var(--accent)); box-shadow:0 10px 30px rgba(37,99,235,0.12); transition: width 900ms cubic-bezier(.2,.9,.2,1); }
 
-    .edu-percent { font-weight:900; font-size:13px; color:var(--text); min-width:56px; text-align:right; }
+    #about .edu-percent { font-weight:900; font-size:13px; color:var(--text); min-width:56px; text-align:right; }
 
-    /* SKILLS: real-logo style */
-    .skills-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; }
-    .skill { display:flex; gap:12px; align-items:center; padding:10px; border-radius:12px; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); }
-    html[data-theme="dark"] .skill { border-color: rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
-    .skill .icon { width:46px; height:46px; border-radius:10px; display:grid; place-items:center; background:#fff; box-shadow:0 8px 26px rgba(16,24,40,0.12); }
-    .skill .icon img { width:28px; height:28px; object-fit:contain; }
-    .skill .icon i { font-size:20px; }
-    .skill .label { font-weight:800; font-size:14px; color:var(--text); }
+    /* SKILLS: real-logo style (kept) */
+    #about .skills-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; }
+    #about .skill { display:flex; gap:12px; align-items:center; padding:10px; border-radius:12px; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); }
+    html[data-theme="dark"] #about .skill { border-color: rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); }
+    #about .skill .icon { width:46px; height:46px; border-radius:10px; display:grid; place-items:center; background:#fff; box-shadow:0 8px 26px rgba(16,24,40,0.12); }
+    #about .skill .icon img { width:28px; height:28px; object-fit:contain; }
+    #about .skill .icon i { font-size:20px; }
+    #about .skill .label { font-weight:800; font-size:14px; color:var(--text); }
 
     /* Force all skill logos/icons into blue */
-.skill .icon i,
-.skill .icon img {
-  filter: brightness(0) saturate(100%) invert(27%) sepia(98%) saturate(2042%) hue-rotate(202deg) brightness(95%) contrast(97%);
-  /* 🔹 This filter makes any logo appear blue (#1572B6-like). */
-}
-
-/* OR simpler: if you're only using <i> (FontAwesome) icons */
-.skill .icon i {
-  color: #1572B6 !important;   /* 🔹 Force all icons blue */
-}
-
+    #about .skill .icon i,
+    #about .skill .icon img {
+      filter: brightness(0) saturate(100%) invert(27%) sepia(98%) saturate(2042%) hue-rotate(202deg) brightness(95%) contrast(97%);
+      /* 🔹 This filter makes any logo appear blue (approx #1572B6). */
+    }
+    #about .skill .icon i { color: #1572B6 !important; }
 
     .themed-card:focus-within, .themed-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(16,24,40,0.10); }
 
+    /* --- MOBILE-SPECIFIC: show two buttons inside the existing info container only on mobile --- */
+    #about .info-actions { display:none; gap:10px; }
+    #about .info-actions .info-btn { padding:10px 12px; border-radius:10px; border:none; font-weight:800; cursor:pointer; background: linear-gradient(90deg,var(--primary),var(--accent)); color:#fff; }
+    #about .info-actions .info-btn.ghost { background:transparent; color:var(--text); border:1px solid rgba(0,0,0,0.06); }
+
+    @media (max-width: 980px) {
+      #about .info-actions { display:flex; align-items:center; margin-top:6px; }
+      /* Make the right column panel compact on mobile and keep alignment same */
+      #about .about-container { grid-template-columns: 1fr; gap:18px; padding:18px; }
+    }
+
+    /* overlay/lightbox (scoped to #about) and use themed-card class for consistent border */
+    #about .overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(2,6,23,0.6); padding:20px; z-index:1400; }
+    #about .overlay.open{ display:flex; }
+    /* give modal a themed-card gradient border by applying themed-card class */
+    #about .modal { width:100%; max-width:920px; border-radius:14px; padding:18px; position:relative; background:var(--card); box-shadow:0 30px 80px rgba(2,6,23,0.5); }
+    #about .modal .close { position:absolute; right:12px; top:12px; border:none; background:transparent; font-weight:800; font-size:18px; cursor:pointer; color:var(--text); }
+
+    /* ensure modal uses the same themed-card border: add the themed-card class to the modal in markup */
+    #about .modal.themed-card { padding:20px; }
+
+    /* small responsive tweaks */
     @media (max-width:980px) {
-      .about-container { grid-template-columns: 1fr; gap:18px; padding:18px; align-items:stretch; }
-      .right-col { flex-direction:column; }
-      .skills-grid { grid-template-columns: repeat(3, 1fr); }
-      .stat-grid { grid-template-columns: repeat(3, 1fr); }
-      .avatar { width:120px; height:120px; }
+      #about .skills-grid { grid-template-columns: repeat(3, 1fr); }
+      #about .stat-grid { grid-template-columns: repeat(3, 1fr); }
+      #about .avatar { width:120px; height:120px; }
     }
     @media (max-width:720px) {
-      .skills-grid { grid-template-columns: repeat(2, 1fr); }
-      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      #about .skills-grid { grid-template-columns: repeat(2, 1fr); }
+      #about .stat-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 
@@ -615,7 +588,6 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
               <div style="font-size:18px;margin-top:4px;font-weight:900;color:var(--text)">B.Tech — CSE</div>
             </div>
           </div>
-
 
           <div class="stat-grid" role="list" aria-label="Personal stats">
             <div class="stat" role="listitem" tabindex="0">
@@ -647,19 +619,30 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         </div>
       </div>
 
-      <!-- RIGHT: Education and Skills -->
+      <!-- RIGHT: Education and Skills (kept layout and alignment) -->
       <div class="right-col">
-        <div class="card themed-card anim" aria-labelledby="eduTitle" role="region" aria-roledescription="education">
+        <div class="card themed-card anim" aria-labelledby="eduTitle" role="region" aria-roledescription="education" style="padding:18px;">
           <h3 id="eduTitle" class="section-title">Education (Academic Journey)</h3>
 
-          <div class="edu-list">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+            <div style="color:var(--about-muted); font-weight:700;">Tap to view details (mobile)</div>
+
+            <!-- INFO ACTIONS: both buttons inside the same info container
+                 Visible only on mobile due to CSS (media query shows .info-actions on <=980px) -->
+            <div class="info-actions" aria-hidden="false">
+              <button class="info-btn" data-open="about-edu-overlay">Education</button>
+              <button class="info-btn ghost" data-open="about-skills-overlay">Skills</button>
+            </div>
+          </div>
+
+          <!-- keep the original edu-list visible on desktop inside the card (no alignment changes) -->
+          <div class="edu-list" style="margin-top:12px;">
             <div class="edu-item">
               <div class="edu-head">
                 <div>
                   <div class="edu-school">B.Tech in CSE — UCE, Thodupuzha</div>
                   <div class="edu-meta">2021 – 2025</div>
                 </div>
-              
               </div>
               <div class="edu-row">
                 <div class="edu-bar-wrap" aria-hidden="true"><div class="edu-bar" data-width="69.9"></div></div>
@@ -673,7 +656,6 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
                   <div class="edu-school">Higher Secondary — St. Sebastian's HSS, Vazhithala</div>
                   <div class="edu-meta">2019 – 2021</div>
                 </div>
-    
               </div>
               <div class="edu-row">
                 <div class="edu-bar-wrap"><div class="edu-bar" data-width="94"></div></div>
@@ -687,7 +669,6 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
                   <div class="edu-school">Secondary — Bappuji Public School, Vazhithala</div>
                   <div class="edu-meta">2018 – 2019</div>
                 </div>
-     
               </div>
               <div class="edu-row">
                 <div class="edu-bar-wrap"><div class="edu-bar" data-width="80"></div></div>
@@ -697,10 +678,10 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           </div>
         </div>
 
-        <div class="card themed-card anim" aria-labelledby="skillsTitle" role="region" aria-roledescription="skills">
+        <div class="card themed-card anim" aria-labelledby="skillsTitle" role="region" aria-roledescription="skills" style="padding:18px;">
           <h3 id="skillsTitle" class="section-title">Skills — Modern stack</h3>
 
-          <div class="skills-grid" role="list" aria-label="skills">
+          <div class="skills-grid" role="list" aria-label="skills" style="margin-top:12px;">
             <div class="skill python" role="listitem" tabindex="0">
               <div class="icon"><img src="assets/logos/python.svg" alt="Python logo" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-brands fa-python&quot;></i>'"></div>
               <div class="label">Python</div>
@@ -714,7 +695,6 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
   </div>
   <div class="label">Django</div>
 </div>
-
 
             <div class="skill html" role="listitem" tabindex="0">
               <div class="icon"><img src="assets/logos/html5.svg" alt="HTML5" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-brands fa-html5&quot;></i>'"></div>
@@ -747,63 +727,173 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
             </div>
           </div>
         </div>
-      </div>
+      </div> <!-- /.right-col -->
     </div>
   </div>
 
+  <!-- Education lightbox (themed: add themed-card to modal to show same gradient border) -->
+  <div class="overlay" id="about-edu-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="about-edu-title">
+    <section class="modal themed-card" role="document" aria-describedby="about-edu-desc">
+      <button class="close" aria-label="Close education" data-close="about-edu-overlay">✕</button>
+      <h3 id="about-edu-title" style="margin:0 0 8px 0; font-family:Playfair Display,serif;">Education — Academic Journey</h3>
+      <div id="about-edu-desc" style="color:var(--muted); margin-bottom:10px;">Animated level bars — same theme as cards.</div>
+
+      <div class="edu-list">
+        <div class="edu-item">
+          <div class="edu-head">
+            <div>
+              <div class="edu-school">B.Tech in CSE — UCE, Thodupuzha</div>
+              <div class="edu-meta">2021 – 2025</div>
+            </div>
+            <div style="font-weight:900">69.9 GPA</div>
+          </div>
+          <div class="edu-row" style="margin-top:6px;">
+            <div class="edu-bar-wrap"><div class="edu-bar" data-width="69.9"></div></div>
+            <div class="edu-percent">Level: <strong>69.9</strong></div>
+          </div>
+        </div>
+
+        <div class="edu-item">
+          <div class="edu-head">
+            <div>
+              <div class="edu-school">Higher Secondary — St. Sebastian's HSS, Vazhithala</div>
+              <div class="edu-meta">2019 – 2021</div>
+            </div>
+            <div style="font-weight:900">94%</div>
+          </div>
+          <div class="edu-row" style="margin-top:6px;">
+            <div class="edu-bar-wrap"><div class="edu-bar" data-width="94"></div></div>
+            <div class="edu-percent">Level: <strong>94%</strong></div>
+          </div>
+        </div>
+
+        <div class="edu-item">
+          <div class="edu-head">
+            <div>
+              <div class="edu-school">Secondary — Bappuji Public School, Vazhithala</div>
+              <div class="edu-meta">2018 – 2019</div>
+            </div>
+            <div style="font-weight:900">80%</div>
+          </div>
+          <div class="edu-row" style="margin-top:6px;">
+            <div class="edu-bar-wrap"><div class="edu-bar" data-width="80"></div></div>
+            <div class="edu-percent">Level: <strong>80%</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Skills lightbox (themed) -->
+  <div class="overlay" id="about-skills-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="about-skills-title">
+    <section class="modal themed-card" role="document">
+      <button class="close" aria-label="Close skills" data-close="about-skills-overlay">✕</button>
+      <h3 id="about-skills-title" style="margin:0 0 8px 0; font-family:Playfair Display,serif;">Skills — Modern stack</h3>
+      <div style="color:var(--muted); margin-bottom:10px;">Logo grid — same themed styling as cards.</div>
+
+      <div class="skills-grid" role="list" aria-label="skills">
+        <div class="skill"><div class="icon"><img src="assets/logos/python.svg" alt="Python"></div><div class="label">Python</div></div>
+        <div class="skill"><div class="icon"><img src="assets/logos/django.svg" alt="Django" style="filter: brightness(0) saturate(100%) invert(24%) sepia(93%) saturate(6000%) hue-rotate(200deg) brightness(95%) contrast(105%);"></div><div class="label">Django</div></div>
+        <div class="skill"><div class="icon"><img src="assets/logos/html5.svg" alt="HTML5"></div><div class="label">HTML</div></div>
+        <div class="skill"><div class="icon"><img src="assets/logos/css3.svg" alt="CSS3"></div><div class="label">CSS</div></div>
+        <div class="skill"><div class="icon"><img src="assets/logos/javascript.svg" alt="JavaScript"></div><div class="label">JavaScript</div></div>
+        <div class="skill"><div class="icon"><img src="assets/logos/react.svg" alt="React"></div><div class="label">React</div></div>
+        <div class="skill"><div class="icon"><img src="assets/logos/sql.svg" alt="SQL"></div><div class="label">SQL</div></div>
+        <div class="skill"><div class="icon"><img src="assets/logos/ml.svg" alt="ML"></div><div class="label">ML</div></div>
+      </div>
+    </section>
+  </div>
+
   <script>
-    // reveal + animate bars + immediate set (fix for missing bars)
     (function(){
-      const animItems = document.querySelectorAll('#about .anim');
-      if('IntersectionObserver' in window){
-        const obs = new IntersectionObserver((entries, o)=>{
-          entries.forEach(entry=>{
+      const root = document.getElementById('about');
+      if(!root) return;
+
+      // open/close overlay helpers (scoped to #about)
+      function openOverlay(id){
+        const overlay = root.querySelector('#' + id);
+        if(!overlay) return;
+        overlay.classList.add('open');
+        overlay.setAttribute('aria-hidden', 'false');
+        // focus close button
+        const close = overlay.querySelector('.close');
+        if(close) close.focus();
+        // animate education bars if education overlay opened
+        if(id === 'about-edu-overlay') animateEduBars(overlay);
+      }
+      function closeOverlay(id){
+        const overlay = root.querySelector('#' + id);
+        if(!overlay) return;
+        overlay.classList.remove('open');
+        overlay.setAttribute('aria-hidden', 'true');
+      }
+
+      // wire mobile info buttons (data-open attr)
+      root.querySelectorAll('[data-open]').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const which = e.currentTarget.getAttribute('data-open');
+          if(which) openOverlay(which);
+        });
+      });
+
+      // wire close buttons inside overlays
+      root.querySelectorAll('[data-close]').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const which = e.currentTarget.getAttribute('data-close');
+          if(which) closeOverlay(which);
+        });
+      });
+
+      // clicking overlay background closes it
+      root.querySelectorAll('.overlay').forEach(o => {
+        o.addEventListener('click', e => {
+          if(e.target === o){ o.classList.remove('open'); o.setAttribute('aria-hidden','true'); }
+        });
+      });
+
+      // ESC closes any open overlays
+      document.addEventListener('keydown', e => {
+        if(e.key === 'Escape') {
+          root.querySelectorAll('.overlay.open').forEach(o => { o.classList.remove('open'); o.setAttribute('aria-hidden','true'); });
+        }
+      });
+
+      // animate education bars (set to 0 then expand)
+      function animateEduBars(container){
+        container.querySelectorAll('.edu-bar').forEach(b => {
+          const w = Number(b.getAttribute('data-width') || 0);
+          b.style.width = '0%';
+          setTimeout(() => b.style.width = Math.max(0, Math.min(100, w)) + '%', 80);
+        });
+      }
+
+      // set bars to intended width on load (desktop preview) — keeps original behavior
+      window.addEventListener('load', () => {
+        root.querySelectorAll('.edu-bar').forEach(b => {
+          const w = Number(b.getAttribute('data-width') || 0);
+          b.style.width = Math.max(0, Math.min(100, w)) + '%';
+        });
+      });
+
+      // existing intersection observer behavior (unchanged)
+      const animItems = root.querySelectorAll('.anim');
+      if('IntersectionObserver' in window && animItems.length){
+        const obs = new IntersectionObserver((entries, o) => {
+          entries.forEach(entry => {
             if(entry.isIntersecting){
               entry.target.classList.add('in-view');
               o.unobserve(entry.target);
             }
           });
-        }, {threshold: 0.12});
+        }, { threshold: 0.12 });
         animItems.forEach(i => obs.observe(i));
-      } else { animItems.forEach(i => i.classList.add('in-view')); }
-
-      function setEduBarsImmediate(){
-        document.querySelectorAll('#about .edu-bar').forEach(b => {
-          const w = Number(b.getAttribute('data-width') || 0);
-          b.style.width = Math.max(0, Math.min(100, w)) + '%';
-        });
-      }
-
-      // Progressively animate bars when edu items enter view (accessible)
-      const eduItems = document.querySelectorAll('#about .edu-item');
-      if('IntersectionObserver' in window){
-        const obs2 = new IntersectionObserver((entries, o)=>{
-          entries.forEach(entry=>{
-            if(entry.isIntersecting){
-              const bar = entry.target.querySelector('.edu-bar');
-              if(bar){
-                const w = Number(bar.getAttribute('data-width') || 0);
-                // set to 0 first to ensure transition shows
-                bar.style.width = '0%';
-                // small timeout to trigger transition
-                setTimeout(()=> bar.style.width = Math.max(0, Math.min(100, w)) + '%', 80);
-              }
-              o.unobserve(entry.target);
-            }
-          });
-        }, {threshold: 0.12});
-        eduItems.forEach(i => obs2.observe(i));
       } else {
-        setEduBarsImmediate();
+        animItems.forEach(i => i.classList.add('in-view'));
       }
-
-      // Also call immediate set after DOM ready in case observer doesn't fire
-      window.addEventListener('load', () => setEduBarsImmediate());
-      // ensure immediate set also on DOMContentLoaded
-      document.addEventListener('DOMContentLoaded', () => setEduBarsImmediate());
     })();
   </script>
 </section>
+
 
 
 

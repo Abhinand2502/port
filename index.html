@@ -424,7 +424,20 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
   align-items: center;
   justify-content: center;
 }
+/* Mobile: reduce overlap */
+@media (max-width: 980px) {
+  .about-inner {
+    transform: translateY(-10px);  /* smaller move-up for tablets/mobiles */
+    padding-top: 12px;             /* optional small padding under header */
+  }
+}
 
+@media (max-width: 720px) {
+  .about-inner {
+    transform: translateY(0);      /* no overlap on small phones */
+    padding-top: 16px;             /* keep small spacing under header */
+  }
+}
     .about-container { width:1350%; max-width:1350px; padding:24px; display:grid; grid-template-columns:420px 1fr; gap:28px; align-items:stretch; }
 /* Gradient border for all .themed-card */
 .themed-card {

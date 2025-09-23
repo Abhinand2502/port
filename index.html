@@ -411,7 +411,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 
 
 
-<!-- ===== WORKS: mobile-optimized ===== -->
+<!-- ===== WORKS: mobile-optimized + neon-image-aligned thumbs + better key search ===== -->
 <section id="works" aria-labelledby="worksTitle">
   <style>
     :root{
@@ -420,7 +420,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       --text:#111;
       --muted:#7a7a7a;
       --header-h:72px; /* desktop header height */
-      --card-radius:12px;
+      --card-radius:11px; /* match neon-image border-radius */
       --thumb-interval: 1800ms;
       --card-bg: #ffffff; /* card / small UI background */
     }
@@ -429,7 +429,6 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     @media (max-width:760px){
       :root{
         --header-h:56px;       /* smaller header on mobile */
-        --card-radius:10px;
       }
     }
 
@@ -480,24 +479,30 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     .folio-item { display:block; overflow:visible; border-radius:var(--card-radius); position:relative; border:1px solid var(--glass-strong); transition: transform .14s ease, box-shadow .14s ease; cursor:pointer; background:var(--card-bg); padding:0; }
     .folio-item:focus, .folio-item:hover { transform: translateY(-4px); box-shadow: 0 18px 46px rgba(16,24,40,0.08); outline:none; }
 
-    /* thumb-wrap: compact on mobile */
-    .thumb-wrap { width:100%; aspect-ratio: 16/9; position:relative; overflow:hidden; border-radius:var(--card-radius) var(--card-radius) 8px 8px; background:#000; display:block; height:auto; }
+    /* thumb-wrap: match neon-image style: same rounding and cover behavior */
+    .thumb-wrap { width:100%; position:relative; overflow:hidden; border-radius:var(--card-radius); background:#000; display:block; }
+    /* We'll keep aspect-ratio to keep consistent card heights but images will be cropped using object-fit:cover */
+    .thumb-wrap { aspect-ratio: 16/9; }
+
+    /* make images align visually like `.neon-image` (max-width/height behavior + rounded corners) */
     .thumb-wrap img {
       position:absolute;
       inset:0;
       width:100%;
       height:100%;
-      object-fit:cover;
+      object-fit:cover;             /* same framing as neon-image */
       object-position:center;
+      border-radius:inherit;        /* same radius as neon-image */
       opacity:0;
       transform: scale(1.02) translateZ(0);
       transition: opacity .38s ease, transform .45s cubic-bezier(.2,.9,.2,1);
       backface-visibility:hidden;
       will-change: opacity, transform;
+      display:block;
     }
     .thumb-wrap img.active { opacity:1; transform: scale(1); z-index:1; }
 
-    /* Make thumbs slightly shorter on small screens */
+    /* Make thumbs slightly shorter on tiny phones */
     @media (max-width:420px){
       .thumb-wrap { aspect-ratio: 4/3; height:180px; }
     }
@@ -525,7 +530,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       border: 1px solid rgba(255,255,255,0.06);
     }
 
-    /* NO RESULTS: color adapt */
+    /* NO RESULTS */
     #works .no-results { color: #111111 !important; margin:8px 0; display:none; font-size:14px; }
     body.dark #works .no-results,
     html.dark #works .no-results,
@@ -537,7 +542,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     #works .search-input { color: #111111 !important; background-clip: padding-box; }
     #works .search-input::placeholder { color: #666666 !important; opacity: 1 !important; }
 
-    /* Lightbox overlay: make mobile-friendly (full screen) */
+    /* Lightbox overlay: mobile-friendly (full screen) */
     .lightbox {
       position:fixed;
       inset:0;
@@ -604,7 +609,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     .show-more-wrap { text-align:center; margin-top:10px; }
     .show-more { display:inline-block; padding:10px 14px; border-radius:999px; border:1px solid var(--glass-strong); background:transparent; font-weight:800; cursor:pointer; color:var(--text); width:100%; max-width:360px; }
 
-    /* Smaller touches */
+    /* smaller touches */
     .folio-caption .title { letter-spacing:0.1px; }
     .thumb-wrap img { -webkit-transform: translateZ(0); transform: translateZ(0); }
 
@@ -621,7 +626,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       <div class="search-wrap" role="search" aria-label="Search projects">
         <div class="search-left">
           <span class="search-icon">🔎</span>
-          <input id="folioSearch" class="search-input" type="search" placeholder="Search projects (title, description, tech)..." aria-label="Search projects" />
+          <input id="folioSearch" class="search-input" type="search" placeholder="Search projects (use #tag or tech:term / title:term). Press / to focus." aria-label="Search projects" />
         </div>
         <div class="search-actions">
           <div id="resultCount" class="result-count" aria-live="polite"></div>
@@ -640,7 +645,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           data-link="https://github.com/Abhinand2502/DetexAI"
           data-title="DetexAI"
           data-desc="DetexAI is an AI-powered system using YOLOv8 to detect and classify trash in both land and aquatic environments."
-          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐YOLOv8,⭐SQLite">
+          data-tech="Python,Django,HTML,CSS,JavaScript,YOLOv8,SQLite">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">DetexAI – AI Trash Detection</span><span class="view">View details</span></div>
         </button>
@@ -651,7 +656,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           data-link="https://github.com/Abhinand2502/Face-recognition"
           data-title="Face recognition"
           data-desc="Face recognition Attendance Register automatically marks student attendance using face recognition."
-          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript">
+          data-tech="Python,Django,OpenCV,FaceRecognition">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">Face recognition - Attendance Register</span><span class="view">View details</span></div>
         </button>
@@ -662,7 +667,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           data-link="https://github.com/Abhinand2502/Ai-Assist-Cart"
           data-title="AI-AssistCart"
           data-desc="AI-AssistCart automates product recommendations and admin tools to improve e-commerce UX."
-          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐AJAX,⭐SQLite">
+          data-tech="Python,Django,HTML,CSS,JavaScript,AJAX,SQLite">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">AI-AssistCart - AI Shopping Site</span><span class="view">View details</span></div>
         </button>
@@ -673,7 +678,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           data-link="https://github.com/Abhinand2502/AiChatbot"
           data-title="AI-Chatbot"
           data-desc="Bilingual chatbot built with Django using a local dataset with fuzzy matching and Cohere integration."
-          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐Cohere API">
+          data-tech="Python,Django,Cohere,NLU">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">AI-Chatbot</span><span class="view">View details</span></div>
         </button>
@@ -684,7 +689,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           data-link="https://github.com/Abhinand2502/tic_tac_toe"
           data-title="Tic-Tac-Toe"
           data-desc="Neon Tic-Tac-Toe with real-time multiplayer using Django Channels (WebSockets)."
-          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐WebSockets">
+          data-tech="Python,Django,WebSockets,HTML,CSS,JS">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">Tic-Tac-Toe</span><span class="view">View details</span></div>
         </button>
@@ -695,7 +700,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           data-link="https://github.com/Abhinand2502/portofolio"
           data-title="Portfolio"
           data-desc="My personal portfolio website."
-          data-tech="⭐HTML,⭐CSS,⭐JavaScript">
+          data-tech="HTML,CSS,JavaScript">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">Portfolio</span><span class="view">View details</span></div>
         </button>
@@ -707,7 +712,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           data-link="https://github.com/Abhinand2502/to_do_app"
           data-title="To-Do List app"
           data-desc="Minimal futuristic To-Do app with real-time search and manage tasks."
-          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript">
+          data-tech="Python,Django,HTML,CSS,JavaScript">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">To-Do List app</span><span class="view">View details</span></div>
         </button>
@@ -903,11 +908,17 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           if(e.key === 'Escape') closeLB();
           if(e.key === 'ArrowRight') { lbNextFn(); }
           if(e.key === 'ArrowLeft') { lbPrevFn(); }
+        } else {
+          // keyboard shortcut: press "/" to focus search (only when LB isn't open and not typing)
+          if(e.key === '/' && document.activeElement !== searchInput && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) {
+            e.preventDefault(); if(searchInput) searchInput.focus();
+          }
         }
       });
 
-      /* SEARCH / FILTER */
+      /* SEARCH / FILTER - improved key search */
       function escapeRegExp(string) { return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
       function highlightText(node, tokens){
         let txt = node.textContent || '';
         if(!tokens.length){ node.innerHTML = txt; return; }
@@ -936,27 +947,63 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         updateResultCount();
       }
 
+      /**
+       * Better key-search behaviors:
+       * - tokens starting with "#" or "tech:" search tech tags only
+       * - tokens starting with "title:" search only titles
+       * - normal tokens search title (weight 3), tech (weight 2), desc (weight 1)
+       * - Enter opens first visible result
+       */
       function applySearch(q){
         q = q.trim().toLowerCase();
         if(!q){ resetFilterRespectExpanded(); return; }
+
         showMoreBtn.style.display = 'none';
         let any = false;
         const tokens = q.split(/\s+/).filter(Boolean);
+
         items.forEach(it => {
           const title = (it.dataset.title || '').toLowerCase();
           const desc = (it.dataset.desc || '').toLowerCase();
           const tech = (it.dataset.tech || '').toLowerCase();
-          const match = tokens.every(tok => title.includes(tok) || desc.includes(tok) || tech.includes(tok));
-          it.style.display = match ? 'block' : 'none';
-          if(match) {
+          let score = 0;
+
+          tokens.forEach(tok => {
+            if(tok.startsWith('#') || tok.startsWith('tech:')){
+              const term = tok.replace(/^#|^tech:/,'');
+              if(term && tech.includes(term)) score += 2;
+            } else if(tok.startsWith('title:')){
+              const term = tok.replace(/^title:/,'');
+              if(term && title.includes(term)) score += 4;
+            } else {
+              // general token: title strong, tech medium, desc weak
+              if(title.includes(tok)) score += 3;
+              if(tech.includes(tok)) score += 2;
+              if(desc.includes(tok)) score += 1;
+            }
+          });
+
+          if(score > 0){
+            it.style.display = 'block';
             any = true;
+            // highlight tokens in title
             const capTitle = it.querySelector('.folio-caption .title');
             if(capTitle) highlightText(capTitle, tokens);
+            it.dataset._score = score;
           } else {
+            it.style.display = 'none';
             const capTitle = it.querySelector('.folio-caption .title');
             if(capTitle) capTitle.innerHTML = capTitle.textContent || '';
+            it.dataset._score = 0;
           }
         });
+
+        // optional: stable sort visible items by score (descending), keep non-matching after
+        // We'll rearrange DOM nodes so top-matches appear first — nice UX for search.
+        const visibleWithScore = items.filter(i => i.style.display !== 'none').sort((a,b) => (parseInt(b.dataset._score||0) - parseInt(a.dataset._score||0)));
+        // re-append in order (keeps their original object references)
+        visibleWithScore.forEach(n => grid.appendChild(n));
+
         noResults.style.display = any ? 'none' : 'block';
         updateResultCount();
       }
@@ -967,7 +1014,26 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           clearTimeout(searchTO);
           searchTO = setTimeout(() => { applySearch(searchInput.value || ''); }, 140);
         });
-        searchInput.addEventListener('keydown', (e) => { if(e.key === 'Escape'){ searchInput.value = ''; applySearch(''); } });
+
+        // keyboard shortcuts while focused in search
+        searchInput.addEventListener('keydown', (e) => {
+          if(e.key === 'Escape'){ searchInput.value = ''; applySearch(''); searchInput.blur(); }
+          if(e.key === 'Enter'){
+            // open first visible item
+            const first = items.find(it => it.style.display !== 'none');
+            if(first){
+              // emulate click (open lightbox)
+              const idx = items.indexOf(first);
+              if(idx >= 0){ openAt(idx); }
+            }
+          }
+          // ArrowDown focuses first visible project (for keyboard nav)
+          if(e.key === 'ArrowDown'){
+            e.preventDefault();
+            const first = items.find(it => it.style.display !== 'none');
+            if(first) first.focus();
+          }
+        });
       }
 
       if(searchClear) {
@@ -992,7 +1058,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         updateResultCount();
       });
 
-      // init
+      // initialize
       resetFilterRespectExpanded();
 
       // preload first image for each card
@@ -1010,6 +1076,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         }
       });
 
+      // update initial result count
       updateResultCount();
 
     })();

@@ -410,8 +410,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 
 
 
-
-<!-- ===== WORKS: updated — mobile-optimized full section (paste to replace existing #works section) ===== -->
+<!-- ===== WORKS: mobile-tweaked + improved search (paste to replace existing #works section) ===== -->
 <section id="works" aria-labelledby="worksTitle">
   <style>
     :root{
@@ -623,32 +622,32 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       #works { padding-bottom: 20px; }
     }
 
-    /* MOBILE (tight layout: phones 320px - 430px wide) — reduces container and card size for compact view */
+    /* MOBILE (tweaked to be slightly larger than previously) — phones 320px - 430px wide */
     @media (max-width:420px){
       :root { --header-h: 56px; }
-      #works { padding-top: calc(var(--header-h) + 6px); padding-bottom: 16px; }
-      .box { padding:10px; max-width: 100%; }
+      #works { padding-top: calc(var(--header-h) + 8px); padding-bottom: 18px; }
+      .box { padding:12px; max-width: 100%; }
       .search-wrap { gap:8px; align-items:flex-start; }
       .search-left { flex:1 1 100%; min-width:0; width:100%; display:flex; align-items:center; }
-      .search-input { padding:9px 12px 9px 38px; font-size:13px; border-radius:10px; }
-      .search-icon { left:10px; margin-right:-10px; font-size:14px; }
+      .search-input { padding:11px 14px 11px 40px; font-size:14px; border-radius:11px; }
+      .search-icon { left:10px; margin-right:-10px; font-size:15px; }
       .search-actions { width:100%; display:flex; justify-content:space-between; margin-top:8px; gap:6px; }
-      .result-count { font-size:12px; max-width:60%; overflow:hidden; text-overflow:ellipsis; }
-      .search-clear { padding:6px 10px; font-size:12px; }
+      .result-count { font-size:13px; max-width:60%; overflow:hidden; text-overflow:ellipsis; }
+      .search-clear { padding:7px 10px; font-size:13px; }
 
-      .folio-grid { gap:10px; grid-template-columns: 1fr; }
+      .folio-grid { gap:12px; grid-template-columns: 1fr; }
       .folio-item { border-radius:10px; }
-      .thumb-wrap { aspect-ratio: 16/9; min-height:120px; border-radius:10px; }
+      .thumb-wrap { aspect-ratio: 16/9; min-height:160px; border-radius:10px; }
       .thumb-wrap img { transform-origin:center center; }
 
-      .folio-caption { left:8px; right:8px; bottom:8px; padding:6px 8px; border-radius:8px; }
-      .folio-caption .title { font-size:13px; line-height:1.16; -webkit-line-clamp:2; }
-      .folio-caption .view { padding:5px 8px; height:32px; font-size:12px; min-width:46px; }
+      .folio-caption { left:8px; right:8px; bottom:8px; padding:7px 10px; border-radius:9px; }
+      .folio-caption .title { font-size:14px; line-height:1.18; -webkit-line-clamp:2; }
+      .folio-caption .view { padding:6px 8px; height:34px; font-size:13px; min-width:50px; }
 
       .show-more-wrap { margin-top:10px; }
-      .show-more { padding:8px 12px; font-size:13px; }
+      .show-more { padding:9px 14px; font-size:14px; }
 
-      /* lightbox compact */
+      /* lightbox compact but slightly roomier */
       .lightbox { padding-top: var(--header-h); }
       .lb-shell {
         width: calc(100vw - 12px);
@@ -660,15 +659,15 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         gap:8px;
         margin-top:6px;
       }
-      .lb-view { min-height:200px; }
-      .lb-slide { min-height:200px; padding:8px; }
-      .lb-prev, .lb-next, .lb-close { width:40px; height:40px; font-size:15px; }
-      .lb-meta { padding:10px; max-height:36vh; overflow:auto; }
-      .lb-title { font-size:16px; }
-      .lb-desc { font-size:13px; line-height:1.35; }
+      .lb-view { min-height:220px; }
+      .lb-slide { min-height:220px; padding:10px; }
+      .lb-prev, .lb-next, .lb-close { width:42px; height:42px; font-size:16px; }
+      .lb-meta { padding:12px; max-height:40vh; overflow:auto; }
+      .lb-title { font-size:17px; }
+      .lb-desc { font-size:14px; line-height:1.4; }
 
       /* reduce heavy hover shadow for performance on phones */
-      .folio-item:focus, .folio-item:hover { box-shadow: 0 8px 26px rgba(16,24,40,0.08); transform: translateY(-3px); }
+      .folio-item:focus, .folio-item:hover { box-shadow: 0 10px 30px rgba(16,24,40,0.09); transform: translateY(-3px); }
 
       /* reduce autoplay movement on small screens to avoid jank */
       .thumb-wrap img { transition: opacity .36s ease, transform .45s cubic-bezier(.2,.9,.2,1); }
@@ -676,11 +675,11 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 
     /* extra-tight for very small phones */
     @media (max-width:360px){
-      .thumb-wrap { min-height:100px; }
-      .folio-caption .title { font-size:12.5px; -webkit-line-clamp:3; }
-      .search-input { font-size:12px; padding-left:36px; }
+      .thumb-wrap { min-height:140px; }
+      .folio-caption .title { font-size:13px; -webkit-line-clamp:3; }
+      .search-input { font-size:13px; padding-left:38px; }
       .result-count { display:inline-block; max-width:55%; }
-      .lb-meta { max-height:40vh; padding:8px; }
+      .lb-meta { max-height:42vh; padding:8px; }
     }
 
     /* force ALL text inside lightbox meta to black (both themes) */
@@ -714,7 +713,6 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       </div>
 
       <p id="noResults" class="no-results">No projects found</p>
-      
 
       <div class="folio-grid anim" id="folioGrid" aria-live="polite">
         <!-- Items: NOTE - .folio-meta removed. Only image + caption overlay remain -->
@@ -723,7 +721,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           data-lightbox="assets/TLOGIN (1).png,assets/THOME.png,assets/TPROF.png,assets/TUPLOAD.png,assets/TRESULT.png,assets/TRESULT1.png,assets/THIST.png,assets/THIST2.png,assets/TCOM.png,assets/ALOG.png,assets/AHOME.png,assets/AUSER.png,assets/AHIST.png,assets/ACOMP.png"
           data-link="https://github.com/Abhinand2502/DetexAI"
           data-title="DetexAI"
-          data-desc=" DetexAI is an AI-powered system using YOLOv8 to detect and classify trash in both land and aquatic environments, enabling real-time identification for smarter, faster cleanup."
+          data-desc="DetexAI is an AI-powered system using YOLOv8 to detect and classify trash in both land and aquatic environments, enabling real-time identification for smarter, faster cleanup."
           data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐YOLOv8,⭐SQLite">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">DetexAI – AI Trash Detection</span><span class="view">View details</span></div>
@@ -766,11 +764,11 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
           data-images="assets/tic (2).png,assets/tic (3).png,assets/tic (1).png"
           data-lightbox="assets/tic (2).png,assets/tic (3).png,assets/tic (1).png"
           data-link="https://github.com/Abhinand2502/tic_tac_toe"
-          data-title=" Tic-Tac-Toe"
+          data-title="Tic-Tac-Toe"
           data-desc="✨ A futuristic neon glassmorphism Tic-Tac-Toe game with real-time multiplayer using Django Channels (WebSockets). Players compete in a best-of-3 format with glowing winning tiles, smooth animations, and responsive design for desktop & mobile."
           data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐WebSockets">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title"> Tic-Tac-Toe</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">Tic-Tac-Toe</span><span class="view">View details</span></div>
         </button>
 
         <button class="folio-item"
@@ -1000,15 +998,26 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         }
       });
 
-      // ------------ SEARCH / FILTER: efficient + highlight ------------
+      // ------------ SEARCH / FILTER: improved section-aware search + highlight ------------
       function escapeRegExp(string) {
         return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
+
+      function normalizeText(str){
+        if(!str) return '';
+        // remove star emoji and non-alphanum (but keep hyphen and dot), collapse spaces
+        return str.replace(/⭐/g,' ')
+                  .replace(/[^\w\-\.\s]/g,' ')
+                  .replace(/\s+/g,' ')
+                  .trim()
+                  .toLowerCase();
       }
 
       function highlightText(node, tokens){
         let txt = node.textContent || '';
         if(!tokens.length){ node.innerHTML = txt; return; }
-        const parts = tokens.map(t => escapeRegExp(t));
+        const parts = tokens.map(t => escapeRegExp(t)).filter(Boolean);
+        if(!parts.length){ node.innerHTML = txt; return; }
         const re = new RegExp('(' + parts.join('|') + ')', 'ig');
         node.innerHTML = txt.replace(re, (m) => `<span class="hl">${m}</span>`);
       }
@@ -1038,22 +1047,35 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         updateResultCount();
       }
 
+      // NEW: More forgiving search: tokens tested against a normalized "haystack" of title+desc+tech.
+      // All tokens must match somewhere in the haystack (AND behavior), but tokens can match any field.
       function applySearch(q){
-        q = q.trim().toLowerCase();
+        q = (q || '').trim().toLowerCase();
         if(!q){
           resetFilterRespectExpanded();
           return;
         }
+        // build tokens and ignore tiny garbage tokens
+        const tokens = q.split(/\s+/).map(t => t.replace(/[^\w\-\.\s]/g,'').trim()).filter(Boolean);
+        if(!tokens.length){
+          resetFilterRespectExpanded();
+          return;
+        }
+
         showMoreBtn.style.display = 'none';
         let any = false;
-        const tokens = q.split(/\s+/).filter(Boolean);
+
         items.forEach(it => {
-          const title = (it.dataset.title || '').toLowerCase();
-          const desc = (it.dataset.desc || '').toLowerCase();
-          const tech = (it.dataset.tech || '').toLowerCase();
-          const match = tokens.every(tok => title.includes(tok) || desc.includes(tok) || tech.includes(tok));
-          it.style.display = match ? 'block' : 'none';
-          if(match) {
+          const title = normalizeText(it.dataset.title || '');
+          const desc = normalizeText(it.dataset.desc || '');
+          const tech = normalizeText(it.dataset.tech || '');
+          const hay = `${title} ${desc} ${tech}`;
+
+          // token matches if present anywhere in haystack
+          const matchedAll = tokens.every(tok => hay.indexOf(tok) !== -1);
+
+          it.style.display = matchedAll ? 'block' : 'none';
+          if(matchedAll) {
             any = true;
             const capTitle = it.querySelector('.folio-caption .title');
             if(capTitle) highlightText(capTitle, tokens);
@@ -1062,6 +1084,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
             if(capTitle) capTitle.innerHTML = capTitle.textContent || '';
           }
         });
+
         noResults.style.display = any ? 'none' : 'block';
         updateResultCount();
       }
@@ -1126,6 +1149,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
   </script>
 </section>
 <!-- ===== end WORKS ===== -->
+
 
 
 

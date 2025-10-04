@@ -127,7 +127,8 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
 .neon-frame { display: inline-block; border-radius: 16px; padding: 3px; background: conic-gradient(from 0deg, #fff, #34e6ff, #ff59d0, #fff); box-shadow: none; -webkit-mask: none; mask: none; overflow: hidden; }
 .neon-image { display: block; width: 100%; height: 440px; object-fit: cover; border-radius: 13px; filter: none; box-shadow: none; }
 
-/* Social row default (desktop inside container) */
+/* ===================== UPDATED SOCIAL (full rules) ===================== */
+/* Black circular social tiles with purple→blue lower-right glow */
 .social-row {
   position: absolute;
   left: calc(50% - 27px);
@@ -135,9 +136,65 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   top: 28px;
   z-index: 6;
   display: flex;
-  gap: 20px;
+  gap: 18px;
   pointer-events: auto;
 }
+
+/* black circle tile */
+.social-square {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #000;               /* solid black */
+  color: #fff;                    /* white glyph color */
+  text-decoration: none;
+  overflow: visible;
+  transition: transform .22s cubic-bezier(.2,.9,.2,1), box-shadow .22s, filter .22s;
+  border: 0;
+  box-shadow:
+    6px 8px 18px rgba(0,0,0,0.45),            /* dark base shadow */
+    10px 14px 28px rgba(79,63,255,0.08),      /* purple glow (near) */
+    16px 26px 46px rgba(31,179,255,0.06);     /* blue glow (further blur) */
+  -webkit-transform: translateZ(0);
+  will-change: transform, box-shadow;
+}
+
+/* small glossy highlight top-left */
+.social-square::after {
+  content: "";
+  position: absolute;
+  left: 8%;
+  top: 8%;
+  width: 46%;
+  height: 22%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(0.5px);
+  mix-blend-mode: overlay;
+  z-index: 1;
+}
+
+/* icon / fa element sits above pseudo highlight */
+.social-square .icon { position: relative; z-index: 2; font-size: 22px; width: 36px; height: 36px; display:inline-flex; align-items:center; justify-content:center; color:#fff; }
+
+/* Hover: lift + intensify glow */
+.social-square:hover {
+  transform: translateY(-8px) scale(1.06);
+  box-shadow:
+    10px 14px 30px rgba(0,0,0,0.44),
+    18px 26px 48px rgba(79,63,255,0.12),
+    26px 40px 72px rgba(31,179,255,0.10);
+  filter: saturate(1.05);
+}
+
+/* Active press & focus */
+.social-square:active { transform: translateY(-2px) scale(.98); }
+.social-square:focus { outline: none; box-shadow: 0 0 0 4px rgba(79,63,255,0.12), 8px 10px 24px rgba(0,0,0,0.36); }
 
 /* class applied when moved out to body for fixed mobile */
 .social-row.fixed-mobile {
@@ -154,26 +211,14 @@ p.lead{color:var(--muted-dark);max-width:540px;margin:0;}
   box-shadow: none;
 }
 
-/* Social tile */
-.social-square {
-  display: inline-grid;
-  place-items: center;
-  width: 64px;
-  height: 64px;
-  border-radius: 14px;
-  padding: 3px;
-  background: linear-gradient(135deg, #1fb3ff, #ffffff);
-  cursor: pointer;
-  text-decoration: none;
-  transition: transform 200ms ease, box-shadow 200ms ease;
-  overflow: hidden;
+/* responsive tweaks */
+@media (max-width:520px){
+  .social-row.mobile-above{ width:100%; max-width:420px; justify-content:space-around; gap:18px; margin-bottom:16px; }
+  .social-square { width:56px; height:56px; }
+  .social-square .icon { font-size:20px; width:32px; height:32px; }
 }
-.social-square .icon-bg { width: 100%; height: 100%; border-radius: 11px; display: grid; place-items: center; background: var(--bg); color: var(--text); transition: color 200ms ease; }
-.social-square svg { width: 28px;height: 28px;fill:currentColor;stroke:currentColor;stroke-width:1.6;display:block;pointer-events:none; }
-.social-square:hover { transform: translateY(-6px) scale(1.06); box-shadow: 0 6px 18px rgba(31, 179, 255, 0.15); }
-.social-square:hover .icon-bg { color: #1fb3ff; }
-.social-square:active .icon-bg { color: #0d8adf; transform: scale(0.96); }
-.social-square:focus { outline: none; box-shadow: 0 0 0 3px rgba(31, 179, 255, 0.3); }
+
+/* ====================================================================== */
 
 /* HIDE mobile menu by default (prevents unwanted links under header on desktop) */
 .mobile-menu { display: none; }
@@ -367,31 +412,23 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
         <!-- Social row (desktop: inside frame). On mobile JS will move it to just above the neon-frame (not fixed). -->
         <div class="social-row" role="navigation" aria-label="Social links">
           <a class="social-square" href="mailto:abhinandbabu2502@gmail.com" title="Email" aria-label="Email">
-            <span class="icon-bg">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2l-8 4.8-8-4.8V6l8 4.8L20 6v2.2z"/></svg>
-            </span>
+            <i class="fa-solid fa-envelope icon" aria-hidden="true"></i>
+            <span class="sr-only">Email</span>
           </a>
 
           <a class="social-square" href="https://github.com/Abhinand2502" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
-            <span class="icon-bg">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0.5C5.73.5.75 5.49.75 11.76c0 4.85 3.14 8.96 7.5 10.42.55.1.75-.24.75-.53v-1.86c-3.05.66-3.7-1.4-3.7-1.4-.5-1.26-1.22-1.6-1.22-1.6-.99-.68.08-.67.08-.67 1.1.08 1.68 1.13 1.68 1.13.97 1.66 2.54 1.18 3.16.9.1-.7.38-1.18.69-1.45-2.43-.28-4.98-1.22-4.98-5.44 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.42.11-2.96 0 0 .92-.3 3.02 1.13a10.5 10.5 0 0 1 5.5 0c2.09-1.43 3.01-1.13 3.01-1.13.61 1.54.23 2.68.11 2.96.7.77 1.13 1.75 1.13 2.95 0 4.23-2.56 5.16-4.99 5.43.39.34.73 1.01.73 2.04v3.02c0 .3.2.64.76.53 4.36-1.46 7.5-5.57 7.5-10.42C23.25 5.49 18.27.5 12 .5z"/></svg>
-            </span>
+            <i class="fa-brands fa-github icon" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span>
           </a>
 
           <a class="social-square" href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">
-            <span class="icon-bg">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5C3.88 3.5 3 4.38 3 5.48c0 1.1.88 1.98 1.98 1.98h.02C6.07 7.46 7 6.58 7 5.48 7 4.38 6.07 3.5 4.98 3.5zM3.5 8.98h3v11.52h-3V8.98zM9.5 8.98h2.88v1.57h.04c.4-.76 1.37-1.57 2.82-1.57 3.01 0 3.57 1.98 3.57 4.55v6.97h-3V14.9c0-1.52-.03-3.47-2.12-3.47-2.12 0-2.44 1.65-2.44 3.36v6.18h-3V8.98z"/></svg>
-            </span>
+            <i class="fa-brands fa-linkedin-in icon" aria-hidden="true"></i>
+            <span class="sr-only">LinkedIn</span>
           </a>
 
           <a class="social-square" href="https://instagram.com/_abhinand_babu" target="_blank" rel="noopener" title="Instagram" aria-label="Instagram">
-            <span class="icon-bg">
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <rect x="2.2" y="2.2" width="19.6" height="19.6" rx="5.2" ry="5.2" fill="none" />
-                <circle cx="12" cy="12" r="3.7" />
-                <circle cx="17.5" cy="6.2" r="0.95" />
-              </svg>
-            </span>
+            <i class="fa-brands fa-instagram icon" aria-hidden="true"></i>
+            <span class="sr-only">Instagram</span>
           </a>
         </div>
 
@@ -400,6 +437,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     </div>
   </div>
 </section>
+
 
 
 

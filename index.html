@@ -1377,7 +1377,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
   </script>
 </section>
 <!-- ===== end WORKS ===== -->
-<!-- ===== Modern Contact Section + Resume Lightbox ===== -->
+<!-- ===== Modern Contact Section + Resume Lightbox (fixed size) ===== -->
 <section id="contact" class="contact-section" aria-labelledby="contact-heading">
   <div class="contact-container">
 
@@ -1385,7 +1385,7 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     <div class="divider" aria-hidden="true"></div>
 
     <p class="contact-text">
-      I’m always excited to connect! Reach out via email or check my social profiles below. You can also view my resume.
+      Reach out via email or social profiles below. You can also view my resume.
     </p>
 
     <div class="socials" role="list" aria-label="Social links">
@@ -1393,32 +1393,27 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       <a href="mailto:abhinandbabu2502@gmail.com" class="social-link" aria-label="Email">
         <img src="assets/logos/email.webp" alt="Email Logo">
       </a>
+
       <!-- GITHUB -->
       <a href="https://github.com/Abhinand2502" target="_blank" rel="noopener" class="social-link" aria-label="GitHub">
         <img src="assets/logos/git.webp" alt="GitHub Logo">
       </a>
+
       <!-- LINKEDIN -->
       <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener" class="social-link" aria-label="LinkedIn">
         <img src="assets/logos/link.png" alt="LinkedIn Logo">
       </a>
+
       <!-- INSTAGRAM -->
       <a href="https://instagram.com/your_instagram_username" target="_blank" rel="noopener" class="social-link" aria-label="Instagram">
         <img src="assets/logos/insta.png" alt="Instagram Logo">
       </a>
     </div>
 
-    <div class="resume-wrapper">
-      <button id="view-resume" class="resume-btn" aria-haspopup="dialog" aria-controls="resume-lightbox-root" aria-expanded="false">
-        <svg viewBox="0 0 24 24" aria-hidden focusable="false"><path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
-        <span>View Resume</span>
-      </button>
-    </div>
-
-    <!-- Home Link -->
-    <a href="#home" class="home-link" aria-label="Go to Home">
-      <span>Back to Home</span>
-      <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 4l1.41 1.41L7.83 11H20v2H7.83l5.58 5.59L12 20l-8-8z"/></svg>
-    </a>
+    <button id="view-resume" class="resume-btn" aria-haspopup="dialog" aria-controls="resume-lightbox-root" aria-expanded="false">
+      <svg viewBox="0 0 24 24" aria-hidden focusable="false"><path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+      <span>View Resume</span>
+    </button>
 
   </div>
 </section>
@@ -1442,109 +1437,290 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
   padding: 48px;
   border-radius: 16px;
   text-align:center;
-  display:flex; flex-direction:column; gap:24px; align-items:center;
+  display:flex; flex-direction:column; gap:20px; align-items:center;
   background: var(--bg-light);
   color: var(--text-light);
   border:1px solid var(--border-light);
   box-shadow:0 12px 40px rgba(0,0,0,0.08);
-  transition: all .25s ease;
+  transition: background .2s, color .2s, border-color .2s, box-shadow .2s, transform .2s;
 }
-.contact-container:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow:0 24px 60px rgba(0,0,0,0.18);
-}
+
 .divider {
   width:72px; height:5px; border-radius:4px; margin-top:8px;
   background: linear-gradient(90deg, var(--accent-blue), #ff59d0);
 }
-.contact-text { font-size:1.05rem; line-height:1.6; max-width:760px; }
 
-/* Socials - horizontal row */
+.contact-text { font-size:1.03rem; line-height:1.6; max-width:760px; }
+
+/* Socials Container */
 .socials {
   display: flex;
   gap: 20px;
   margin-top: 22px;
   justify-content: center;
   align-items: center;
-  flex-wrap: nowrap;
-  overflow-x:auto;
-  padding-bottom:4px;
 }
-.socials::-webkit-scrollbar { height:6px; }
-.socials::-webkit-scrollbar-thumb { background:rgba(0,0,0,0.2); border-radius:3px; }
 
+/* Social links - fixed size for all screens */
 .social-link {
-  flex:0 0 auto;
-  width:64px; height:64px;
-  display:grid; place-items:center;
-  border-radius:16px;
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
   background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.10);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
   box-shadow: 0 6px 18px rgba(0,0,0,0.28);
-  text-decoration:none;
+  text-decoration: none;
 }
-.social-link img { width:34px; height:34px; object-fit:contain; display:block; }
+
+/* Logo images - fixed size */
+.social-link img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Hover effect */
 .social-link:hover {
-  transform: translateY(-8px) scale(1.1);
-  background: rgba(255,255,255,0.16);
-  box-shadow: 0 20px 48px rgba(0,0,0,0.28);
+  transform: translateY(-6px) scale(1.06);
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 14px 36px rgba(0,0,0,0.4);
 }
 
-/* Resume Button Wrapper */
-.resume-wrapper { width:100%; display:flex; justify-content:center; margin-top:20px; }
-
+/* Resume Button - fixed size */
 .resume-btn {
-  padding:16px 28px;
-  border-radius:16px;
-  border:none;
+  margin-top:20px;
+  padding:14px 22px;
+  border-radius:12px;
+  border:1px solid var(--border-light);
+  background: linear-gradient(180deg,#fff,#f5f5f5);
+  display:inline-flex;
+  gap:12px;
+  align-items:center;
   font-weight:700;
-  font-size:1.1rem;
-  background: linear-gradient(135deg, #1f8eff, #ff59d0);
-  color:#fff;
+  color:#000;
   cursor:pointer;
-  display:inline-flex; gap:12px; align-items:center;
-  box-shadow:0 10px 28px rgba(31,142,255,0.2);
-  transition: all 0.25s ease;
+  transition:all .14s ease;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
-.resume-btn svg { width:20px; height:20px; fill:currentColor; }
-.resume-btn:hover { transform: translateY(-4px) scale(1.03); box-shadow:0 14px 38px rgba(31,142,255,0.28); }
-
-/* Home link */
-.home-link {
-  margin-top: 24px;
-  display:inline-flex; gap:10px; align-items:center;
-  font-weight:600; font-size:1.05rem;
-  color: var(--accent-blue);
-  text-decoration:none;
-  transition: all 0.25s ease;
-}
-.home-link svg { width:20px; height:20px; fill: var(--accent-blue); transition: transform 0.25s ease; }
-.home-link:hover { transform: translateX(6px); color:#ff59d0; }
-.home-link:hover svg { transform: translateX(6px); fill:#ff59d0; }
+.resume-btn svg { width:18px; height:18px; fill:currentColor; }
+.resume-btn:hover { transform: translateY(-3px) scale(1.02); }
 
 /* Light/Dark theme */
-html[data-theme="dark"] .contact-container { background: var(--bg-dark); color: var(--text-dark); border:1px solid var(--border-dark); box-shadow:0 12px 40px rgba(0,0,0,0.6);}
-html[data-theme="dark"] .social-link { background: rgba(255,255,255,0.02); border:1px solid var(--border-dark); box-shadow: 0 6px 18px rgba(0,0,0,0.6);}
-html[data-theme="dark"] .resume-btn { background: linear-gradient(135deg,#0b0b0c,#131416); color: var(--text-dark); border:1px solid var(--border-dark); }
-html[data-theme="dark"] .home-link { color: #1f8eff; }
-html[data-theme="dark"] .home-link svg { fill: #1f8eff; }
-
-/* ===== Mobile improvements ===== */
-@media(max-width:720px){
-  .contact-section { padding:36px 12px; }
-  .contact-container { width: calc(100% - 24px); padding:28px; border-radius:12px; }
-  .divider { width:48px; }
-  .contact-text { font-size:1.1rem; line-height:1.7; }
-  .socials { gap:16px; margin-top:20px; flex-wrap: nowrap; overflow-x:auto; justify-content:flex-start; }
-  .social-link { width:72px; height:72px; border-radius:16px; margin-bottom:0;}
-  .social-link img { width:40px; height:40px; }
-  .resume-wrapper { justify-content:center; }
-  .resume-btn { width:100%; max-width:280px; padding:16px; font-size:1.05rem;}
-  .home-link { font-size:1rem; }
+html[data-theme="dark"] .contact-container {
+  background: var(--bg-dark);
+  color: var(--text-dark);
+  border:1px solid var(--border-dark);
+  box-shadow:0 12px 40px rgba(0,0,0,0.6);
 }
+html[data-theme="dark"] .social-link {
+  background: rgba(255,255,255,0.02);
+  border:1px solid var(--border-dark);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+html[data-theme="dark"] .resume-btn {
+  background: linear-gradient(180deg,#131416,#0b0b0c);
+  color: var(--text-dark);
+  border:1px solid var(--border-dark);
+}
+
+/* ===== Lightbox ===== */
+.resume-lightbox-root {
+  position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+  z-index:2147483647; padding:20px;
+}
+.resume-lightbox-root[aria-hidden="false"] { display:flex; }
+
+.resume-lb-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.55); backdrop-filter:blur(4px); }
+.resume-lb-panel {
+  position:relative; z-index:2; width:auto; max-width:92vw; max-height:90vh;
+  border-radius:12px; padding:18px; overflow:auto;
+  display:inline-block; vertical-align:middle; text-align:center;
+  background:#fff; color:#000; border:2px solid rgba(0,0,0,0.85);
+  box-shadow: 0 26px 64px rgba(0,0,0,0.25);
+}
+html[data-theme="dark"] .resume-lb-panel { background:#0f0f10; color:#fff; border:2px solid rgba(255,255,255,0.06); }
+
+.resume-lb-close {
+  position:absolute; top:10px; right:12px;
+  background: var(--accent-blue); border: none; color: #fff;
+  width:42px; height:42px; display:inline-grid; place-items:center;
+  font-size:20px; line-height:1; cursor:pointer; border-radius:10px; padding:0;
+  box-shadow: 0 8px 20px rgba(31,142,255,0.18);
+  transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+}
+.resume-lb-close:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 12px 30px rgba(31,142,255,0.22); }
+html[data-theme="dark"] .resume-lb-close { box-shadow: 0 8px 20px rgba(31,142,255,0.12); }
+
+.resume-lb-img { display:flex; justify-content:center; align-items:center; padding:6px; }
+.resume-lb-img img {
+  width:auto; height:auto; max-width:84vw; max-height:80vh;
+  border-radius:8px; object-fit:contain;
+  box-shadow:0 10px 40px rgba(0,0,0,0.12);
+  background:#fff; border:1px solid rgba(0,0,0,0.06);
+}
+.resume-lb-caption { margin-top:10px; font-size:.95rem; color:inherit; opacity:.95; text-align:center; max-width:90%; margin-left:auto; margin-right:auto; }
+.resume-lb-download {
+  display:inline-block; margin:12px auto 4px auto; padding:12px 20px;
+  background:var(--accent-blue); color:#fff; border-radius:10px; font-weight:700;
+  text-decoration:none; transition: all .12s; border:none;
+}
+.resume-lb-download:hover { transform:translateY(-3px); box-shadow: 0 10px 28px rgba(31,142,255,0.18); }
+
+/* REMOVE media queries for scaling - same size on all screens */
 </style>
+
+<!-- ===== Script (lightbox + theme sync) ===== -->
+<script>
+/* THEME SYNC */
+(function(){
+  const html=document.documentElement;
+  if(html.hasAttribute('data-theme')) return;
+  try{ const saved=localStorage.getItem('theme'); if(saved==='dark'||saved==='light'){ html.setAttribute('data-theme',saved); return; } } catch(e){}
+  html.setAttribute('data-theme', window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light');
+})();
+
+/* LIGHTBOX */
+(function(){
+  const PREVIEW_IMAGE = 'assets/resume.jpg';
+  const DOWNLOAD_PDF   = 'assets/resume.pdf';
+  const DOWNLOAD_NAME  = 'Resume.pdf';
+
+  function ensureLightbox(){
+    let root=document.getElementById('resume-lightbox-root');
+    if(root) return root;
+    root=document.createElement('div');
+    root.id='resume-lightbox-root';
+    root.className='resume-lightbox-root';
+    root.setAttribute('role','dialog');
+    root.setAttribute('aria-modal','true');
+    root.setAttribute('aria-hidden','true');
+
+    const overlay=document.createElement('div');
+    overlay.className='resume-lb-overlay';
+    overlay.dataset.close='true';
+    root.appendChild(overlay);
+
+    const panel=document.createElement('div');
+    panel.className='resume-lb-panel';
+    panel.tabIndex=-1;
+    panel.setAttribute('role','document');
+
+    const closeBtn=document.createElement('button');
+    closeBtn.className='resume-lb-close';
+    closeBtn.type='button';
+    closeBtn.innerHTML='×';
+    closeBtn.dataset.close='true';
+    closeBtn.setAttribute('aria-label','Close resume preview');
+    panel.appendChild(closeBtn);
+
+    const body=document.createElement('div');
+    body.className='resume-lb-body';
+
+    const imgWrap=document.createElement('div');
+    imgWrap.className='resume-lb-img';
+    const img=document.createElement('img');
+    img.id='resume-lb-image';
+    img.alt='Resume preview';
+    imgWrap.appendChild(img);
+    body.appendChild(imgWrap);
+
+    const caption=document.createElement('div');
+    caption.className='resume-lb-caption';
+    caption.textContent = 'Preview of resume. Use the Download button to save the PDF.';
+    body.appendChild(caption);
+
+    const actions=document.createElement('div');
+    actions.className='resume-lb-actions';
+    const dl=document.createElement('a');
+    dl.id='resume-lb-download';
+    dl.className='resume-lb-download';
+    dl.setAttribute('role','button');
+    dl.download=DOWNLOAD_NAME;
+    dl.innerText='Download PDF';
+    actions.appendChild(dl);
+    body.appendChild(actions);
+
+    panel.appendChild(body);
+    root.appendChild(panel);
+    (document.body || document.documentElement).appendChild(root);
+    return root;
+  }
+
+  function focusable(container){
+    const sel='a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    return Array.from((container||document).querySelectorAll(sel)).filter(el=>el.offsetWidth||el.offsetHeight||el.getClientRects().length);
+  }
+
+  function ready(fn){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
+
+  ready(function(){
+    const opener=document.getElementById('view-resume');
+    if(!opener){ console.error('No opener (view-resume) found'); return; }
+
+    const root=ensureLightbox();
+    const panel=root.querySelector('.resume-lb-panel');
+    const overlay=root.querySelector('.resume-lb-overlay');
+    const closeBtn=root.querySelector('.resume-lb-close');
+    const img=root.querySelector('#resume-lb-image');
+    const dl=root.querySelector('#resume-lb-download');
+
+    dl.href = DOWNLOAD_PDF;
+    dl.download = DOWNLOAD_NAME;
+    let lastActive=null;
+
+    function openLB(e){
+      if(e) e.preventDefault();
+      lastActive=document.activeElement;
+      if(PREVIEW_IMAGE){ img.src = PREVIEW_IMAGE; img.parentElement.style.display='flex'; } 
+      else { if(img && img.parentElement) img.parentElement.style.display='none'; }
+      dl.href = DOWNLOAD_PDF;
+      root.setAttribute('aria-hidden','false');
+      root.style.display='flex';
+      panel.focus();
+      document.documentElement.style.overflow='hidden';
+      document.body.style.overflow='hidden';
+      opener.setAttribute('aria-expanded','true');
+    }
+
+    function closeLB(e){
+      if(e) e.preventDefault();
+      root.setAttribute('aria-hidden','true');
+      root.style.display='none';
+      document.documentElement.style.overflow='';
+      document.body.style.overflow='';
+      try{ (lastActive || opener).focus(); } catch(err){}
+      opener.setAttribute('aria-expanded','false');
+    }
+
+    opener.addEventListener('click', openLB);
+    closeBtn && closeBtn.addEventListener('click', closeLB);
+    overlay && overlay.addEventListener('click', function(e){ if(e.target === overlay) closeLB(e); });
+
+    document.addEventListener('keydown', function(e){
+      if(root.getAttribute('aria-hidden') === 'true') return;
+      if(e.key === 'Escape' || e.key === 'Esc'){ e.preventDefault(); closeLB(e); return; }
+      if(e.key === 'Tab'){
+        const nodes = focusable(panel);
+        if(nodes.length === 0){ e.preventDefault(); return; }
+        const first = nodes[0], last = nodes[nodes.length - 1];
+        if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+        else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+      }
+    });
+
+    img.addEventListener('error', function(){ 
+      const wrap = root.querySelector('.resume-lb-img'); 
+      if(wrap) wrap.style.display = 'none'; 
+      console.warn('Failed loading preview image:', PREVIEW_IMAGE);
+    });
+  });
+})();
+</script>
 
 
 

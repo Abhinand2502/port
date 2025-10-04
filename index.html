@@ -1389,28 +1389,30 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
     <p class="contact-text">
       Reach out via email or social profiles below. You can also view my resume.
     </p>
+<div class="socials" role="list" aria-label="Social links">
 
-    <div class="socials" role="list" aria-label="Social links">
-      <!-- EMAIL -->
-      <a href="mailto:abhinandbabu2502@gmail.com" class="social-link email" aria-label="Email">
-        <svg viewBox="0 0 24 24" aria-hidden focusable="false"><path fill="currentColor" d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5L4 8V6l8 5 8-5v2z"/></svg>
-      </a>
+  <!-- EMAIL -->
+  <a href="mailto:abhinandbabu2502@gmail.com" class="social-link" aria-label="Email">
+    <img src="assets/logos/email.webp" alt="Email Logo">
+  </a>
 
-      <!-- GITHUB -->
-      <a href="https://github.com/Abhinand2502" target="_blank" rel="noopener" class="social-link github" aria-label="GitHub">
-        <svg viewBox="0 0 24 24" aria-hidden focusable="false"><path fill="currentColor" d="M12 .5C5.65.5.75 5.4.75 11.77c0 4.86 3.16 8.98 7.55 10.44.55.1.75-.24.75-.52v-1.82c-3.07.66-3.72-1.36-3.72-1.36-.5-1.28-1.25-1.62-1.25-1.62-1.02-.7.08-.7.08-.7 1.12.08 1.71 1.16 1.71 1.16.98 1.7 2.56 1.21 3.18.92.1-.72.38-1.21.69-1.49-2.45-.28-5.02-1.23-5.02-5.46 0-1.21.43-2.2 1.14-2.98-.11-.28-.5-1.4.11-2.92 0 0 .93-.3 3.05 1.14a10.6 10.6 0 0 1 5.56 0c2.12-1.44 3.05-1.14 3.05-1.14.62 1.52.22 2.64.11 2.92.71.78 1.14 1.77 1.14 2.98 0 4.24-2.58 5.18-5.04 5.45.39.33.73.98.73 1.98v2.93c0 .29.2.63.76.52 4.39-1.46 7.55-5.58 7.55-10.44C23.25 5.4 18.35.5 12 .5z"/></svg>
-      </a>
+  <!-- GITHUB -->
+  <a href="https://github.com/Abhinand2502" target="_blank" rel="noopener" class="social-link" aria-label="GitHub">
+    <img src="assets/logos/git.webp" alt="GitHub Logo">
+  </a>
 
-      <!-- LINKEDIN -->
-      <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener" class="social-link linkedin" aria-label="LinkedIn">
-        <svg viewBox="0 0 24 24" aria-hidden focusable="false"><path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.329-.026-3.041-1.853-3.041-1.854 0-2.136 1.447-2.136 2.944v5.666H9.348V9h3.414v1.561h.049c.476-.9 1.635-1.852 3.364-1.852 3.598 0 4.264 2.369 4.264 5.455v6.288zM5.337 7.433a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.119 20.452H3.556V9h3.563v11.452z"/></svg>
-      </a>
+  <!-- LINKEDIN -->
+  <a href="https://linkedin.com/in/abhinand-babu-153b66324" target="_blank" rel="noopener" class="social-link" aria-label="LinkedIn">
+    <img src="assets/logos/link.png" alt="LinkedIn Logo">
+  </a>
 
-      <!-- INSTAGRAM (replace username) -->
-      <a href="https://instagram.com/your_instagram_username" target="_blank" rel="noopener" class="social-link instagram" aria-label="Instagram">
-        <svg viewBox="0 0 24 24" aria-hidden focusable="false"><path fill="currentColor" d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2c1.65 0 3 1.35 3 3v10c0 1.65-1.35 3-3 3H7c-1.65 0-3-1.35-3-3V7c0-1.65 1.35-3 3-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-2.9a1.1 1.1 0 100 2.2 1.1 1.1 0 000-2.2z"/></svg>
-      </a>
-    </div>
+  <!-- INSTAGRAM -->
+  <a href="https://instagram.com/your_instagram_username" target="_blank" rel="noopener" class="social-link" aria-label="Instagram">
+    <img src="assets/logos/insta.png" alt="Instagram Logo">
+  </a>
+
+</div>
+
 
     <button id="view-resume" class="resume-btn" aria-haspopup="dialog" aria-controls="resume-lightbox-root" aria-expanded="false">
       <svg viewBox="0 0 24 24" aria-hidden focusable="false"><path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
@@ -1447,21 +1449,45 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 .divider { width:60px; height:4px; border-radius:4px; margin-top:8px; background:linear-gradient(90deg,#1f8eff,#ff59d0); }
 .contact-text { font-size:1rem; line-height:1.6; max-width:600px; }
 
-/* Socials */
-.socials { display:flex; gap:16px; margin-top:20px; }
-.social-link {
-  width:46px; height:46px; display:grid; place-items:center; border-radius:12px;
-  background:#f0f0f0; color:#333; transition:all .15s; border:1px solid var(--border-light);
-  text-decoration:none;
+/* Socials Container */
+.socials {
+  display: flex;
+  gap: 18px;
+  margin-top: 22px;
+  justify-content: center;
 }
-.social-link svg { width:20px; height:20px; display:block; fill:currentColor; }
-.social-link:hover { transform:scale(1.08); }
 
-/* brand accents */
-.social-link.email { color:#0f1724; background:#fff; }
-.social-link.github { color:#181717; background:#fff; }
-.social-link.linkedin { color:#0A66C2; background:#E6F0FF; }
-.social-link.instagram { color:#E1306C; background:#FFF0F6; }
+/* Each social link button */
+.social-link {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.06); /* frosted look */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  text-decoration: none;
+}
+
+/* Logo images */
+.social-link img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Hover effect */
+.social-link:hover {
+  transform: translateY(-4px) scale(1.08);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.5);
+}
 
 /* Resume Button */
 .resume-btn { margin-top:20px; padding:12px 20px; border-radius:12px; border:1px solid var(--border-light); background:linear-gradient(180deg,#fff,#f5f5f5); display:inline-flex; gap:10px; align-items:center; font-weight:600; color:#000; cursor:pointer; transition:all .15s; }

@@ -1414,6 +1414,12 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
       </button>
     </div>
 
+    <!-- Home Link -->
+    <a href="#home" class="home-link" aria-label="Go to Home">
+      <span>Back to Home</span>
+      <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 4l1.41 1.41L7.83 11H20v2H7.83l5.58 5.59L12 20l-8-8z"/></svg>
+    </a>
+
   </div>
 </section>
 
@@ -1505,12 +1511,25 @@ html[data-theme="light"]{--bg:var(--bg-light);--text:var(--text-light);--muted:v
 .resume-btn svg { width:20px; height:20px; fill:currentColor; }
 .resume-btn:hover { transform: translateY(-4px) scale(1.03); box-shadow:0 14px 38px rgba(31,142,255,0.28); }
 
+/* Home link */
+.home-link {
+  margin-top: 24px;
+  display:inline-flex; gap:10px; align-items:center;
+  font-weight:600; font-size:1.05rem;
+  color: var(--accent-blue);
+  text-decoration:none;
+  transition: all 0.25s ease;
+}
+.home-link svg { width:20px; height:20px; fill: var(--accent-blue); transition: transform 0.25s ease; }
+.home-link:hover { transform: translateX(6px); color:#ff59d0; }
+.home-link:hover svg { transform: translateX(6px); fill:#ff59d0; }
+
 /* Light/Dark theme */
 html[data-theme="dark"] .contact-container { background: var(--bg-dark); color: var(--text-dark); border:1px solid var(--border-dark); box-shadow:0 12px 40px rgba(0,0,0,0.6);}
 html[data-theme="dark"] .social-link { background: rgba(255,255,255,0.02); border:1px solid var(--border-dark); box-shadow: 0 6px 18px rgba(0,0,0,0.6);}
 html[data-theme="dark"] .resume-btn { background: linear-gradient(135deg,#0b0b0c,#131416); color: var(--text-dark); border:1px solid var(--border-dark); }
-
-/* Lightbox & other styles remain unchanged (use your previous script) */
+html[data-theme="dark"] .home-link { color: #1f8eff; }
+html[data-theme="dark"] .home-link svg { fill: #1f8eff; }
 
 /* ===== Mobile improvements ===== */
 @media(max-width:720px){
@@ -1523,6 +1542,7 @@ html[data-theme="dark"] .resume-btn { background: linear-gradient(135deg,#0b0b0c
   .social-link img { width:40px; height:40px; }
   .resume-wrapper { justify-content:center; }
   .resume-btn { width:100%; max-width:280px; padding:16px; font-size:1.05rem;}
+  .home-link { font-size:1rem; }
 }
 </style>
 

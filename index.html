@@ -16,7 +16,7 @@
     /* LIGHT THEME: pure black text */
     [data-theme="light"]{
       --bg:var(--bg-light);
-      --text:#000000;              /* pure black */
+      --text:#000000;
       --nav-link-col:var(--text);
       --surface:#ffffff;
       --icon-bg:rgba(0,0,0,0.04);
@@ -26,7 +26,7 @@
     /* DARK THEME: pure white text */
     [data-theme="dark"]{
       --bg:var(--bg-dark);
-      --text:#ffffff;              /* pure white */
+      --text:#ffffff;
       --nav-link-col:var(--text);
       --surface:#081226;
       --icon-bg:rgba(255,255,255,0.03);
@@ -39,6 +39,7 @@
       background:var(--bg);color:var(--text);
       transition:background var(--transition), color var(--transition);
       line-height:1.45;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+      -webkit-font-feature-settings: "tnum";
     }
 
     /* Header (fixed) */
@@ -54,7 +55,6 @@
     }
 
     .brand{display:flex;align-items:center;gap:12px}
-    /* Replaced text badge with SVG logo for better look in both themes */
     .badge { width:48px; height:48px; display:inline-block; flex-shrink:0; }
     .brand .name{font-weight:700;color:var(--text);font-size:16px}
 
@@ -85,58 +85,53 @@
       text-decoration:none; cursor:pointer;
     }
 
-    /* hamburger — perfect three parallel bars */
-    .hamburger{
-      display:none;width:44px;height:44px;border-radius:10px;border:none;background:transparent;cursor:pointer;padding:8px;
-      align-items:center; justify-content:center;
-    }
-    .hamburger .bars{
-      display:flex; flex-direction:column; justify-content:space-between; align-items:center;
-      height:18px; width:20px;
-    }
-    .hamburger .bar{
-      display:block;height:2px;width:100%; background:var(--text); border-radius:2px;
-      transition:transform .22s cubic-bezier(.2,.9,.2,1), opacity .18s ease, background .18s;
-      transform-origin:center;
-    }
-    /* morph to X: move top/bottom towards center then rotate; middle fades */
+    /* hamburger */
+    .hamburger{ display:none;width:44px;height:44px;border-radius:10px;border:none;background:transparent;cursor:pointer;padding:8px; align-items:center; justify-content:center; }
+    .hamburger .bars{ display:flex; flex-direction:column; justify-content:space-between; align-items:center; height:18px; width:20px; }
+    .hamburger .bar{ display:block;height:2px;width:100%; background:var(--text); border-radius:2px; transition:transform .22s cubic-bezier(.2,.9,.2,1), opacity .18s ease, background .18s; transform-origin:center; }
     .hamburger.open .bar:nth-child(1){ transform: translateY(7px) rotate(45deg); }
     .hamburger.open .bar:nth-child(2){ opacity:0; transform:scaleX(0); }
     .hamburger.open .bar:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
 
-    /* Main hero */
+    /* Main wrapper */
     main{max-width:1250px;margin:0 auto;padding:0 20px}
-    .hero{padding-top:calc(var(--header-h) + 48px); padding-bottom:80px; display:grid; grid-template-columns:1fr 520px; gap:36px; align-items:center}
 
+    /* --- Section sizing: fill viewport (desktop) --- */
+    /* Each <section id="..."> will try to fill the screen minus header */
+    section[id] {
+      min-height: calc(100vh - var(--header-h));
+      padding-top: 28px;
+      padding-bottom: 28px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* HERO */
+    .hero{ padding-top:calc(var(--header-h) + 48px); padding-bottom:80px; display:grid; grid-template-columns:1fr 520px; gap:36px; align-items:center; width:100%;}
+    /* Keep hero min-height logic from section[id]; reduce double top space */
     .left{padding-right:10px; max-width:720px}
     .hero-title{font-size:72px;line-height:.98;font-weight:800;margin:0 0 12px;color:var(--text)}
     .hero-title .accent{color:var(--accent-1)}
-    /* note: user requested all text pure black/white — keep muted same as text */
     .lead{color:var(--text);max-width:640px;font-size:18px;margin-bottom:20px}
 
     .cta-row{display:flex;gap:14px;align-items:center;margin-bottom:22px;justify-content:flex-start}
     .btn-primary{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;padding:12px 18px;border-radius:12px;border:none;font-weight:700;cursor:pointer;text-decoration:none}
     .btn-resume{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1.5px solid var(--accent-1);background:transparent;color:var(--accent-1);font-weight:700;text-decoration:none;cursor:pointer}
 
-    /* social icons: left aligned on desktop, centered on mobile */
     .social-row{display:flex; gap:var(--social-gap); margin-top:8px; align-items:center; flex-wrap:wrap; justify-content:flex-start;}
     .social-row a{width:64px;height:64px;border-radius:12px;background:var(--icon-bg);display:inline-grid;place-items:center;text-decoration:none;color:var(--text);transition:transform .12s, box-shadow .12s;}
     .social-row a:hover{transform:translateY(-6px); box-shadow:0 16px 36px rgba(10,12,20,0.08)}
     @media (max-width:420px){ .social-row a{width:56px;height:56px} }
 
-    /* photo */
     .right{display:flex;align-items:center;justify-content:center;position:relative}
     .photo{width:100%;max-width:520px;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);position:relative}
-    .photo img{display:block;width:100%;height:auto;object-fit:cover}
+    .photo img{display:block;width:100%;height:100%;object-fit:cover;min-height:320px}
 
-    section.demo{padding:110px 0;border-top:1px solid var(--divider)}
+    section.demo{padding:28px 0;border-top:1px solid var(--divider); width:100%}
     section.demo h2{font-size:32px;margin-bottom:8px}
     section.demo p{color:var(--text)}
 
-    /* MOBILE NAV overlay
-       Ensure it's always hidden by default unless .show is added.
-       This prevents stray links from appearing under the header.
-    */
+    /* MOBILE NAV overlay - hidden unless .show is added */
     .mobile-nav{position:fixed;inset:0;background:linear-gradient(180deg,rgba(2,6,23,0.55),rgba(2,6,23,0.45));backdrop-filter:blur(6px);display:none !important;z-index:140;padding-top:var(--header-h)}
     .mobile-nav.show{display:block !important}
     .mobile-nav .panel{background:var(--surface);margin:22px;border-radius:12px;padding:18px}
@@ -144,55 +139,67 @@
     .mobile-nav a.active{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:white}
     .mobile-nav hr{border:0;height:1px;background:var(--divider);margin:10px 0}
 
-    /* CONTACT section styles (kept inside same style block) */
-    .contact-section{padding:110px 0;border-top:1px solid var(--divider);display:grid;grid-template-columns:1fr 520px;gap:36px;align-items:start;max-width:1250px;margin:0 auto}
-    .contact-left{padding-right:10px}
+    /* CONTACT */
+    .contact-section{ padding:28px 0; border-top:1px solid var(--divider); display:grid; grid-template-columns:1fr 520px; gap:36px; align-items:center; width:100%;}
+    .contact-left{padding-right:10px; max-width:720px}
     .contact-left h2{font-size:40px;margin:0 0 8px}
-    .contact-left p{color:var(--text);opacity:0.6;margin-bottom:28px}
-    .contact-card{display:flex;gap:14px;align-items:center;margin-bottom:22px}
+    .contact-left p{color:var(--text);opacity:0.85;margin-bottom:18px}
+    .contact-card{display:flex;gap:14px;align-items:center;margin-bottom:18px}
     .contact-card .icon{width:64px;height:64px;border-radius:12px;background:linear-gradient(180deg, rgba(139,60,255,0.12), rgba(164,75,255,0.08));display:grid;place-items:center}
     .contact-card .icon svg{width:28px;height:28px}
     .contact-card .txt{font-weight:700}
-    .contact-card small{display:block;color:var(--text);opacity:0.6;font-weight:600}
+    .contact-card small{display:block;color:var(--text);opacity:0.7;font-weight:600}
 
-    .contact-socials{display:flex;gap:14px;margin-top:20px;flex-wrap:wrap}
+    .contact-socials{display:flex;gap:14px;margin-top:12px;flex-wrap:wrap}
     .social-btn{display:inline-flex;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--icon-bg);text-decoration:none;color:var(--text);font-weight:700}
     .social-btn svg{width:18px;height:18px}
 
     /* form */
-    .contact-form .label{display:block;font-size:13px;color:var(--text);opacity:0.6;margin-bottom:6px;font-weight:700}
+    .contact-form .label{display:block;font-size:13px;color:var(--text);opacity:0.8;margin-bottom:6px;font-weight:700}
     .contact-form .field{margin-bottom:16px}
     .contact-form input, .contact-form textarea{width:100%;border:0;border-bottom:1px solid var(--divider);background:transparent;padding:10px 6px;font-size:15px;color:var(--text);outline:none}
     .contact-form textarea{min-height:110px}
     .contact-form .row{display:flex;gap:12px}
     .contact-form .row .col{flex:1}
     .send-btn{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;padding:12px 18px;border-radius:12px;border:none;font-weight:700;cursor:pointer}
-    .form-note{color:var(--text);opacity:0.6;font-size:14px}
+    .form-note{color:var(--text);opacity:0.7;font-size:14px}
 
-    /* responsive */
+    /* responsive behavior */
+    @media (max-width:980px){ .hero{grid-template-columns:1fr 380px} .hero-title{font-size:56px} }
     @media (max-width:820px){
       header{height:80px}
       :root{ --header-h:80px }
       nav.desktop{display:none}
       .contact-btn{display:none}
       .hamburger{display:flex}
-      .hero{grid-template-columns:1fr;gap:18px;padding-top:calc(var(--header-h) + 12px + var(--mobile-offset));padding-bottom:40px}
-      .hero-title{display:none}
+
+      /* Stop forcing full-screen on small devices (so content scrolls naturally) */
+      section[id] {
+        min-height: auto;
+        padding-top: calc(var(--header-h) + 12px + var(--mobile-offset));
+        padding-bottom: 32px;
+        display:block;
+        align-items:stretch;
+      }
+
+      .hero{grid-template-columns:1fr; gap:18px; padding-top:calc(var(--header-h) + 12px + var(--mobile-offset)); padding-bottom:40px}
+      .hero-title{display:block} /* we'll show a scaled heading in stacked layout */
       .left{order:2;text-align:center;padding:0;max-width:100%}
       .right{order:1;position:relative}
       .photo{max-width:100%;border-radius:12px}
-      .contact-section{grid-template-columns:1fr;gap:22px;padding:48px 20px}
-      .contact-card{justify-content:center;text-align:center;flex-direction:column}
-      .contact-card .icon{margin-bottom:6px}
+      .contact-section{grid-template-columns:1fr;gap:22px;padding:28px 20px}
+      .contact-card{justify-content:flex-start;text-align:left;flex-direction:row}
+      .contact-card .icon{margin-right:10px}
       .contact-left, .contact-right{width:100%}
-      .contact-socials{justify-content:center}
+      .contact-socials{justify-content:flex-start}
       .cta-row { justify-content:center }
       .social-row { justify-content:center }
       .contact-form .row{flex-direction:column}
       .contact-form textarea{min-height:140px}
+      .photo img{min-height:240px}
     }
 
-    /* modal (resume) - DESKTOP enlarged for readability, MOBILE capped (kept as earlier) */
+    /* modal (resume) */
     .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.55);z-index:160;padding:20px}
     .modal.show{display:flex}
     .modal .box{width:100%; max-width:920px; background:var(--surface); border-radius:12px; overflow:hidden; box-shadow:0 28px 80px rgba(2,6,23,0.6);}
@@ -211,7 +218,6 @@
 
   <header>
     <div class="brand">
-      <!-- improved SVG logo that adapts well to light/dark -->
       <div class="badge" aria-hidden="true">
         <svg viewBox="0 0 100 100" width="48" height="48" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
           <defs>
@@ -221,7 +227,6 @@
             </linearGradient>
           </defs>
           <rect rx="18" width="100" height="100" fill="url(#g1)"/>
-          <!-- letter B as contrast - will always be white -->
           <text x="50" y="60" text-anchor="middle" font-family="Inter, system-ui, Arial" font-weight="700" font-size="54" fill="#ffffff">B</text>
         </svg>
       </div>
@@ -255,7 +260,7 @@
     </div>
   </header>
 
-  <!-- mobile nav overlay (hidden unless .show is added by JS) -->
+  <!-- mobile nav overlay (hidden unless .show) -->
   <div class="mobile-nav" id="mobileNav" aria-hidden="true">
     <div class="panel" role="dialog" aria-modal="true">
       <a href="#home" class="mobile-link">Home</a>
@@ -270,7 +275,7 @@
   </div>
 
   <main style="max-width:1250px;margin:0 auto;padding:0 20px">
-    <!-- hero now has id="home" -->
+    <!-- HERO -->
     <section id="home" class="hero" aria-label="Intro">
       <div class="left">
         <h1 class="hero-title">Hello, I’m <span class="accent">Brooklyn Gilbert</span></h1>
@@ -285,7 +290,6 @@
         </div>
 
         <div class="social-row" aria-label="Social links">
-          <!-- improved social links with your URLs -->
           <a href="mailto:mail-abhinandbabu2502@gmail.com" title="Email" aria-label="Email">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 7.5v9a2 2 0 002 2h14a2 2 0 002-2v-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 7.5l-9 6-9-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
@@ -312,7 +316,7 @@
       </div>
     </section>
 
-    <!-- demo pages -->
+    <!-- demo pages (each section will try to fill viewport on desktop) -->
     <section id="about" class="demo"><h2>About</h2><p>About demo. "Say Hello!" links here.</p></section>
     <section id="process" class="demo"><h2>Process</h2><p>Process demo content.</p></section>
     <section id="portfolio" class="demo"><h2>Portfolio</h2><p>Portfolio demo content.</p></section>
@@ -322,8 +326,8 @@
     <!-- ===== Contact section (added) ===== -->
     <section id="contact" class="contact-section" aria-label="Contact">
       <div class="contact-left">
-        <!-- resume button moved above address as requested -->
-        <div style="display:flex;gap:12px;align-items:center;margin-bottom:18px;flex-wrap:wrap;">
+        <!-- Resume button above address -->
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
           <a class="btn-resume resume-trigger" href="#" data-image="assets/resume.jpg" data-pdf="assets/resume.pdf">Resume</a>
           <div style="font-weight:700;color:var(--text)">Let's connect — details below.</div>
         </div>
@@ -546,7 +550,7 @@
       window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeModal(); });
     })();
 
-    /* Smooth scrolling + active link management (robust) */
+    /* Smooth scrolling + active link management */
     (function(){
       const header = document.querySelector('header');
       const headerH = ()=> header.offsetHeight || 72;

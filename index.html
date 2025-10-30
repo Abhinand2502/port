@@ -19,6 +19,7 @@
       --surface:#ffffff;
       --icon-bg:rgba(0,0,0,0.04);
       --divider: rgba(0,0,0,0.06);
+      --toggle-bg: #f6f5ff; /* small background for sun */
     }
 
     [data-theme="dark"]{
@@ -27,6 +28,7 @@
       --surface:#081226;
       --icon-bg:rgba(255,255,255,0.03);
       --divider: rgba(255,255,255,0.06);
+      --toggle-bg: #0e0e16; /* small background for moon */
     }
 
     *{box-sizing:border-box} html,body{height:100%}
@@ -35,6 +37,8 @@
       background:var(--bg);color:var(--text);
       transition:background var(--transition), color var(--transition);
       line-height:1.45;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+      /* ensure page content sits below fixed header */
+      padding-top: var(--header-h);
     }
 
     header{
@@ -65,11 +69,12 @@
     }
 
     .header-right{display:flex;align-items:center;gap:10px}
+    /* Updated toggle (rounded square) matching your sample */
     .theme-btn{
-      width:44px;height:44px;border-radius:10px;border:none;background:var(--icon-bg);
-      display:grid;place-items:center;cursor:pointer;padding:8px;color:var(--text);
+      width:48px;height:36px;border-radius:12px;border:1px solid var(--divider);
+      background:var(--toggle-bg); display:grid;place-items:center;cursor:pointer;padding:6px;color:var(--text);
     }
-    .theme-btn svg{ display:block; width:20px; height:20px; color:var(--text); }
+    .theme-btn svg{ display:block; width:22px; height:22px; }
 
     .contact-btn{
       display:inline-block;padding:10px 14px;border-radius:10px;border:none;
@@ -86,7 +91,7 @@
 
     main{max-width:1250px;margin:0 auto;padding:0 20px}
 
-    /* each section tries to fill viewport on desktop */
+    /* each section fills viewport below header on all devices */
     section[id] {
       min-height: calc(100vh - var(--header-h));
       padding-top: 28px;
@@ -94,6 +99,23 @@
       display: flex;
       align-items: center;
       width:100%;
+      position:relative;
+    }
+
+    /* Section tag pill (visible) */
+    .section-tag{
+      position:absolute;
+      left:20px;
+      top:12px;
+      background:var(--surface);
+      color:var(--text);
+      border:1px solid var(--divider);
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:13px;
+      z-index:30;
+      box-shadow:0 10px 30px rgba(2,6,23,0.04);
     }
 
     /* HERO layout */
@@ -199,9 +221,9 @@
       .contact-btn{display:none}
       .hamburger{display:flex}
 
-      /* stop forcing full-screen on small devices */
+      /* KEEP forcing one section per screen on mobile too (user requested) */
       section[id] {
-        min-height: auto;
+        /* min-height remains so each section fills viewport below header */
         padding-top: calc(var(--header-h) + var(--mobile-offset));
         padding-bottom: 48px;
         display:block;
@@ -316,7 +338,8 @@
   </div>
 
   <main style="max-width:1250px;margin:0 auto;padding:0 20px">
-    <section id="home" class="hero" aria-label="Intro">
+    <section id="home" class="hero" aria-label="Intro" data-tag="home">
+
       <div class="right">
         <div class="photo" id="photoWrap" style="position:relative">
           <img src="assets/bg.jpg" alt="Portrait">
@@ -356,13 +379,14 @@
       </div>
     </section>
 
-    <section id="about" class="demo"><h2>About</h2><p>About demo. "Say Hello!" links here.</p></section>
-    <section id="process" class="demo"><h2>Process</h2><p>Process demo content.</p></section>
-    <section id="portfolio" class="demo"><h2>Portfolio</h2><p>Portfolio demo content.</p></section>
-    <section id="blog" class="demo"><h2>Blog</h2><p>Blog demo content.</p></section>
-    <section id="services" class="demo"><h2>Services</h2><p>Services demo content.</p></section>
+    <section id="about" class="demo" data-tag="about"><div class="section-tag">About</div><h2>About</h2><p>About demo. "Say Hello!" links here.</p></section>
+    <section id="process" class="demo" data-tag="process"><div class="section-tag">Process</div><h2>Process</h2><p>Process demo content.</p></section>
+    <section id="portfolio" class="demo" data-tag="portfolio"><div class="section-tag">Portfolio</div><h2>Portfolio</h2><p>Portfolio demo content.</p></section>
+    <section id="blog" class="demo" data-tag="blog"><div class="section-tag">Blog</div><h2>Blog</h2><p>Blog demo content.</p></section>
+    <section id="services" class="demo" data-tag="services"><div class="section-tag">Services</div><h2>Services</h2><p>Services demo content.</p></section>
 
-    <section id="contact" class="contact-section" aria-label="Contact">
+    <section id="contact" class="contact-section" aria-label="Contact" data-tag="contact">
+      <div class="section-tag">Contact</div>
       <div class="contact-left">
         <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
           <a class="btn-resume resume-trigger" href="#" data-image="assets/resume.jpg" data-pdf="assets/resume.pdf">Resume</a>
@@ -483,11 +507,11 @@
   </div>
 
   <script>
-    /* THEME (persist) */
+    /* THEME (persist) - updated icons (sun in light, moon in dark) */
     (function(){
       const root=document.documentElement, icon=document.getElementById('themeIcon'), key='site-theme';
-      const sun = '<circle cx="12" cy="12" r="4" fill="currentColor"></circle><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>';
-      const moon = '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor"></path>';
+      const sun = '<g fill=\"none\" fill-rule=\"evenodd\"><circle cx=\"12\" cy=\"12\" r=\"4\" fill=\"#8b3cff\"/><g stroke=\"#8b3cff\" stroke-width=\"1.6\" stroke-linecap=\"round\"><path d=\"M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4\"/></g></g>';
+      const moon = '<g fill=\"none\" fill-rule=\"evenodd\"><path d=\"M17.6 15.6a6.5 6.5 0 11-8.2-8.2 5.5 5.5 0 108.2 8.2z\" fill=\"#cfa8ff\"/><g fill=\"#cfa8ff\"><circle cx=\"19.2\" cy=\"5.8\" r=\"0.9\"/></g></g>';
       const saved = localStorage.getItem(key);
       const prefers = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
       const initial = saved || (prefers ? 'dark' : 'light');

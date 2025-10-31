@@ -5,14 +5,18 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Portfolio — Hero</title>
   <style>
+    /* =========================
+       Theme tokens & basics
+       ========================= */
     :root{
       --accent-1:#8b3cff; --accent-2:#a44bff;
       --bg-light:#fbfbfd; --bg-dark:#071025;
       --shadow:0 14px 40px rgba(10,12,20,0.06);
       --transition:.28s; --social-gap:18px; --header-h:72px;
       --mobile-offset:18px;
+      --touch: 12px; /* base padding for touch targets */
+      --social-size:36px;
     }
-
     [data-theme="light"]{
       --bg:var(--bg-light);
       --text:#0b0b0b;
@@ -21,7 +25,6 @@
       --divider: rgba(0,0,0,0.06);
       --toggle-bg: #f6f5ff;
     }
-
     [data-theme="dark"]{
       --bg:var(--bg-dark);
       --text:#ffffff;
@@ -37,10 +40,12 @@
       background:var(--bg);color:var(--text);
       transition:background var(--transition), color var(--transition);
       line-height:1.45;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
-      /* keep header fixed but avoid extra gap on mobile: body keeps header height so content sits below header */
       padding-top: var(--header-h);
     }
 
+    /* =========================
+       Header
+       ========================= */
     header{
       position:fixed; left:0; right:0; top:0; height:var(--header-h);
       display:flex; align-items:center; justify-content:space-between;
@@ -82,7 +87,6 @@
       text-decoration:none; cursor:pointer;
     }
 
-    /* modern hamburger: pill with gradient, subtle shadow and smooth morph */
     .hamburger{
       display:none;width:46px;height:40px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));cursor:pointer;padding:8px; align-items:center; justify-content:center; color:#fff; box-shadow:0 8px 24px rgba(139,60,255,0.12); transition:transform .18s ease, box-shadow .18s ease, background .18s;
     }
@@ -92,8 +96,6 @@
     .hamburger .bar:nth-child(1){ top:0 }
     .hamburger .bar:nth-child(2){ top:8px }
     .hamburger .bar:nth-child(3){ bottom:0 }
-
-    /* open state: smooth cross with scale */
     .hamburger.open{ transform: scale(1.02) }
     .hamburger.open .bar:nth-child(1){ transform: translateY(8px) rotate(45deg) }
     .hamburger.open .bar:nth-child(2){ opacity:0; transform:scaleX(0) }
@@ -101,10 +103,11 @@
 
     main{max-width:1250px;margin:0 auto;padding:0 20px}
 
-    /* each section fills viewport below header on all devices */
+    /* =========================
+       Sections / hero
+       ========================= */
     section[id] {
       min-height: calc(100vh - var(--header-h));
-      /* remove default top padding so header sits flush above content; small internal spacing handled inside components */
       padding-top: 28px;
       padding-bottom: 28px;
       display: flex;
@@ -147,27 +150,32 @@
     .btn-primary{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;padding:12px 18px;border-radius:12px;border:none;font-weight:700;cursor:pointer;text-decoration:none}
     .btn-resume{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1.5px solid var(--accent-1);background:transparent;color:var(--accent-1);font-weight:700;text-decoration:none;cursor:pointer}
 
-    /* default social area styles */
-    .social-row{display:flex; gap:var(--social-gap); margin-top:8px; align-items:center; flex-wrap:wrap; justify-content:flex-start;}
-    .social-row a{width:64px;height:64px;border-radius:12px;display:inline-grid;place-items:center;text-decoration:none;color:var(--accent-1);transition:transform .12s, box-shadow .12s;}
-    .social-row a:hover{transform:translateY(-6px); box-shadow:0 16px 36px rgba(10,12,20,0.06)}
-    @media (max-width:420px){ .social-row a{width:56px;height:56px} }
-
-    /* SVG icon consistent sizing + purple color (transparent background) */
-    .social-row a svg, .contact-socials .social-btn svg, .social-btn svg{
-      width:22px; height:22px; display:block;
-      stroke: currentColor;
-      fill: none; /* keep outlines transparent where appropriate */
-      color: var(--accent-1); /* currentColor for stroke/fill */
+    /* SOCIAL: image-only logos, accessible touch target */
+    .social-row{ display:flex; gap:var(--social-gap); margin-top:8px; align-items:center; flex-wrap:wrap; justify-content:flex-start; }
+    .social-row .social-link{
+      display:inline-grid;
+      place-items:center;
+      text-decoration:none;
+      padding: var(--touch);
+      border-radius:8px;
+      background:transparent;
+      transition:transform .12s, opacity .12s;
+      color:var(--text);
     }
-
-    /* if an SVG uses fill (like a filled GitHub mark), enable fill using currentColor */
-    .social-row a svg.fillable, .contact-socials .social-btn svg.fillable { fill: currentColor; stroke: none; }
+    .social-row .social-link img{
+      display:block;
+      width:var(--social-size); height:var(--social-size);
+      object-fit:contain;
+      pointer-events:none;
+    }
+    .social-row .social-link:focus{ outline:3px solid rgba(139,60,255,0.12); outline-offset:4px; border-radius:12px; }
+    .social-row .social-link:hover{ transform: translateY(-6px); opacity:0.98 }
 
     .right{display:flex;align-items:center;justify-content:center;position:relative}
     .photo{width:100%;max-width:520px;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);position:relative}
     .photo img{display:block;width:100%;height:100%;object-fit:cover;min-height:320px}
 
+    /* rest sections */
     section.demo{padding:28px 0;border-top:1px solid var(--divider); width:100%}
     section.demo h2{font-size:32px;margin-bottom:8px}
     section.demo p{color:var(--text)}
@@ -179,6 +187,7 @@
     .mobile-nav a.active{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:white}
     .mobile-nav hr{border:0;height:1px;background:var(--divider);margin:10px 0}
 
+    /* contact */
     .contact-section{ padding:28px 0; border-top:1px solid var(--divider); display:grid; grid-template-columns:1fr 520px; gap:36px; align-items:start; width:100%;}
     .contact-left{padding-right:10px; max-width:720px}
     .contact-left h2{font-size:40px;margin:0 0 8px}
@@ -188,10 +197,9 @@
     .contact-card .icon svg{width:28px;height:28px}
     .contact-card .txt{font-weight:700}
     .contact-card small{display:block;color:var(--text);opacity:0.7;font-weight:600}
-
     .contact-socials{display:flex;gap:14px;margin-top:12px;flex-wrap:wrap}
-    .social-btn{display:inline-flex;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;background:transparent;text-decoration:none;color:var(--accent-1);font-weight:700}
-    .social-btn svg{width:18px;height:18px;color:var(--accent-1); stroke:currentColor; fill:none}
+    .social-btn{display:inline-flex;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--icon-bg);text-decoration:none;color:var(--text);font-weight:700}
+    .social-btn svg{width:18px;height:18px}
 
     .contact-right .form-card{
       background:var(--surface);
@@ -228,6 +236,9 @@
     }
     .notice-box.show{display:flex}
 
+    /* =========================
+       Responsive / mobile tweaks
+       ========================= */
     @media (max-width:980px){ .hero{grid-template-columns:1fr 380px} .hero-title{font-size:56px} }
 
     @media (max-width:820px){
@@ -237,7 +248,6 @@
       .contact-btn{display:none}
       .hamburger{display:flex}
 
-      /* remove extra offsets: content sits directly below header with no added gap */
       section[id] {
         padding-top: 0;
         padding-bottom: 48px;
@@ -245,7 +255,6 @@
         align-items:stretch;
       }
 
-      /* Stack hero vertically and make it use full remaining viewport (header excluded) */
       .hero{
         display:flex;
         flex-direction:column;
@@ -284,7 +293,7 @@
       .cta-row a{min-width:140px}
       @media (max-width:420px){ .btn-primary, .btn-resume{width:100%} .hero-title{font-size:34px} }
 
-      /* social icons overlay when moved into image on mobile */
+      /* social icons overlay when moved into image on mobile - TRANSPARENT logos (no visible container) */
       .photo .social-row{
         position: absolute;
         left: 12px;
@@ -293,28 +302,26 @@
         display: flex;
         justify-content: center;
         gap: 12px;
-        padding: 8px 12px;
+        padding: 0 6px;
         border-radius: 12px;
-        backdrop-filter: blur(6px);
-        background: linear-gradient(180deg, rgba(0,0,0,0.22), rgba(0,0,0,0.10));
+        backdrop-filter: none;
+        background: transparent !important;
         z-index: 30;
-        box-shadow: 0 10px 30px rgba(2,6,23,0.35);
       }
 
-      /* slightly smaller icon sizing inside photo for balance */
-      .photo .social-row a{
-        width:56px;
-        height:56px;
-        border-radius:10px;
+      .photo .social-row .social-link{
+        padding: 10px; /* keeps comfortable tap area */
+        border-radius: 999px;
         background: transparent;
       }
 
-      /* light theme tweak so overlay is not too dark on light mode */
-      [data-theme="light"] .photo .social-row{
-        background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.65));
-        box-shadow: 0 8px 24px rgba(2,6,23,0.06);
+      .photo .social-row .social-link img{
+        width:32px; height:32px;
       }
-      [data-theme="light"] .photo .social-row a{ background: transparent; }
+
+      [data-theme="light"] .photo .social-row .social-link img { /* optional tweak if you use monochrome SVGs using currentColor */
+        /* nothing forced — preferences preserved */
+      }
     }
 
     .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.55);z-index:160;padding:20px}
@@ -329,7 +336,6 @@
     .download{display:inline-block;padding:10px 14px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;font-weight:700;text-decoration:none}
 
     .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-
     a:focus, button:focus, input:focus, textarea:focus{outline:3px solid rgba(139,60,255,0.18);outline-offset:2px}
   </style>
 </head>
@@ -340,7 +346,6 @@
       <div class="badge" aria-hidden="true">
         <img src="assets/AB.png" alt="AB" width="48" height="48" />
       </div>
-
       <div class="name">Abhinand</div>
     </div>
 
@@ -390,44 +395,26 @@
         <div class="photo" id="photoWrap" style="position:relative">
           <img src="assets/bg.jpg" alt="Portrait">
           <div id="mobileOverlayHolder" style="position:absolute;left:50%;transform:translateX(-50%);width:90%;pointer-events:none;z-index:4"></div>
-          <!-- social-row will be reparented into this .photo on mobile via JS -->
+
+          <!-- SOCIAL ROW: image-only logos (place the SVGs in assets/icons/) -->
           <div class="social-row" aria-label="Social links">
-            <!-- Email (transparent envelope outline, purple) -->
-            <a href="mailto:mail-abhinandbabu2502@gmail.com" title="Email" aria-label="Email">
-              <svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="5" width="20" height="14" rx="2"></rect>
-                <polyline points="22,7 12,13 2,7"></polyline>
-              </svg>
+            <a href="mailto:mail-abhinandbabu2502@gmail.com" title="Email" aria-label="Email" class="social-link">
+              <img src="assets/icons/mail.svg" alt="Email">
             </a>
 
-            <!-- Instagram (camera outline) -->
-            <a href="https://www.instagram.com/_abhinand_babu/" title="Instagram" aria-label="Instagram" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="5"></rect>
-                <circle cx="12" cy="12" r="3"></circle>
-                <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"></circle>
-              </svg>
+            <a href="https://www.instagram.com/_abhinand_babu/" title="Instagram" aria-label="Instagram" target="_blank" rel="noopener" class="social-link">
+              <img src="assets/icons/instagram.svg" alt="Instagram">
             </a>
 
-            <!-- LinkedIn (rounded square + 'in' simplified as inner paths) -->
-            <a href="https://www.linkedin.com/in/abhinand-babu-153b66324/" title="LinkedIn" aria-label="LinkedIn" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="3"></rect>
-                <path d="M6 9v8"></path>
-                <path d="M6 7a2 2 0 110-4 2 2 0 010 4z" transform="translate(0,4)"></path>
-                <path d="M10 16v-4c0-1 1-2 2-2s2 1 2 2v4"></path>
-              </svg>
+            <a href="https://www.linkedin.com/in/abhinand-babu-153b66324/" title="LinkedIn" aria-label="LinkedIn" target="_blank" rel="noopener" class="social-link">
+              <img src="assets/icons/linkedin.svg" alt="LinkedIn">
             </a>
 
-            <!-- GitHub (stylised mark — outline stroke) -->
-            <a href="https://github.com/Abhinand2502" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 19c-4.97 1.5-4.97-2.1-6-2.5"></path>
-                <path d="M20.5 14.5c.1 1.5-.1 3.3-.8 4.8-1.2 2.8-4.5 3.7-8.6 3.2-3.9-.5-7.1-2.5-7.1-6.6 0-2 .9-3.6 2.3-4.6"></path>
-                <path d="M9 19c1 1.1 4 1.1 5 0"></path>
-              </svg>
+            <a href="https://github.com/Abhinand2502" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener" class="social-link">
+              <img src="assets/icons/github.svg" alt="GitHub">
             </a>
           </div>
+
         </div>
       </div>
 
@@ -442,8 +429,6 @@
           <a class="btn-primary" href="#about" id="sayHello">More About Me!</a>
           <a class="btn-resume" href="#" id="resumeBtn" data-image="assets/resume.jpg" data-pdf="assets/resume.pdf">View Resume</a>
         </div>
-
-        <!-- NOTE: social-row defined inside .photo for easier overlay behavior; JS can move it back for desktop -->
       </div>
     </section>
 
@@ -496,22 +481,22 @@
 
         <div class="contact-socials" aria-label="Social links">
           <a class="social-btn" href="mailto:mail-abhinandbabu2502@gmail.com" title="Email">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="5" width="20" height="14" rx="2"></rect><polyline points="22,7 12,13 2,7"></polyline></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M3 7.5v9a2 2 0 002 2h14a2 2 0 002-2v-9"/><path d="M21 7.5l-9 6-9-6"/></svg>
             Email
           </a>
 
           <a class="social-btn" href="https://github.com/Abhinand2502" target="_blank" rel="noopener" title="GitHub">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M9 19c-4.97 1.5-4.97-2.1-6-2.5"/><path d="M20.5 14.5c.1 1.5-.1 3.3-.8 4.8-1.2 2.8-4.5 3.7-8.6 3.2-3.9-.5-7.1-2.5-7.1-6.6 0-2 .9-3.6 2.3-4.6"/><path d="M9 19c1 1.1 4 1.1 5 0"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M9 19c-4.97 1.5-4.97-2.1-6-2.5"/><path d="M20.5 14.5c.1 1.5-.1 3.3-.8 4.8-1.2 2.8-4.5 3.7-8.6 3.2-3.9-.5-7.1-2.5-7.1-6.6 0-2 .9-3.6 2.3-4.6-.2-.6-1-2.3.2-4.7 0 0 1.6-.5 5.1 2a17.1 17.1 0 014.6 0c3.5-2.5 5.1-2 5.1-2 1.2 2.4.4 4.1.2 4.7 1.4 1 2.3 2.6 2.3 4.6z"/></svg>
             GitHub
           </a>
 
           <a class="social-btn" href="https://www.instagram.com/_abhinand_babu/" target="_blank" rel="noopener" title="Instagram">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="3"></circle><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"></circle></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M16 11.5a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
             Instagram
           </a>
 
           <a class="social-btn" href="https://www.linkedin.com/in/abhinand-babu-153b66324/" target="_blank" rel="noopener" title="LinkedIn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="3"></rect><path d="M6 9v8"></path><path d="M6 7a2 2 0 110-4 2 2 0 010 4z" transform="translate(0,4)"></path><path d="M10 16v-4c0-1 1-2 2-2s2 1 2 2v4"></path></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M4.98 3.5A2.5 2.5 0 004.98 8.5H4.99A2.5 2.5 0 004.98 3.5z"/><path d="M3.5 8.5h3v11h-3zM12 8.5c-1.8 0-2.6 1.1-3 1.8v-1.8h-3v11h3v-6.2c0-.96.2-1.92 1.5-1.92s1.5 1.02 1.5 2.02V19.5h3v-6.8c0-3-1.3-4.2-3.5-4.2z"/></svg>
             LinkedIn
           </a>
         </div>
@@ -575,7 +560,9 @@
   </div>
 
   <script>
-    /* THEME (persist) - updated icons (sun in light, moon in dark) */
+    /* =========================
+       THEME (persist) - sun/moon icons
+       ========================= */
     (function(){
       const root=document.documentElement, icon=document.getElementById('themeIcon'), key='site-theme';
       const sun = '<g fill=\"none\" fill-rule=\"evenodd\"><circle cx=\"12\" cy=\"12\" r=\"4\" fill=\"#8b3cff\"/><g stroke=\"#8b3cff\" stroke-width=\"1.6\" stroke-linecap=\"round\"><path d=\"M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4\"/></g></g>';
@@ -597,7 +584,9 @@
       });
     })();
 
-    /* MOBILE NAV + hamburger (improved accessibility + close on escape) */
+    /* =========================
+       MOBILE NAV + hamburger
+       ========================= */
     (function(){
       const ham = document.getElementById('hamburger');
       const mobileNav = document.getElementById('mobileNav');
@@ -618,25 +607,15 @@
         document.body.style.overflow = '';
         ham.focus();
       }
-
       ham.addEventListener('click', ()=>{ if(mobileNav.classList.contains('show')) closeNav(); else openNav(); });
-
-      // close when clicking on backdrop
       mobileNav.addEventListener('click',(e)=>{ if(e.target === mobileNav) closeNav(); });
-
-      // close on Escape
       window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && mobileNav.classList.contains('show')){ closeNav(); } });
-
-      // close when a link is clicked (and keep smooth scroll working)
-      document.querySelectorAll('.mobile-link').forEach(m=>{
-        m.addEventListener('click', function(e){
-          // allow main scroll handler to run (it does preventDefault itself)
-          setTimeout(closeNav, 200);
-        });
-      });
+      document.querySelectorAll('.mobile-link').forEach(m=>{ m.addEventListener('click', function(){ setTimeout(closeNav, 200); }); });
     })();
 
-    /* mobile overlay title (placed inside photo on small screens) */
+    /* =========================
+       Mobile overlay title
+       ========================= */
     (function(){
       const holder = document.getElementById('mobileOverlayHolder');
       const template = document.getElementById('overlayTemplate');
@@ -654,14 +633,14 @@
       window.addEventListener('resize', update);
     })();
 
-    /* move social-row into .photo on mobile, move back on desktop */
+    /* =========================
+       Move social-row into photo on mobile (keeps desktop position)
+       ========================= */
     (function(){
       const social = document.querySelector('.social-row');
       const photo = document.querySelector('.photo');
       const left = document.querySelector('.left');
-
       if(!social || !photo || !left) return;
-
       function repositionSocial(){
         const isMobile = window.matchMedia('(max-width:820px)').matches;
         if(isMobile && social.parentNode !== photo){
@@ -672,12 +651,13 @@
           social.style.marginTop = '';
         }
       }
-
       window.addEventListener('load', repositionSocial);
       window.addEventListener('resize', repositionSocial);
     })();
 
-    /* Resume modal (wired to both buttons) */
+    /* =========================
+       Resume modal
+       ========================= */
     (function(){
       const resumeBtn = document.getElementById('resumeBtn');
       const resumeTriggers = document.querySelectorAll('.resume-trigger');
@@ -711,7 +691,6 @@
           openModal(imgH, pdfH);
         });
       }
-
       resumeTriggers.forEach(btn=>{
         btn.addEventListener('click', function(e){
           e.preventDefault();
@@ -720,14 +699,15 @@
           openModal(imgH, pdfH);
         });
       });
-
       close.addEventListener('click', closeModal);
       close2.addEventListener('click', closeModal);
       modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
       window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeModal(); });
     })();
 
-    /* Smooth scrolling & active nav */
+    /* =========================
+       Smooth scroll & active nav
+       ========================= */
     (function(){
       const header = document.querySelector('header');
       const headerH = ()=> header.offsetHeight || 72;
@@ -779,7 +759,9 @@
       window.addEventListener('resize', updateActiveOnScroll);
     })();
 
-    /* Contact form (client-side simulation) — shows themed notice box on send */
+    /* =========================
+       Contact form (client-side simulation)
+       ========================= */
     (function(){
       const form = document.getElementById('contactForm');
       const notice = document.getElementById('noticeBox');
@@ -806,15 +788,12 @@
           btn.disabled = true; btn.style.opacity = '.7';
           btn.textContent = 'Sending...';
 
-          // simulated network delay
           setTimeout(()=>{
             btn.disabled = false; btn.style.opacity = '';
             form.reset();
             btn.textContent = 'Send Message';
-            // show themed success notice
             noticeText.textContent = 'Message sent — thank you! I will reply within 48 hours.';
             notice.classList.add('show');
-            // automatically hide after 6s
             setTimeout(()=>{ notice.classList.remove('show'); }, 6000);
           }, 900);
         });

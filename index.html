@@ -150,52 +150,44 @@
     .btn-primary{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;padding:12px 18px;border-radius:12px;border:none;font-weight:700;cursor:pointer;text-decoration:none}
     .btn-resume{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1.5px solid var(--accent-1);background:transparent;color:var(--accent-1);font-weight:700;text-decoration:none;cursor:pointer}
 
-    /* SOCIAL: image-only logos, accessible touch target */
+    /* SOCIAL: using sprite image at assets/social.jpg */
     .social-row{ display:flex; gap:var(--social-gap); margin-top:8px; align-items:center; flex-wrap:wrap; justify-content:flex-start; }
     .social-row .social-link{
       display:inline-grid;
       place-items:center;
       text-decoration:none;
-      padding: 0;
+      padding:6px;
       border-radius:14px;
       background:transparent;
       transition:transform .12s, opacity .12s;
       color:var(--text);
     }
 
-    /* box that visually matches your screenshot: black rounded square with white outer stroke + inner thin rounded border */
+    /* sprite box that shows only a section of assets/social.jpg for each icon */
     .social-box{
-      display:inline-grid;
-      place-items:center;
+      display:inline-block;
       width:64px;
       height:64px;
       border-radius:12px;
-      background:#0b0b0b; /* black interior */
-      border:3px solid #fff; /* outer white border like screenshot */
-      box-shadow: 0 6px 14px rgba(0,0,0,0.25), inset 0 0 0 2px rgba(255,255,255,0.03);
-      padding:10px;
+      background-color:transparent;
+      position:relative;
+      background-repeat:no-repeat;
+      background-size: 400% 100%; /* 4 frames side-by-side */
+      box-shadow: 0 6px 14px rgba(0,0,0,0.18);
     }
+    /* hide any white ring if sprite already has border - keep subtle shadow instead */
+    .social-link:focus .social-box,
+    .social-link:hover .social-box{ transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.28); }
 
-    /* svg icons inside the box */
-    .social-box svg{
-      width:36px; height:36px;
-      display:block;
-      fill:none; /* use stroke for line icons */
-      stroke:#ffffff;
-      stroke-width:1.6;
-      stroke-linecap:round;
-      stroke-linejoin:round;
-    }
+    /* Sprite positions: assumes 4 equal horizontal slices (left→right)
+       adjust % if your sprite layout is different */
+    .social-row a:nth-child(1) .social-box{ background-image: url('assets/social.jpg'); background-position: 0% 50%; }
+    .social-row a:nth-child(2) .social-box{ background-image: url('assets/social.jpg'); background-position: 25% 50%; }
+    .social-row a:nth-child(3) .social-box{ background-image: url('assets/social.jpg'); background-position: 50% 50%; }
+    .social-row a:nth-child(4) .social-box{ background-image: url('assets/social.jpg'); background-position: 75% 50%; }
 
-    /* hover transform */
-    .social-row .social-link:focus .social-box,
-    .social-row .social-link:hover .social-box{
-      transform: translateY(-6px);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
-    }
-
-    /* smaller touch area on desktop */
-    .social-row .social-link { padding:8px; }
+    /* fallback if sprite not found — show dark box */
+    .social-box:empty{ background-color:#0b0b0b; }
 
     .right{display:flex;align-items:center;justify-content:center;position:relative}
     .photo{width:100%;max-width:520px;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);position:relative}
@@ -319,7 +311,7 @@
       .cta-row a{min-width:140px}
       @media (max-width:420px){ .btn-primary, .btn-resume{width:100%} .hero-title{font-size:34px} }
 
-      /* social icons overlay when moved into image on mobile - TRANSPARENT logos (no visible container) */
+      /* social icons overlay when moved into image on mobile */
       .photo .social-row{
         position: absolute;
         left: 12px;
@@ -341,14 +333,16 @@
         background: transparent;
       }
 
-      /* increase size on mobile as requested */
+      /* slightly smaller on small mobile requested: decrease a little */
       .photo .social-row .social-box{
-        width:72px;
-        height:72px;
-        padding:12px;
-        border-radius:12px;
+        width:68px;
+        height:68px;
       }
-      .photo .social-row .social-box svg{ width:40px; height:40px; stroke-width:1.8; }
+
+      /* on very small phones make them a tiny bit smaller */
+      @media (max-width:380px){
+        .photo .social-row .social-box{ width:60px; height:60px; }
+      }
 
     }
 
@@ -424,51 +418,22 @@
           <img src="assets/bg.jpg" alt="Portrait">
           <div id="mobileOverlayHolder" style="position:absolute;left:50%;transform:translateX(-50%);width:90%;pointer-events:none;z-index:4"></div>
 
-          <!-- SOCIAL ROW: replaced images with inline SVGs that match the screenshot -->
-          <div class="social-row" aria-label="Social links">
-            <!-- Email -->
-            <a href="mailto:mail-abhinandbabu2502@gmail.com" title="Email" aria-label="Email" class="social-link">
-              <span class="social-box" role="img" aria-hidden="true">
-                <!-- envelope icon -->
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <rect x="3.5" y="6.5" width="17" height="11" rx="2" ry="2" fill="none" stroke="#fff" stroke-width="0"/>
-                  <path d="M4 8.5l7.5 6L19 8.5" stroke="#fff" fill="none"/>
-                  <rect x="3.5" y="6.5" width="17" height="11" rx="2" ry="2" fill="none" stroke="rgba(255,255,255,0.0)" />
-                </svg>
-              </span>
+          <!-- SOCIAL ROW: using your uploaded sprite at assets/social.jpg -->
+          <div class="social-row" aria-label="Social links" role="list">
+            <a href="mailto:mail-abhinandbabu2502@gmail.com" title="Email" aria-label="Email" class="social-link" role="listitem">
+              <span class="social-box" aria-hidden="true"></span>
             </a>
 
-            <!-- GitHub -->
-            <a href="https://github.com/Abhinand2502" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener" class="social-link">
-              <span class="social-box" role="img" aria-hidden="true">
-                <!-- simplified octocat mark (line style) -->
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <!-- round-mark head + ears outline to match screenshot style -->
-                  <path d="M12 2.5c-3.6 0-6.5 2.9-6.5 6.5 0 2.9 1.9 5.4 4.6 6.3.3.1.4-.1.4-.3v-1.2c-1.9.4-2.4-.9-2.4-.9-.3-.8-.8-1-.8-1-.6-.4.1-.4.1-.4.7.1 1.1.7 1.1.7.6 1 1.6.7 2 .5.1-.4.3-.7.5-.9-1.5-.2-3-0.8-3-3.4 0-.7.2-1.3.6-1.8-.1-.2-.3-1 .1-2.1 0 0 .5-.2 1.9.7.6-.2 1.3-.4 2-.4s1.4.1 2 .4c1.4-.9 1.9-.7 1.9-.7.4 1.1.2 1.9.1 2.1.4.5.6 1.1.6 1.8 0 2.6-1.6 3.2-3 3.4.3.3.6.8.6 1.6v2.4c0 .2.1.4.4.3 2.7-.9 4.6-3.4 4.6-6.3 0-3.6-2.9-6.5-6.5-6.5z" stroke="#fff" fill="none"/>
-                </svg>
-              </span>
+            <a href="https://github.com/Abhinand2502" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener" class="social-link" role="listitem">
+              <span class="social-box" aria-hidden="true"></span>
             </a>
 
-            <!-- LinkedIn -->
-            <a href="https://www.linkedin.com/in/abhinand-babu-153b66324/" title="LinkedIn" aria-label="LinkedIn" target="_blank" rel="noopener" class="social-link">
-              <span class="social-box" role="img" aria-hidden="true">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" fill="none" stroke="rgba(255,255,255,0)" />
-                  <path d="M6.5 9.5v7M6 7.5a1 1 0 110-2 1 1 0 010 2zM10.5 16.5v-4a1.5 1.5 0 013 0v4" stroke="#fff" fill="none"/>
-                </svg>
-              </span>
+            <a href="https://www.linkedin.com/in/abhinand-babu-153b66324/" title="LinkedIn" aria-label="LinkedIn" target="_blank" rel="noopener" class="social-link" role="listitem">
+              <span class="social-box" aria-hidden="true"></span>
             </a>
 
-            <!-- Instagram -->
-            <a href="https://www.instagram.com/_abhinand_babu/" title="Instagram" aria-label="Instagram" target="_blank" rel="noopener" class="social-link">
-              <span class="social-box" role="img" aria-hidden="true">
-                <!-- simplified camera-outline instagram -->
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <rect x="4" y="4" width="16" height="16" rx="4" ry="4" fill="none" stroke="#fff"/>
-                  <circle cx="12" cy="12" r="3" stroke="#fff" fill="none"/>
-                  <circle cx="17.2" cy="6.8" r="0.7" fill="#fff" stroke="none"/>
-                </svg>
-              </span>
+            <a href="https://www.instagram.com/_abhinand_babu/" title="Instagram" aria-label="Instagram" target="_blank" rel="noopener" class="social-link" role="listitem">
+              <span class="social-box" aria-hidden="true"></span>
             </a>
           </div>
 

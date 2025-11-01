@@ -15,8 +15,7 @@
       --transition:.28s; --social-gap:18px; --header-h:72px;
       --mobile-offset:18px;
       --touch: 12px; /* base padding for touch targets */
-      --social-size:36px; /* hero icon size (same as your original) */
-      --contact-social-size:18px; /* keeps current contact icon size */
+      --social-size:36px;
     }
     [data-theme="light"]{
       --bg:var(--bg-light);
@@ -151,42 +150,60 @@
     .btn-primary{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;padding:12px 18px;border-radius:12px;border:none;font-weight:700;cursor:pointer;text-decoration:none}
     .btn-resume{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1.5px solid var(--accent-1);background:transparent;color:var(--accent-1);font-weight:700;text-decoration:none;cursor:pointer}
 
-    /* SOCIAL: using assets/bg.jpg for all social logos */
+    /* =====================================================
+       SOCIAL ICONS — UPDATED (supports per-icon files + sprite)
+       ===================================================== */
+
     .social-row{ display:flex; gap:var(--social-gap); margin-top:8px; align-items:center; flex-wrap:wrap; justify-content:flex-start; }
     .social-row .social-link{
       display:inline-grid;
       place-items:center;
       text-decoration:none;
-      padding: var(--touch);
-      border-radius:8px;
+      padding:6px;
+      border-radius:14px;
       background:transparent;
       transition:transform .12s, opacity .12s;
       color:var(--text);
     }
 
-    /* sprite box showing part of assets/bg.jpg (4 frames horizontally) */
+    /* Default behavior: use individual image files for each .social-box
+       (recommended when you have separate PNG/SVG files like mail.png, git.png, etc.)
+       To use this: keep inline style/background-image on each .social-box element. */
     .social-box{
       display:inline-block;
-      width:var(--social-size);
-      height:var(--social-size);
-      border-radius:8px;
+      width:64px;
+      height:64px;
+      border-radius:12px;
       background-color:transparent;
       position:relative;
       background-repeat:no-repeat;
-      background-size: 400% 100%; /* 4 frames horizontally */
-      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
-      flex-shrink:0;
+      background-position:center center;
+      background-size:cover;       /* <-- KEY: use cover so single icons aren't stretched by sprite rules */
+      box-shadow: 0 6px 14px rgba(0,0,0,0.18);
     }
-    .social-link:focus .social-box,
-    .social-link:hover .social-box{ transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.16); }
 
-    /* Map hero social DOM order to sprite positions:
-       Hero order (in this file): mail, github, linkedin, instagram
-       Position mapping assumes 4 equal horizontal frames left→right in assets/bg.jpg */
-    .social-row a:nth-child(1) .social-box{ background-image: url('assets/bg.jpg'); background-position: 0% 50%; }
-    .social-row a:nth-child(2) .social-box{ background-image: url('assets/bg.jpg'); background-position: 25% 50%; }
-    .social-row a:nth-child(3) .social-box{ background-image: url('assets/bg.jpg'); background-position: 50% 50%; }
-    .social-row a:nth-child(4) .social-box{ background-image: url('assets/bg.jpg'); background-position: 75% 50%; }
+    /* hover/focus lift */
+    .social-link:focus .social-box,
+    .social-link:hover .social-box{ transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.28); }
+
+    /* optional sprite mode:
+       If you prefer the old single-sprite approach, add class "use-sprite" to the .social-row container:
+       <div class="social-row use-sprite"> and ensure assets/social.jpg is a horizontal sprite with N frames.
+       The .use-sprite rules below will apply.
+    */
+    .social-row.use-sprite .social-box{
+      background-image: url('assets/social.jpg');
+      background-size: 400% 100%; /* change 400% if your sprite has different number of frames */
+      background-position: 0% 50%;
+    }
+    /* Example per-child positions when using sprite (adjust if your sprite layout differs) */
+    .social-row.use-sprite a:nth-child(1) .social-box{ background-position: 0% 50%; }
+    .social-row.use-sprite a:nth-child(2) .social-box{ background-position: 25% 50%; }
+    .social-row.use-sprite a:nth-child(3) .social-box{ background-position: 50% 50%; }
+    .social-row.use-sprite a:nth-child(4) .social-box{ background-position: 75% 50%; }
+
+    /* fallback if image not found — show dark box */
+    .social-box:empty{ background-color:#0b0b0b; }
 
     .right{display:flex;align-items:center;justify-content:center;position:relative}
     .photo{width:100%;max-width:520px;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);position:relative}
@@ -214,27 +231,9 @@
     .contact-card .icon svg{width:28px;height:28px}
     .contact-card .txt{font-weight:700}
     .contact-card small{display:block;color:var(--text);opacity:0.7;font-weight:600}
-    .contact-socials{display:flex;gap:14px;margin-top:12px;flex-wrap:wrap;align-items:center}
-    .social-btn{display:inline-flex;gap:10px;align-items:center;padding:8px 12px;border-radius:12px;background:var(--icon-bg);text-decoration:none;color:var(--text);font-weight:700}
-    .social-btn .social-box{ margin-right:8px; } /* small gap between box and text */
-
-    /* contact social box size kept same as earlier SVG icons (~18px) */
-    .contact-socials .social-box{
-      width:var(--contact-social-size);
-      height:var(--contact-social-size);
-      border-radius:6px;
-      background-repeat:no-repeat;
-      background-size: 400% 100%;
-      box-shadow: none;
-      background-color: transparent;
-      flex-shrink:0;
-    }
-
-    /* Contact sprite mapping (DOM order in contact area): Email, GitHub, Instagram, LinkedIn */
-    .contact-socials a:nth-child(1) .social-box{ background-image: url('assets/bg.jpg'); background-position: 0% 50%; }
-    .contact-socials a:nth-child(2) .social-box{ background-image: url('assets/bg.jpg'); background-position: 25% 50%; }
-    .contact-socials a:nth-child(3) .social-box{ background-image: url('assets/bg.jpg'); background-position: 75% 50%; }
-    .contact-socials a:nth-child(4) .social-box{ background-image: url('assets/bg.jpg'); background-position: 50% 50%; }
+    .contact-socials{display:flex;gap:14px;margin-top:12px;flex-wrap:wrap}
+    .social-btn{display:inline-flex;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--icon-bg);text-decoration:none;color:var(--text);font-weight:700}
+    .social-btn svg{width:18px;height:18px}
 
     .contact-right .form-card{
       background:var(--surface);
@@ -350,15 +349,15 @@
         background: transparent;
       }
 
-      /* keep same hero size on mobile (as requested earlier) */
+      /* slightly smaller on small mobile requested: decrease a little */
       .photo .social-row .social-box{
-        width:var(--social-size);
-        height:var(--social-size);
+        width:68px;
+        height:68px;
       }
 
       /* on very small phones make them a tiny bit smaller */
       @media (max-width:380px){
-        .photo .social-row .social-box{ width:34px; height:34px; }
+        .photo .social-row .social-box{ width:60px; height:60px; }
       }
 
     }
@@ -435,24 +434,28 @@
           <img src="assets/bg.jpg" alt="Portrait">
           <div id="mobileOverlayHolder" style="position:absolute;left:50%;transform:translateX(-50%);width:90%;pointer-events:none;z-index:4"></div>
 
-          <!-- SOCIAL ROW: using your uploaded sprite at assets/bg.jpg (hero) -->
-          <div class="social-row" aria-label="Social links" role="list">
-            <a href="mailto:mail-abhinandbabu2502@gmail.com" title="Email" aria-label="Email" class="social-link" role="listitem">
-              <span class="social-box" aria-hidden="true"></span>
-            </a>
+       <!-- SOCIAL ROW: using per-icon images (recommended)
+            If you instead want to use a single sprite file, add class "use-sprite" to the social-row:
+            <div class="social-row use-sprite"> and ensure assets/social.jpg exists.
+        -->
+<div class="social-row" aria-label="Social links" role="list">
+  <a href="mailto:mail-abhinandbabu2502@gmail.com" title="Email" aria-label="Email" class="social-link" role="listitem">
+    <span class="social-box" aria-hidden="true" style="background-image: url('assets/mail.png');"></span>
+  </a>
 
-            <a href="https://github.com/Abhinand2502" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener" class="social-link" role="listitem">
-              <span class="social-box" aria-hidden="true"></span>
-            </a>
+  <a href="https://github.com/Abhinand2502" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener" class="social-link" role="listitem">
+    <span class="social-box" aria-hidden="true" style="background-image: url('assets/git.png');"></span>
+  </a>
 
-            <a href="https://www.linkedin.com/in/abhinand-babu-153b66324/" title="LinkedIn" aria-label="LinkedIn" target="_blank" rel="noopener" class="social-link" role="listitem">
-              <span class="social-box" aria-hidden="true"></span>
-            </a>
+  <a href="https://www.linkedin.com/in/abhinand-babu-153b66324/" title="LinkedIn" aria-label="LinkedIn" target="_blank" rel="noopener" class="social-link" role="listitem">
+    <span class="social-box" aria-hidden="true" style="background-image: url('assets/in.png');"></span>
+  </a>
 
-            <a href="https://www.instagram.com/_abhinand_babu/" title="Instagram" aria-label="Instagram" target="_blank" rel="noopener" class="social-link" role="listitem">
-              <span class="social-box" aria-hidden="true"></span>
-            </a>
-          </div>
+  <a href="https://www.instagram.com/_abhinand_babu/" title="Instagram" aria-label="Instagram" target="_blank" rel="noopener" class="social-link" role="listitem">
+    <span class="social-box" aria-hidden="true" style="background-image: url('assets/insta.png');"></span>
+  </a>
+</div>
+
 
         </div>
       </div>
@@ -520,22 +523,22 @@
 
         <div class="contact-socials" aria-label="Social links">
           <a class="social-btn" href="mailto:mail-abhinandbabu2502@gmail.com" title="Email">
-            <span class="social-box" aria-hidden="true"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M3 7.5v9a2 2 0 002 2h14a2 2 0 002-2v-9"/><path d="M21 7.5l-9 6-9-6"/></svg>
             Email
           </a>
 
           <a class="social-btn" href="https://github.com/Abhinand2502" target="_blank" rel="noopener" title="GitHub">
-            <span class="social-box" aria-hidden="true"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M9 19c-4.97 1.5-4.97-2.1-6-2.5"/><path d="M20.5 14.5c.1 1.5-.1 3.3-.8 4.8-1.2 2.8-4.5 3.7-8.6 3.2-3.9-.5-7.1-2.5-7.1-6.6 0-2 .9-3.6 2.3-4.6-.2-.6-1-2.3.2-4.7 0 0 1.6-.5 5.1 2a17.1 17.1 0 014.6 0c3.5-2.5 5.1-2 5.1-2 1.2 2.4.4 4.1.2 4.7 1.4 1 2.3 2.6 2.3 4.6z"/></svg>
             GitHub
           </a>
 
           <a class="social-btn" href="https://www.instagram.com/_abhinand_babu/" target="_blank" rel="noopener" title="Instagram">
-            <span class="social-box" aria-hidden="true"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M16 11.5a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
             Instagram
           </a>
 
           <a class="social-btn" href="https://www.linkedin.com/in/abhinand-babu-153b66324/" target="_blank" rel="noopener" title="LinkedIn">
-            <span class="social-box" aria-hidden="true"></span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M4.98 3.5A2.5 2.5 0 004.98 8.5H4.99A2.5 2.5 0 004.98 3.5z"/><path d="M3.5 8.5h3v11h-3zM12 8.5c-1.8 0-2.6 1.1-3 1.8v-1.8h-3v11h3v-6.2c0-.96.2-1.92 1.5-1.92s1.5 1.02 1.5 2.02V19.5h3v-6.8c0-3-1.3-4.2-3.5-4.2z"/></svg>
             LinkedIn
           </a>
         </div>

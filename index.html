@@ -24,11 +24,6 @@
       --icon-bg:rgba(0,0,0,0.04);
       --divider: rgba(0,0,0,0.06);
       --toggle-bg: #f6f5ff;
-      /* exact-look social variables (light and dark both use same visual per screenshot) */
-      --social-square-bg: #0b0b0b;      /* black square */
-      --social-square-border: #ffffff;  /* white rounded border */
-      --social-square-shadow: 0 6px 12px rgba(0,0,0,0.12);
-      --social-icon-color: #ffffff;     /* white glyphs */
     }
     [data-theme="dark"]{
       --bg:var(--bg-dark);
@@ -37,10 +32,6 @@
       --icon-bg:rgba(255,255,255,0.03);
       --divider: rgba(255,255,255,0.06);
       --toggle-bg: #0e0e16;
-      --social-square-bg: #0b0b0b;
-      --social-square-border: #ffffff;
-      --social-square-shadow: 0 6px 12px rgba(0,0,0,0.12);
-      --social-icon-color: #ffffff;
     }
 
     *{box-sizing:border-box} html,body{height:100%}
@@ -159,47 +150,52 @@
     .btn-primary{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;padding:12px 18px;border-radius:12px;border:none;font-weight:700;cursor:pointer;text-decoration:none}
     .btn-resume{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1.5px solid var(--accent-1);background:transparent;color:var(--accent-1);font-weight:700;text-decoration:none;cursor:pointer}
 
-    /* SOCIAL: image-only logos, exact screenshot style */
+    /* SOCIAL: image-only logos, accessible touch target */
     .social-row{ display:flex; gap:var(--social-gap); margin-top:8px; align-items:center; flex-wrap:wrap; justify-content:flex-start; }
     .social-row .social-link{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
+      display:inline-grid;
+      place-items:center;
       text-decoration:none;
-      padding:0;
+      padding: 0;
       border-radius:14px;
       background:transparent;
       transition:transform .12s, opacity .12s;
       color:var(--text);
+    }
+
+    /* box that visually matches your screenshot: black rounded square with white outer stroke + inner thin rounded border */
+    .social-box{
+      display:inline-grid;
+      place-items:center;
       width:64px;
       height:64px;
+      border-radius:12px;
+      background:#0b0b0b; /* black interior */
+      border:3px solid #fff; /* outer white border like screenshot */
+      box-shadow: 0 6px 14px rgba(0,0,0,0.25), inset 0 0 0 2px rgba(255,255,255,0.03);
+      padding:10px;
     }
 
-    /* inner square like screenshot: black background, white rounded border */
-    .social-row .social-link .icon-wrap{
-      width:56px;
-      height:56px;
-      border-radius:12px; /* rounded corners like screenshot */
-      display:grid;
-      place-items:center;
-      background:var(--social-square-bg);
-      border:3px solid var(--social-square-border);
-      box-shadow: var(--social-square-shadow);
-      box-sizing: border-box;
-    }
-
-    /* glyphs: forced white fill to match screenshot */
-    .social-row .social-link .icon-wrap svg{
-      width:28px;
-      height:28px;
+    /* svg icons inside the box */
+    .social-box svg{
+      width:36px; height:36px;
       display:block;
-      color: var(--social-icon-color);
-      fill: currentColor;
-      stroke: none;
+      fill:none; /* use stroke for line icons */
+      stroke:#ffffff;
+      stroke-width:1.6;
+      stroke-linecap:round;
+      stroke-linejoin:round;
     }
 
-    .social-row .social-link:focus{ outline:3px solid rgba(139,60,255,0.12); outline-offset:4px; border-radius:12px; }
-    .social-row .social-link:hover{ transform: translateY(-4px); opacity:0.98 }
+    /* hover transform */
+    .social-row .social-link:focus .social-box,
+    .social-row .social-link:hover .social-box{
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    }
+
+    /* smaller touch area on desktop */
+    .social-row .social-link { padding:8px; }
 
     .right{display:flex;align-items:center;justify-content:center;position:relative}
     .photo{width:100%;max-width:520px;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);position:relative}
@@ -340,21 +336,20 @@
       }
 
       .photo .social-row .social-link{
-        width:52px;
-        height:52px;
+        padding: 6px; /* keeps comfortable tap area */
+        border-radius: 999px;
+        background: transparent;
       }
 
-      .photo .social-row .social-link .icon-wrap{
-        width:48px;
-        height:48px;
-        border-radius:10px;
-        border-width:2px;
+      /* increase size on mobile as requested */
+      .photo .social-row .social-box{
+        width:72px;
+        height:72px;
+        padding:12px;
+        border-radius:12px;
       }
+      .photo .social-row .social-box svg{ width:40px; height:40px; stroke-width:1.8; }
 
-      .photo .social-row .social-link .icon-wrap svg{
-        width:20px;
-        height:20px;
-      }
     }
 
     .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.55);z-index:160;padding:20px}
@@ -429,50 +424,51 @@
           <img src="assets/bg.jpg" alt="Portrait">
           <div id="mobileOverlayHolder" style="position:absolute;left:50%;transform:translateX(-50%);width:90%;pointer-events:none;z-index:4"></div>
 
-          <!-- SOCIAL ROW: exact-look rounded squares with white border & white glyphs -->
-          <div class="social-row" aria-label="Social links" role="navigation">
+          <!-- SOCIAL ROW: replaced images with inline SVGs that match the screenshot -->
+          <div class="social-row" aria-label="Social links">
             <!-- Email -->
             <a href="mailto:mail-abhinandbabu2502@gmail.com" title="Email" aria-label="Email" class="social-link">
-              <span class="icon-wrap" aria-hidden="true">
-                <!-- filled envelope glyph -->
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M20 6H4c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 2v.01L12 13 4 8.01V8h16z" fill="currentColor"/>
+              <span class="social-box" role="img" aria-hidden="true">
+                <!-- envelope icon -->
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="3.5" y="6.5" width="17" height="11" rx="2" ry="2" fill="none" stroke="#fff" stroke-width="0"/>
+                  <path d="M4 8.5l7.5 6L19 8.5" stroke="#fff" fill="none"/>
+                  <rect x="3.5" y="6.5" width="17" height="11" rx="2" ry="2" fill="none" stroke="rgba(255,255,255,0.0)" />
                 </svg>
               </span>
-              <span class="sr-only">Email</span>
             </a>
 
             <!-- GitHub -->
             <a href="https://github.com/Abhinand2502" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener" class="social-link">
-              <span class="icon-wrap" aria-hidden="true">
-                <!-- GitHub (filled) -->
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 .5C5.73.5.75 5.48.75 11.75c0 4.92 3.18 9.09 7.6 10.57.56.1.76-.24.76-.54 0-.27-.01-1.16-.02-2.1-3.09.67-3.74-1.49-3.74-1.49-.5-1.28-1.22-1.62-1.22-1.62-.99-.68.08-.67.08-.67 1.1.08 1.68 1.14 1.68 1.14.97 1.66 2.55 1.18 3.17.9.1-.7.38-1.18.68-1.45-2.47-.28-5.07-1.23-5.07-5.48 0-1.21.43-2.2 1.14-2.98-.11-.28-.5-1.4.11-2.92 0 0 .93-.3 3.05 1.14.88-.24 1.82-.36 2.76-.36.94 0 1.88.12 2.76.36 2.12-1.44 3.05-1.14 3.05-1.14.61 1.52.22 2.64.11 2.92.71.78 1.14 1.77 1.14 2.98 0 4.26-2.6 5.2-5.08 5.48.39.34.74 1.01.74 2.04 0 1.47-.01 2.66-.01 3.02 0 .3.2.65.77.54 4.42-1.48 7.6-5.65 7.6-10.57C23.25 5.48 18.27.5 12 .5z" fill="currentColor"/>
+              <span class="social-box" role="img" aria-hidden="true">
+                <!-- simplified octocat mark (line style) -->
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <!-- round-mark head + ears outline to match screenshot style -->
+                  <path d="M12 2.5c-3.6 0-6.5 2.9-6.5 6.5 0 2.9 1.9 5.4 4.6 6.3.3.1.4-.1.4-.3v-1.2c-1.9.4-2.4-.9-2.4-.9-.3-.8-.8-1-.8-1-.6-.4.1-.4.1-.4.7.1 1.1.7 1.1.7.6 1 1.6.7 2 .5.1-.4.3-.7.5-.9-1.5-.2-3-0.8-3-3.4 0-.7.2-1.3.6-1.8-.1-.2-.3-1 .1-2.1 0 0 .5-.2 1.9.7.6-.2 1.3-.4 2-.4s1.4.1 2 .4c1.4-.9 1.9-.7 1.9-.7.4 1.1.2 1.9.1 2.1.4.5.6 1.1.6 1.8 0 2.6-1.6 3.2-3 3.4.3.3.6.8.6 1.6v2.4c0 .2.1.4.4.3 2.7-.9 4.6-3.4 4.6-6.3 0-3.6-2.9-6.5-6.5-6.5z" stroke="#fff" fill="none"/>
                 </svg>
               </span>
-              <span class="sr-only">GitHub</span>
             </a>
 
             <!-- LinkedIn -->
             <a href="https://www.linkedin.com/in/abhinand-babu-153b66324/" title="LinkedIn" aria-label="LinkedIn" target="_blank" rel="noopener" class="social-link">
-              <span class="icon-wrap" aria-hidden="true">
-                <!-- LinkedIn (filled simplified glyph) -->
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M4.98 3.5A2.5 2.5 0 004.98 8.5H4.99A2.5 2.5 0 004.98 3.5zM3.5 8.5h3v11h-3zM12 8.5c-1.8 0-2.6 1.1-3 1.8v-1.8h-3v11h3v-6.2c0-.96.2-1.92 1.5-1.92s1.5 1.02 1.5 2.02V19.5h3v-6.8c0-3-1.3-4.2-3.5-4.2z" fill="currentColor"/>
+              <span class="social-box" role="img" aria-hidden="true">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" fill="none" stroke="rgba(255,255,255,0)" />
+                  <path d="M6.5 9.5v7M6 7.5a1 1 0 110-2 1 1 0 010 2zM10.5 16.5v-4a1.5 1.5 0 013 0v4" stroke="#fff" fill="none"/>
                 </svg>
               </span>
-              <span class="sr-only">LinkedIn</span>
             </a>
 
             <!-- Instagram -->
             <a href="https://www.instagram.com/_abhinand_babu/" title="Instagram" aria-label="Instagram" target="_blank" rel="noopener" class="social-link">
-              <span class="icon-wrap" aria-hidden="true">
-                <!-- Instagram: outer square is the square, inner glyph simplified to filled circle + ring -->
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm5 6.5a4 4 0 100 8 4 4 0 000-8zm4.5-3a1 1 0 11-2 0 1 1 0 012 0z" fill="currentColor"/>
+              <span class="social-box" role="img" aria-hidden="true">
+                <!-- simplified camera-outline instagram -->
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <rect x="4" y="4" width="16" height="16" rx="4" ry="4" fill="none" stroke="#fff"/>
+                  <circle cx="12" cy="12" r="3" stroke="#fff" fill="none"/>
+                  <circle cx="17.2" cy="6.8" r="0.7" fill="#fff" stroke="none"/>
                 </svg>
               </span>
-              <span class="sr-only">Instagram</span>
             </a>
           </div>
 

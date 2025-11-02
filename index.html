@@ -94,6 +94,7 @@
        - morphing icon with expanding circular clip-path
        - CSS variables updated from JS for the reveal center
        - staggered menu animation
+       - swipe-to-close implemented
        ========================= */
 
     /* hide original simple hamburger; we use .adv-hamburger */
@@ -136,7 +137,9 @@
 
     .mobile-nav .panel{
       width: 92%; max-width:420px; background: var(--surface); height:100vh; box-shadow: -10px 0 40px rgba(2,6,23,0.4); padding: 28px 20px; border-left: 1px solid var(--divider); overflow-y:auto; display:flex; flex-direction:column; gap:18px;
-      transform: translateX(0); /* kept for compatibility */
+      transform: translateX(0); /* used for swipe drag feedback */
+      transition: transform .28s cubic-bezier(.2,.95,.2,1);
+      touch-action: pan-y;
     }
 
     /* backdrop remains similar but milder when using circular reveal */
@@ -413,12 +416,13 @@
 
       <div style="height:8px"></div>
 
+      <!-- NOTE: 'Services' replaced with 'Contact' as requested -->
       <a href="#home" class="mobile-link">Home</a>
       <a href="#about" class="mobile-link">About</a>
       <a href="#process" class="mobile-link">Process</a>
       <a href="#portfolio" class="mobile-link">Portfolio</a>
       <a href="#blog" class="mobile-link">Blog</a>
-      <a href="#services" class="mobile-link">Services</a>
+      <a href="#contact" class="mobile-link">Contact</a>
 
       <hr style="border:0;height:1px;background:var(--divider);margin:12px 0">
 
@@ -632,11 +636,12 @@
     })();
 
     /* =========================
-       ADVANCED SLIDING MOBILE NAV + CIRCULAR REVEAL
+       ADVANCED SLIDING MOBILE NAV + CIRCULAR REVEAL + SWIPE-TO-CLOSE
        - sets CSS vars --reveal-x / --reveal-y based on button center
        - toggles .show on .mobile-nav and .mobile-backdrop
        - morphs hamburger icon
        - improved focus management + focus trap
+       - swipe (drag) right to close with feedback
        ========================= */
     (function(){
       const ham = document.getElementById('hamburger');
@@ -650,11 +655,19 @@
       // compute center position for clip-path in px
       function updateRevealVars(){
         const rect = ham.getBoundingClientRect();
-        // convert to page coordinates
         const x = rect.left + rect.width/2;
         const y = rect.top + rect.height/2;
         mobileNav.style.setProperty('--reveal-x', x + 'px');
         mobileNav.style.setProperty('--reveal-y', y + 'px');
+      }
+
+      // Focus-trap helper
+      function trapFocus(e){
+        if(!mobileNav.classList.contains('show')) return;
+        if(mobileNav.contains(e.target) || ham.contains(e.target)) return;
+        const focusable = panel.querySelectorAll('a, button, input, textarea, [tabindex]:not([tabindex="-1"])');
+        if(focusable.length) focusable[0].focus();
+        e.stopPropagation();
       }
 
       function openMenu(){
@@ -675,24 +688,24 @@
       }
 
       function closeMenu(returnFocus=true){
-        mobileNav.classList.remove('show');
-        backdrop.classList.remove('show');
-        ham.classList.remove('open');
-        ham.setAttribute('aria-expanded','false');
-        mobileNav.setAttribute('aria-hidden','true');
-        backdrop.setAttribute('aria-hidden','true');
-        document.documentElement.style.overflow = '';
-        document.body.style.overflow = '';
-        if(returnFocus) ham.focus();
-        document.removeEventListener('focus', trapFocus, true);
-      }
-
-      function trapFocus(e){
-        if(!mobileNav.classList.contains('show')) return;
-        if(mobileNav.contains(e.target) || ham.contains(e.target)) return;
-        const focusable = panel.querySelectorAll('a, button, input, textarea, [tabindex]:not([tabindex="-1"])');
-        if(focusable.length) focusable[0].focus();
-        e.stopPropagation();
+        // graceful close: briefly push panel to right for perceived 'slide out' then hide
+        panel.style.transition = 'transform .22s ease';
+        panel.style.transform = 'translateX(24%)';
+        // small delay to show slide-out
+        setTimeout(()=>{
+          mobileNav.classList.remove('show');
+          backdrop.classList.remove('show');
+          ham.classList.remove('open');
+          ham.setAttribute('aria-expanded','false');
+          mobileNav.setAttribute('aria-hidden','true');
+          backdrop.setAttribute('aria-hidden','true');
+          panel.style.transform = '';
+          panel.style.transition = '';
+          document.documentElement.style.overflow = '';
+          document.body.style.overflow = '';
+          if(returnFocus) ham.focus();
+          document.removeEventListener('focus', trapFocus, true);
+        }, 160);
       }
 
       ham.addEventListener('click', (e)=> {
@@ -706,6 +719,7 @@
       window.addEventListener('resize', ()=>{
         if(mobileNav.classList.contains('show')) updateRevealVars();
         if(window.matchMedia('(min-width:821px)').matches && mobileNav.classList.contains('show')){
+          // close without returning focus (we're switching to desktop)
           closeMenu(false);
         }
       });
@@ -716,12 +730,11 @@
       // close via internal close button
       if(closeBtn) closeBtn.addEventListener('click', ()=> closeMenu());
 
-      // close with Escape
+      // close with Escape and keyboard toggle when hamburger focused
       window.addEventListener('keydown', (e)=>{
         if(e.key === 'Escape' && mobileNav.classList.contains('show')){
           closeMenu();
         }
-        // allow Enter/Space to toggle when hamburger has keyboard focus
         if((e.key === 'Enter' || e.key === ' ') && document.activeElement === ham){
           e.preventDefault();
           ham.click();
@@ -731,12 +744,68 @@
       // when clicking a mobile link, close panel shortly after (keeps link action)
       document.querySelectorAll('.mobile-link').forEach(link=>{
         link.addEventListener('click', (ev)=>{
-          // if anchor to section, let scroll happen — close after short delay
-          setTimeout(()=> closeMenu(false), 180);
+          const href = (link.getAttribute('href') || '').trim();
+          if(href.startsWith('#')){
+            // user requested an anchor — do scroll then close
+            setTimeout(()=> {
+              closeMenu(false);
+            }, 180);
+          } else {
+            // regular external link — close immediately
+            closeMenu(false);
+          }
         });
       });
 
-      // basic accessibility: ensure reveal origin updates when user scrolls (so clip-path center aligns)
+      // ----- Swipe-to-close (touch drag) -----
+      let touchStartX = 0;
+      let currentTranslate = 0;
+      let dragging = false;
+      const MAX_DRAG = window.innerWidth; // maximum allowed translate
+      const CLOSE_THRESHOLD = 80; // px to trigger close
+
+      panel.addEventListener('touchstart', (e) => {
+        if(!mobileNav.classList.contains('show')) return;
+        if(e.touches.length !== 1) return;
+        dragging = true;
+        touchStartX = e.touches[0].clientX;
+        panel.style.transition = 'none'; // disable transition while dragging
+      }, {passive:true});
+
+      panel.addEventListener('touchmove', (e) => {
+        if(!dragging) return;
+        const touchX = e.touches[0].clientX;
+        // user drags panel to the right to close -> delta positive
+        const delta = Math.max(0, touchX - touchStartX);
+        currentTranslate = Math.min(delta, window.innerWidth); // cap
+        panel.style.transform = `translateX(${currentTranslate}px)`;
+        // fade backdrop slightly as user drags
+        const pct = Math.max(0, 1 - (currentTranslate / (window.innerWidth * 0.5)));
+        backdrop.style.opacity = `${0.42 * pct}`;
+      }, {passive:true});
+
+      panel.addEventListener('touchend', (e) => {
+        if(!dragging) return;
+        dragging = false;
+        panel.style.transition = 'transform .22s ease';
+        // if dragged far enough -> close
+        if(currentTranslate > CLOSE_THRESHOLD){
+          // tiny slide to confirm then close
+          panel.style.transform = `translateX(${window.innerWidth * 0.6}px)`;
+          setTimeout(()=> {
+            panel.style.transform = '';
+            backdrop.style.opacity = '';
+            closeMenu();
+          }, 120);
+        } else {
+          // snap back
+          panel.style.transform = '';
+          backdrop.style.opacity = '';
+        }
+        currentTranslate = 0;
+      }, {passive:true});
+
+      // keep reveal center updated when scrolling while open
       window.addEventListener('scroll', ()=>{ if(mobileNav.classList.contains('show')) updateRevealVars(); }, {passive:true});
 
     })();

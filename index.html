@@ -87,19 +87,79 @@
       text-decoration:none; cursor:pointer;
     }
 
+    /* =========================
+       NEW MOBILE-ONLY HAMBURGER (default hidden; visible only at mobile breakpoint)
+       - uses three rounded bars that morph into an X
+       - accessible (aria-expanded toggled)
+       ========================= */
     .hamburger{
-      display:none;width:46px;height:40px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));cursor:pointer;padding:8px; align-items:center; justify-content:center; color:#fff; box-shadow:0 8px 24px rgba(139,60,255,0.12); transition:transform .18s ease, box-shadow .18s ease, background .18s;
+      display:none; /* default hidden; mobile media query will show it */
+      border:0;
+      background:transparent;
+      cursor:pointer;
+      padding:8px;
+      border-radius:10px;
+      align-items:center;
+      justify-content:center;
     }
-    .hamburger:focus{outline:3px solid rgba(139,60,255,0.18); outline-offset:3px}
-    .hamburger .bars{ position:relative; width:22px; height:18px; display:block }
-    .hamburger .bar{ position:absolute; left:0; right:0; height:2px; background:currentColor; border-radius:2px; transition:transform .28s cubic-bezier(.2,.9,.2,1), opacity .18s ease; }
-    .hamburger .bar:nth-child(1){ top:0 }
-    .hamburger .bar:nth-child(2){ top:8px }
-    .hamburger .bar:nth-child(3){ bottom:0 }
-    .hamburger.open{ transform: scale(1.02) }
-    .hamburger.open .bar:nth-child(1){ transform: translateY(8px) rotate(45deg) }
-    .hamburger.open .bar:nth-child(2){ opacity:0; transform:scaleX(0) }
-    .hamburger.open .bar:nth-child(3){ transform: translateY(-8px) rotate(-45deg) }
+    .hamburger .sr-only{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); border:0; white-space:nowrap; }
+
+    /* bar base */
+    .hamburger .newbars{ display:inline-block; width:34px; height:22px; position:relative; }
+    .hamburger .newbars .bar{
+      position:absolute;
+      left:0; right:0;
+      height:3.4px;
+      border-radius:99px;
+      background: currentColor;
+      transition: transform .36s cubic-bezier(.2,.9,.2,1), opacity .28s ease, top .28s ease;
+      transform-origin: center;
+      will-change: transform, opacity, top;
+      opacity:1;
+    }
+    .hamburger .newbars .bar:nth-child(1){ top:0; }
+    .hamburger .newbars .bar:nth-child(2){ top:9px; }
+    .hamburger .newbars .bar:nth-child(3){ top:18px; }
+
+    /* focus-visible (keyboard) */
+    .hamburger:focus-visible{
+      outline:3px solid rgba(139,60,255,0.14);
+      outline-offset:4px;
+      border-radius:12px;
+    }
+
+    /* =========================
+       MOBILE SHOW: apply the new visual style only for <=820px
+       ========================= */
+    @media (max-width:820px){
+      nav.desktop{display:none}
+      .contact-btn{display:none}
+
+      .hamburger{
+        display:flex; width:52px; height:40px;
+        background:linear-gradient(90deg,var(--accent-1),var(--accent-2));
+        color:#fff; box-shadow:0 8px 24px rgba(139,60,255,0.12);
+        border-radius:12px;
+      }
+
+      /* open state: morph bars into X */
+      .hamburger.open .newbars .bar:nth-child(1){
+        top:9px;
+        transform: rotate(45deg) scaleX(1.02);
+      }
+      .hamburger.open .newbars .bar:nth-child(2){
+        opacity:0;
+        transform: scaleX(.2);
+      }
+      .hamburger.open .newbars .bar:nth-child(3){
+        top:9px;
+        transform: rotate(-45deg) scaleX(1.02);
+      }
+    }
+
+    /* =========================
+       rest of your original CSS (kept unchanged)
+       ========================= */
 
     main{max-width:1250px;margin:0 auto;padding:0 20px}
 
@@ -150,10 +210,6 @@
     .btn-primary{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#fff;padding:12px 18px;border-radius:12px;border:none;font-weight:700;cursor:pointer;text-decoration:none}
     .btn-resume{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1.5px solid var(--accent-1);background:transparent;color:var(--accent-1);font-weight:700;text-decoration:none;cursor:pointer}
 
-    /* =====================================================
-       SOCIAL ICONS — UPDATED (supports per-icon files + sprite)
-       ===================================================== */
-
     .social-row{ display:flex; gap:var(--social-gap); margin-top:8px; align-items:center; flex-wrap:wrap; justify-content:flex-start; }
     .social-row .social-link{
       display:inline-grid;
@@ -166,7 +222,6 @@
       color:var(--text);
     }
 
-    /* Default behavior: use individual image files for each .social-box */
     .social-box{
       display:inline-block;
       width:64px;
@@ -176,19 +231,16 @@
       position:relative;
       background-repeat:no-repeat;
       background-position:center center;
-      background-size:cover;       /* <-- use cover so single icons aren't stretched by sprite rules */
+      background-size:cover;
       box-shadow: 0 6px 14px rgba(0,0,0,0.18);
     }
 
-    /* hover/focus lift */
     .social-link:focus .social-box,
     .social-link:hover .social-box{ transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.28); }
 
-    /* optional sprite mode:
-       Add class "use-sprite" to the .social-row container if you want a single sprite file. */
     .social-row.use-sprite .social-box{
       background-image: url('assets/social.jpg');
-      background-size: 400% 100%; /* change 400% to match number of frames */
+      background-size: 400% 100%;
       background-position: 0% 50%;
     }
     .social-row.use-sprite a:nth-child(1) .social-box{ background-position: 0% 50%; }
@@ -196,14 +248,12 @@
     .social-row.use-sprite a:nth-child(3) .social-box{ background-position: 50% 50%; }
     .social-row.use-sprite a:nth-child(4) .social-box{ background-position: 75% 50%; }
 
-    /* fallback if image not found — show dark box */
     .social-box:empty{ background-color:#0b0b0b; }
 
     .right{display:flex;align-items:center;justify-content:center;position:relative}
     .photo{width:100%;max-width:520px;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);position:relative}
     .photo img{display:block;width:100%;height:100%;object-fit:cover;min-height:320px}
 
-    /* rest sections */
     section.demo{padding:28px 0;border-top:1px solid var(--divider); width:100%}
     section.demo h2{font-size:32px;margin-bottom:8px}
     section.demo p{color:var(--text)}
@@ -215,7 +265,6 @@
     .mobile-nav a.active{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:white}
     .mobile-nav hr{border:0;height:1px;background:var(--divider);margin:10px 0}
 
-    /* contact */
     .contact-section{ padding:28px 0; border-top:1px solid var(--divider); display:grid; grid-template-columns:1fr 520px; gap:36px; align-items:start; width:100%;}
     .contact-left{padding-right:10px; max-width:720px}
     .contact-left h2{font-size:40px;margin:0 0 8px}
@@ -264,17 +313,11 @@
     }
     .notice-box.show{display:flex}
 
-    /* =========================
-       Responsive / mobile tweaks
-       ========================= */
     @media (max-width:980px){ .hero{grid-template-columns:1fr 380px} .hero-title{font-size:56px} }
 
     @media (max-width:820px){
       header{height:80px}
       :root{ --header-h:80px }
-      nav.desktop{display:none}
-      .contact-btn{display:none}
-      .hamburger{display:flex}
 
       section[id] {
         padding-top: 0;
@@ -321,7 +364,6 @@
       .cta-row a{min-width:140px}
       @media (max-width:420px){ .btn-primary, .btn-resume{width:100%} .hero-title{font-size:34px} }
 
-      /* social icons overlay when moved into image on mobile */
       .photo .social-row{
         position: absolute;
         left: 12px;
@@ -343,13 +385,11 @@
         background: transparent;
       }
 
-      /* slightly smaller on small mobile requested: decrease a little */
       .photo .social-row .social-box{
         width:68px;
         height:68px;
       }
 
-      /* on very small phones make them a tiny bit smaller */
       @media (max-width:380px){
         .photo .social-row .social-box{ width:60px; height:60px; }
       }
@@ -397,8 +437,10 @@
 
       <button class="contact-btn" id="contactBtn">Contact</button>
 
-      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
-        <span class="bars" aria-hidden="true">
+      <!-- MOBILE-ONLY hamburger (new style) -->
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+        <span class="sr-only">Menu</span>
+        <span class="newbars" aria-hidden="true">
           <span class="bar"></span>
           <span class="bar"></span>
           <span class="bar"></span>
@@ -435,7 +477,7 @@
   </a>
 
   <a href="https://github.com/Abhinand2502" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener" class="social-link" role="listitem">
-    <span class="social-box" aria-hidden="true" style="background-image: url('assets/git\ \(2\).png');"></span>
+    <span class="social-box" aria-hidden="true" style="background-image: url('assets/git (2).png');"></span>
   </a>
 
   <a href="https://www.linkedin.com/in/abhinand-babu-153b66324/" title="LinkedIn" aria-label="LinkedIn" target="_blank" rel="noopener" class="social-link" role="listitem">
@@ -511,7 +553,6 @@
           </div>
         </div>
 
-        <!-- UPDATED: contact social icons use same .social-row / .social-box setup as home -->
         <div class="contact-socials" aria-label="Social links">
           <div class="social-row" role="list">
             <a href="mailto:mail-abhinandbabu2502@gmail.com" title="Email" aria-label="Email" class="social-link" role="listitem">
@@ -519,7 +560,7 @@
             </a>
 
             <a href="https://github.com/Abhinand2502" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener" class="social-link" role="listitem">
-              <span class="social-box" aria-hidden="true" style="background-image: url('assets/git\ \(2\).png');"></span>
+              <span class="social-box" aria-hidden="true" style="background-image: url('assets/git (2).png');"></span>
             </a>
 
             <a href="https://www.instagram.com/_abhinand_babu/" title="Instagram" aria-label="Instagram" target="_blank" rel="noopener" class="social-link" role="listitem">
@@ -593,6 +634,7 @@
   <script>
     /* =========================
        THEME (persist) - sun/moon icons
+       (unchanged)
        ========================= */
     (function(){
       const root=document.documentElement, icon=document.getElementById('themeIcon'), key='site-theme';
@@ -616,19 +658,26 @@
     })();
 
     /* =========================
-       MOBILE NAV + hamburger
+       MOBILE NAV + hamburger (mobile-only)
+       - toggles .open on #hamburger and .show on #mobileNav
+       - keeps accessibility attributes
        ========================= */
     (function(){
       const ham = document.getElementById('hamburger');
       const mobileNav = document.getElementById('mobileNav');
       const panel = mobileNav.querySelector('.panel');
+
+      if(!ham || !mobileNav || !panel) return;
+
       function openNav(){
         mobileNav.classList.add('show');
         ham.classList.add('open');
         ham.setAttribute('aria-expanded','true');
         mobileNav.setAttribute('aria-hidden','false');
         document.body.style.overflow = 'hidden';
-        panel.focus();
+        // focus first link inside panel
+        const first = panel.querySelector('a, button, [tabindex]:not([tabindex="-1"])');
+        if(first) first.focus();
       }
       function closeNav(){
         mobileNav.classList.remove('show');
@@ -638,14 +687,33 @@
         document.body.style.overflow = '';
         ham.focus();
       }
-      ham.addEventListener('click', ()=>{ if(mobileNav.classList.contains('show')) closeNav(); else openNav(); });
-      mobileNav.addEventListener('click',(e)=>{ if(e.target === mobileNav) closeNav(); });
-      window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && mobileNav.classList.contains('show')){ closeNav(); } });
-      document.querySelectorAll('.mobile-link').forEach(m=>{ m.addEventListener('click', function(){ setTimeout(closeNav, 200); }); });
+
+      ham.addEventListener('click', ()=>{
+        if(mobileNav.classList.contains('show')) closeNav(); else openNav();
+      });
+
+      mobileNav.addEventListener('click',(e)=>{
+        if(e.target === mobileNav) closeNav();
+      });
+
+      window.addEventListener('keydown', (e)=>{
+        if(e.key === 'Escape' && mobileNav.classList.contains('show')){ closeNav(); }
+        // Enter/Space for keyboard activation
+        if((e.key === 'Enter' || e.key === ' ') && document.activeElement === ham){
+          e.preventDefault();
+          ham.click();
+        }
+      });
+
+      document.querySelectorAll('.mobile-link').forEach(m=>{
+        m.addEventListener('click', function(){
+          setTimeout(closeNav, 140);
+        });
+      });
     })();
 
     /* =========================
-       Mobile overlay title
+       Mobile overlay title (unchanged)
        ========================= */
     (function(){
       const holder = document.getElementById('mobileOverlayHolder');
@@ -665,7 +733,7 @@
     })();
 
     /* =========================
-       Move social-row into photo on mobile (keeps desktop position)
+       Move social-row into photo on mobile (unchanged)
        ========================= */
     (function(){
       const social = document.querySelector('.social-row');
@@ -687,7 +755,7 @@
     })();
 
     /* =========================
-       Resume modal
+       Resume modal (unchanged)
        ========================= */
     (function(){
       const resumeBtn = document.getElementById('resumeBtn');
@@ -737,7 +805,7 @@
     })();
 
     /* =========================
-       Smooth scroll & active nav
+       Smooth scroll & active nav (unchanged)
        ========================= */
     (function(){
       const header = document.querySelector('header');
@@ -791,7 +859,7 @@
     })();
 
     /* =========================
-       Contact form (client-side simulation)
+       Contact form (unchanged)
        ========================= */
     (function(){
       const form = document.getElementById('contactForm');

@@ -531,7 +531,7 @@
   </a>
 
   <a href="https://www.instagram.com/_abhinand_babu/" title="Instagram" aria-label="Instagram" target="_blank" rel="noopener" class="social-link" role="listitem">
-    <span class="social-box" aria-hidden="true" style="background-image: url('assets/insta.png');"></span>
+    <span class="social-box" aria-hidden="true" style="background-image: url('assets/1000217821.png');"></span>
   </a>
 </div>
 
@@ -552,7 +552,235 @@
       </div>
     </section>
 
-    <section id="about" class="demo" data-tag="about"><div class="section-tag">About</div><h2>About</h2><p>About demo. "Say Hello!" links here.</p></section>
+    <!-- ABOUT SECTION: paste this where your <section id="about"> should be -->
+<section id="about" class="about-section" aria-label="About me">
+  <div class="about-inner">
+    <!-- LEFT: profile card -->
+    <aside class="profile-card" role="region" aria-label="Profile card">
+      <div class="avatar">
+        <img src="assets/bg.jpg" alt="Abhinand Babu portrait">
+      </div>
+
+      <h2 class="profile-name">Abhinand Babu</h2>
+      <div class="profile-role">DEVELOPER · B.TECH CSE</div>
+
+      <div class="degree-card">
+        <div class="degree-label">DEG</div>
+        <div class="degree-value">B.Tech — CSE</div>
+      </div>
+
+      <dl class="stats-grid" aria-hidden="false">
+        <div class="stat">
+          <dt>AGE</dt>
+          <dd>22</dd>
+        </div>
+        <div class="stat">
+          <dt>DOB</dt>
+          <dd>25/02/03</dd>
+        </div>
+        <div class="stat">
+          <dt>STATUS</dt>
+          <dd>Student</dd>
+        </div>
+
+        <div class="stat">
+          <dt>EXP</dt>
+          <dd>Fresher</dd>
+        </div>
+        <div class="stat">
+          <dt>COUNTRY</dt>
+          <dd>IN</dd>
+        </div>
+        <div class="stat">
+          <dt>LOC</dt>
+          <dd>Kerala</dd>
+        </div>
+      </dl>
+    </aside>
+
+    <!-- RIGHT: info: education + skills -->
+    <div class="info-column">
+      <div class="card education-card" role="region" aria-label="Education (Academic Journey)">
+        <h3>Education <span class="muted"> (Academic Journey)</span></h3>
+
+        <div class="edu-item">
+          <div class="edu-head">
+            <div class="edu-title">B.Tech in CSE — UCE, Thodupuzha</div>
+            <div class="edu-level">Level: <strong>69.9 GPA</strong></div>
+          </div>
+          <div class="edu-years">2021 — 2025</div>
+          <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="69.9">
+            <div class="progress-fill" data-level="69.9"></div>
+          </div>
+        </div>
+
+        <div class="edu-item">
+          <div class="edu-head">
+            <div class="edu-title">Higher Secondary — St. Sebastian's HSS, Vazhithala</div>
+            <div class="edu-level">Level: <strong>94%</strong></div>
+          </div>
+          <div class="edu-years">2019 — 2021</div>
+          <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="94">
+            <div class="progress-fill" data-level="94"></div>
+          </div>
+        </div>
+
+        <div class="edu-item">
+          <div class="edu-head">
+            <div class="edu-title">Secondary — Bappuji Public School, Vazhithala</div>
+            <div class="edu-level">Level: <strong>80%</strong></div>
+          </div>
+          <div class="edu-years">2018 — 2019</div>
+          <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80">
+            <div class="progress-fill" data-level="80"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card skills-card" role="region" aria-label="Skills — Modern stack">
+        <h3>Skills — Modern stack</h3>
+
+        <div class="skills-grid">
+          <!-- Replace background-image URLs with your icon assets if you have them -->
+          <div class="skill">
+            <div class="icon" style="background-image:url('assets/python.svg')">Py</div>
+            <div class="label">Python</div>
+          </div>
+
+          <div class="skill">
+            <div class="icon" style="background-image:url('assets/django.svg')">Dj</div>
+            <div class="label">Django</div>
+          </div>
+
+          <div class="skill">
+            <div class="icon" style="background-image:url('assets/html.svg')">HT</div>
+            <div class="label">HTML</div>
+          </div>
+
+          <div class="skill">
+            <div class="icon" style="background-image:url('assets/css.svg')">CS</div>
+            <div class="label">CSS</div>
+          </div>
+
+          <div class="skill">
+            <div class="icon" style="background-image:url('assets/js.svg')">JS</div>
+            <div class="label">JavaScript</div>
+          </div>
+
+          <div class="skill">
+            <div class="icon" style="background-image:url('assets/react.svg')">Re</div>
+            <div class="label">React</div>
+          </div>
+
+          <div class="skill">
+            <div class="icon" style="background-image:url('assets/sql.svg')">DB</div>
+            <div class="label">SQL</div>
+          </div>
+
+          <div class="skill">
+            <div class="icon" style="background-image:url('assets/ml.svg')">ML</div>
+            <div class="label">ML</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inline style scoped to about section -->
+  <style>
+    /* Scoped About styles — relies on your root color variables (keeps dark look consistent) */
+    .about-section { padding: 28px 0; }
+    .about-inner { display: grid; grid-template-columns: 420px 1fr; gap: 28px; max-width:1250px; margin: 0 auto; align-items:start; }
+
+    /* Profile card */
+    .profile-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: 16px; padding: 28px; border: 2px solid rgba(255,255,255,0.12);
+      display:flex; flex-direction:column; align-items:center; gap:14px;
+      box-shadow: var(--shadow);
+    }
+    .profile-card .avatar{ width:160px; height:160px; border-radius:999px; overflow:hidden; border:8px solid var(--surface); box-shadow:0 14px 40px rgba(2,6,23,0.6);}
+    .profile-card .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .profile-name{ margin:6px 0 0; font-size:28px; letter-spacing:0.2px; font-weight:800; color:var(--text); }
+    .profile-role{ font-weight:700; color:var(--text); opacity:0.8; font-size:13px; }
+
+    .degree-card { width:100%; margin-top:6px; border-radius:12px; padding:16px; text-align:center; background:transparent; border:1px solid rgba(255,255,255,0.03); }
+    .degree-card .degree-label{ font-size:11px; color:var(--text); opacity:0.65; font-weight:800; letter-spacing:1px; margin-bottom:6px; }
+    .degree-card .degree-value{ font-weight:800; font-size:18px; color:var(--accent-1); }
+
+    .stats-grid{ width:100%; display:grid; grid-template-columns: repeat(3,1fr); gap:14px; margin-top:18px; }
+    .stat{ background: rgba(255,255,255,0.01); border-radius:12px; padding:12px; text-align:center; border:1px solid rgba(255,255,255,0.03); }
+    .stat dt{ font-size:12px; color:var(--text); opacity:0.7; font-weight:800; margin-bottom:8px; }
+    .stat dd{ font-size:18px; font-weight:800; margin:0; color:var(--text); }
+
+    /* Info column */
+    .info-column { display:flex; flex-direction:column; gap:18px; }
+
+    .card { background:transparent; border-radius:12px; padding:18px; border:2px solid rgba(255,255,255,0.12); box-shadow: var(--shadow); }
+    .education-card h3, .skills-card h3 { margin:0 0 12px; font-size:26px; font-weight:800; color:var(--text); }
+    .education-card .muted{ font-weight:600; color:var(--text); opacity:0.7; font-size:15px; margin-left:6px; }
+
+    .edu-item{ margin-bottom:18px; }
+    .edu-head{ display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .edu-title{ font-weight:800; color:var(--text); }
+    .edu-level{ color:var(--text); opacity:0.9; font-weight:700; font-size:14px; }
+    .edu-years{ color:var(--text); opacity:0.6; font-size:13px; margin:6px 0 8px; }
+
+    /* Progress bar */
+    .progress{ height:12px; background: rgba(255,255,255,0.03); border-radius:999px; position:relative; overflow:hidden; border:1px solid rgba(255,255,255,0.03); }
+    .progress-fill{ position:absolute; left:0; top:0; bottom:0; width:0%; border-radius:999px; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); transition: width 900ms cubic-bezier(.2,.9,.3,1); box-shadow: 0 8px 28px rgba(139,60,255,0.08); }
+
+    /* Skills grid */
+    .skills-grid{ display:grid; grid-template-columns: repeat(4,1fr); gap:12px; margin-top:12px; }
+    .skill{ display:flex; align-items:center; gap:12px; padding:12px; border-radius:12px; background: rgba(255,255,255,0.01); border:1px solid rgba(255,255,255,0.03); }
+    .skill .icon{ width:44px; height:44px; border-radius:10px; background-color:var(--surface); display:grid; place-items:center; font-weight:800; color:var(--accent-1); background-size:cover; background-position:center; box-shadow: 0 8px 18px rgba(0,0,0,0.4); }
+    .skill .label{ font-weight:800; color:var(--text); }
+
+    /* responsive */
+    @media (max-width:980px){
+      .about-inner{ grid-template-columns: 1fr; }
+      .stats-grid{ grid-template-columns: repeat(3,1fr); }
+      .skills-grid{ grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width:420px){
+      .stats-grid{ grid-template-columns: repeat(2,1fr); }
+      .skill .label{ font-size:13px; }
+    }
+  </style>
+
+  <script>
+    // Animate progress fills when the section enters viewport
+    (function(){
+      const fills = document.querySelectorAll('.progress-fill');
+      function animate() {
+        fills.forEach(f => {
+          const level = parseFloat(f.getAttribute('data-level') || 0);
+          // Ensure width within 0-100
+          const pct = Math.max(0, Math.min(100, level));
+          f.style.width = pct + '%';
+          f.parentElement.setAttribute('aria-valuenow', pct);
+        });
+      }
+
+      // If IntersectionObserver available, animate when visible, else immediate
+      if ('IntersectionObserver' in window) {
+        const obs = new IntersectionObserver((entries, o) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              animate();
+              o.disconnect();
+            }
+          });
+        }, { threshold: 0.2 });
+        obs.observe(document.querySelector('#about') || document.body);
+      } else {
+        // fallback
+        window.addEventListener('load', animate);
+      }
+    })();
+  </script>
+</section>
+
     <section id="process" class="demo" data-tag="process"><div class="section-tag">Process</div><h2>Process</h2><p>Process demo content.</p></section>
     <section id="portfolio" class="demo" data-tag="portfolio"><div class="section-tag">Portfolio</div><h2>Portfolio</h2><p>Portfolio demo content.</p></section>
     <section id="blog" class="demo" data-tag="blog"><div class="section-tag">Blog</div><h2>Blog</h2><p>Blog demo content.</p></section>

@@ -192,6 +192,7 @@
     .btn{display:inline-flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;border:1px solid var(--glass-border);background:transparent;font-weight:600;cursor:pointer;color:var(--text)}
     .btn:focus{outline:2px solid rgba(255,255,255,0.06);outline-offset:2px}
 
+    /* Default: hide hamburger on larger screens */
     .hamburger{display:none;border:0;background:transparent;padding:8px;border-radius:8px;cursor:pointer}
     .hamburger:focus{outline:3px solid rgba(255,255,255,0.08);outline-offset:3px}
 
@@ -289,12 +290,12 @@
     /* Mobile adjustments */
     @media (max-width:900px){
       .nav-links{display:none}
+      /* show simple hamburger in mobile only */
       .hamburger{display:inline-flex}
       header{padding:0 14px}
       .social-fixed{position:relative;right:auto;top:auto;transform:none;display:flex;flex-direction:row;gap:12px;justify-content:center;margin:14px 0 6px;z-index:3}
       .social-fixed a{width:48px;height:48px;border-radius:10px}
       .hero h1{font-size:clamp(28px,7vw,48px)}
-      /* stack hero container content and keep spacing */
       .hero .container { z-index:4; position:relative; padding-bottom:36px; }
     }
 
@@ -304,7 +305,7 @@
     .mobile-nav.open .sheet{transform:translateY(0);opacity:1}
     .mobile-nav .panel{padding:28px}
     .mobile-nav .close-tab{display:flex;justify-content:flex-end}
-    .mobile-nav .close-btn{background:transparent;border:0;padding:8px;border-radius:8px;cursor:pointer}
+    .mobile-nav .close-btn{background:transparent;border:0;padding:8px;border-radius:8px;cursor:pointer;font-size:22px;line-height:1}
     .mobile-nav[aria-hidden="true"]{pointer-events:none}
     .mobile-nav[aria-hidden="false"]{pointer-events:auto}
 
@@ -337,24 +338,6 @@
     }
 
     @media (prefers-reduced-motion: reduce){*{transition:none !important}}
-
-    /* ------------------------------
-       Improved hamburger icon (three bars -> X)
-       ------------------------------ */
-    .hamburger .bar{
-      display:block;
-      width:20px;
-      height:2px;
-      background:currentColor;
-      border-radius:2px;
-      transition: transform .22s cubic-bezier(.2,.9,.2,1), opacity .18s ease;
-    }
-    .hamburger { width:44px;height:44px;display:grid;place-items:center;color:var(--text);border:1px solid var(--glass-border);border-radius:10px;background:var(--glass-strong) }
-    .hamburger .bars{display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:center;transform-origin:center}
-    .hamburger.open .bar:nth-child(1){ transform: translateY(7px) rotate(45deg); }
-    .hamburger.open .bar:nth-child(2){ opacity:0; transform: scaleX(0.8); }
-    .hamburger.open .bar:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
-
   </style>
 </head>
 <body>
@@ -379,13 +362,9 @@
         <!-- Theme toggle (visible) -->
         <button class="btn" id="themeToggle" aria-pressed="false" title="Toggle dark / light mode" aria-label="Toggle theme" ></button>
 
-        <!-- Improved hamburger -->
+        <!-- SIMPLE (idiot) hamburger - visible only on mobile (CSS) -->
         <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false">
-          <span class="bars" aria-hidden="true">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-          </span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
         </button>
       </div>
     </div>
@@ -602,7 +581,7 @@
 
 
     /* ==============
-       Mobile nav + hamburger handling (improved)
+       Mobile nav + hamburger handling
        ============== */
     const mobileNav = document.getElementById('mobileNav');
     const hamburgerBtn = document.getElementById('hamburgerBtn');
@@ -612,8 +591,7 @@
       mobileNav.classList.add('open');
       mobileNav.setAttribute('aria-hidden','false');
       hamburgerBtn.setAttribute('aria-expanded','true');
-      hamburgerBtn.classList.add('open');
-      // lock scroll
+      // keep focus and lock scroll
       document.documentElement.style.overflow = 'hidden';
       document.body.style.overflow = 'hidden';
     }
@@ -621,11 +599,8 @@
       mobileNav.classList.remove('open');
       mobileNav.setAttribute('aria-hidden','true');
       hamburgerBtn.setAttribute('aria-expanded','false');
-      hamburgerBtn.classList.remove('open');
-      // unlock scroll
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
-      // return focus to hamburger for accessibility
       hamburgerBtn.focus();
     }
 

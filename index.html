@@ -10,12 +10,12 @@
        ------------------------------ */
     :root{
       /* Light-mode (user requested): slightly lighter dark grey background + white text/icons */
-      --bg: #ffffff; /* slightly lighter dark grey (not too dark) */
+      --bg: #ffffff;
       --surface: rgba(255,255,255,0.04);
-      --text: #ffffff; /* keep main text white in the design */
+      --text: #ffffff;
       --muted: #d0d0d0;
-      --accent: #ffffff; /* accent for animated underline in light */
-      --accent-anim: #00e6ff; /* animated accent visible on active nav */
+      --accent: #ffffff;
+      --accent-anim: #00e6ff;
       --glass: rgba(255,255,255,0.03);
       --glass-strong: rgba(255,255,255,0.06);
       --card: rgba(255,255,255,0.02);
@@ -35,10 +35,11 @@
       --header-bg: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
       --header-border: rgba(255,255,255,0.06);
 
-      /* hero background brightness control (less dark than before) */
-      --hero-brightness: 0.44; /* increase to make image a little more visible/grey */
-      --hero-overlay-start: rgba(0,0,0,0.36);
-      --hero-overlay-end: rgba(0,0,0,0.44);
+      /* hero background brightness control (less dark than before) -
+         increased for lighter image visibility in both themes */
+      --hero-brightness: 0.62; /* light mode baseline (less dark) */
+      --hero-overlay-start: rgba(0,0,0,0.24); /* lighter overlay */
+      --hero-overlay-end: rgba(0,0,0,0.32);
 
       /* section bg for light mode (greyish white for other pages) */
       --section-bg-light: #f5f5f5;
@@ -50,7 +51,7 @@
       --surface: rgba(0,0,0,0.45);
       --text: #ffffff;
       --muted: #bdbdbd;
-      --accent: #ffffff; /* accent for animated underline in dark */
+      --accent: #ffffff;
       --glass: rgba(255,255,255,0.03);
       --glass-strong: rgba(255,255,255,0.06);
       --card: #0b0b0b;
@@ -64,10 +65,10 @@
       --header-bg: linear-gradient(180deg, rgba(0,0,0,0.22), rgba(0,0,0,0.12));
       --header-border: rgba(255,255,255,0.04);
 
-      /* darker hero for dark theme */
-      --hero-brightness: 0.28;
-      --hero-overlay-start: rgba(0,0,0,0.45);
-      --hero-overlay-end: rgba(0,0,0,0.55);
+      /* slightly brighter hero for dark theme (reduced darkness) */
+      --hero-brightness: 0.42;
+      --hero-overlay-start: rgba(0,0,0,0.35);
+      --hero-overlay-end: rgba(0,0,0,0.45);
     }
 
     @media (prefers-color-scheme: dark){
@@ -88,19 +89,15 @@
       line-height:1.4;
       font-size:16px;
       transition:background .35s ease, color .35s ease;
-      /* enable CSS snapping by default (JS provides enhanced behavior) */
       scroll-behavior: smooth;
       scroll-snap-type: y mandatory;
     }
 
-    /* Each section will align to the top when snapped.
-       We offset snap by the header using scroll-margin-top. */
     section{
       scroll-snap-align: start;
       scroll-margin-top: calc(var(--nav-height) + 8px);
     }
 
-    /* For users who prefer reduced motion, remove snapping/smooth behavior */
     @media (prefers-reduced-motion: reduce){
       html,body{ scroll-behavior: auto; scroll-snap-type: none; }
       section{ scroll-snap-align: none; scroll-margin-top: 0; }
@@ -108,14 +105,10 @@
 
     .container{max-width:var(--max-width);margin:0 auto;padding:0 20px;}
 
-    /* Skip link for accessibility */
     .skip-link{position:absolute;left:8px;top:8px;background:#000;color:#fff;padding:8px 12px;border-radius:6px;z-index:120;transform:translateY(-120%);transition:transform .18s ease;}
     .skip-link:focus{transform:translateY(0%);}    
 
-    /* ------------------------------
-       Header / Nav (animated underline + spacing)
-       Uses --header-bg so it can be different per theme
-       ------------------------------ */
+    /* Header / Nav */
     header{
       position:fixed;inset:0 0 auto 0;height:var(--nav-height);display:flex;align-items:center;z-index:60;
       backdrop-filter: blur(8px) saturate(120%);
@@ -124,8 +117,6 @@
       padding:0 20px;gap:16px;transition:background .35s ease, border .25s ease, color .25s ease;
     }
 
-    /* When in light mode and the header is outside of the hero (i.e. About/Projects/Contact),
-       switch header text/links/buttons to black as requested. */
     header.light-outside-hero .brand .text,
     header.light-outside-hero .nav-links a,
     header.light-outside-hero .btn,
@@ -135,7 +126,6 @@
       border-color: rgba(0,0,0,0.08) !important;
     }
 
-    /* Tweak underline shimmer for dark text so it's subtle on white */
     header.light-outside-hero .nav-links a::after{
       background: linear-gradient(120deg, rgba(0,0,0,0.06), rgba(0,0,0,0.12), rgba(0,0,0,0.06));
     }
@@ -150,7 +140,7 @@
     nav{margin-left:auto;display:flex;align-items:center;gap:18px}
     .nav-links{display:flex;gap:24px;align-items:center}
     .nav-links a{
-      color:var(--text); /* header links will follow --text which is white */
+      color:var(--text);
       text-decoration:none;
       padding:10px 16px;
       border-radius:12px;
@@ -163,7 +153,6 @@
     }
     .nav-links a:focus{ outline: 3px solid rgba(255,255,255,0.08); outline-offset:4px; }
 
-    /* animated sliding/shimmering underline using gradient background */
     .nav-links a::after{
       content:"";
       position:absolute;
@@ -177,7 +166,6 @@
       background-position: 0% 50%;
     }
 
-    /* animate gradient position to create shimmer on hover */
     .nav-links a:hover::after,
     .nav-links a:focus::after{
       opacity:1;
@@ -192,7 +180,6 @@
 
     .nav-links a:hover{ transform: translateY(-3px); }
 
-    /* Active link - animated color / gradient */
     .nav-links a.active{ color:var(--accent-anim); }
     .nav-links a.active::after{
       opacity:1; transform: translateY(0) scaleX(1);
@@ -205,7 +192,8 @@
     .btn{display:inline-flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;border:1px solid var(--glass-border);background:transparent;font-weight:600;cursor:pointer;color:var(--text)}
     .btn:focus{outline:2px solid rgba(255,255,255,0.06);outline-offset:2px}
 
-    .hamburger{display:none;border:0;background:transparent;padding:8px;border-radius:8px}
+    .hamburger{display:none;border:0;background:transparent;padding:8px;border-radius:8px;cursor:pointer}
+    .hamburger:focus{outline:3px solid rgba(255,255,255,0.08);outline-offset:3px}
 
     #themeToggle{
       width:44px;height:44px;border-radius:10px;display:grid;place-items:center;border:1px solid var(--glass-border);
@@ -218,12 +206,12 @@
     #themeToggle:focus{ outline: 3px solid rgba(255,255,255,0.08); outline-offset:3px; }
 
     /* ------------------------------
-       Hero / Home (stronger black background)
-       Use --hero-brightness to tune darkness/greyness
+       Hero / Home
        ------------------------------ */
     .hero{
-      min-height:100vh;padding-top:var(--nav-height);display:grid;align-items:center;position:relative;overflow:hidden;
+      min-height:100vh;padding-top:var(--nav-height);display:block;align-items:center;position:relative;overflow:hidden;
       background: none;
+      display:flex;flex-direction:column;align-items:stretch;
     }
     /* pseudo-background so content stays independent; keep B&W look in both themes */
     .hero::before{
@@ -232,7 +220,7 @@
       background-image: url('assets/bg.jpg');
       background-size:cover;background-position:center center;background-repeat:no-repeat;
       z-index:1;
-      /* grayscale + controlled brightness so image is slightly more visible/grey in light theme */
+      /* grayscale + controlled brightness so image is slightly more visible/grey */
       filter: grayscale(100%) contrast(1.06) brightness(var(--hero-brightness)) saturate(0.6);
       mix-blend-mode:normal;
       transition: filter .35s ease, opacity .35s ease, transform .35s ease;
@@ -240,7 +228,6 @@
     }
 
     .hero .overlay{position:absolute;inset:0;z-index:2;pointer-events:none}
-    /* Overlay uses variables so it can be slightly lighter/darker per theme */
     .hero .overlay{ background: linear-gradient(180deg, var(--hero-overlay-start), var(--hero-overlay-end)); }
 
     .hero .content{position:relative;z-index:3}
@@ -276,15 +263,13 @@
       display:inline-grid;place-items:center;
       width:64px;height:64px;border-radius:14px;border:1px solid rgba(255,255,255,0.06);
       background:var(--social-bg);text-decoration:none;
-      color:#ffffff; /* force white icons across themes because hero is dark */
+      color:#ffffff;
       transition: transform .18s ease, box-shadow .18s ease, background .25s, color .25s ease;
       box-shadow: 0 6px 18px rgba(0,0,0,0.12);
     }
     .social-fixed a:hover{ transform: translateY(-8px); box-shadow: 0 18px 40px rgba(0,0,0,0.18); }
     .social-fixed svg{ width:28px;height:28px; display:block; stroke:currentColor; fill:currentColor; }
 
-    /* MAKE ABOUT/PROJECTS/CONTACT greyish white in light mode only */
-    /* sections already have scroll-margin-top to account for fixed header */
     section.section{
       padding: 80px 0;
     }
@@ -301,20 +286,28 @@
     /* Keep hero untouched */
     #home.section{ background: none; }
 
-    /* small devices slightly smaller social buttons */
+    /* Mobile adjustments */
     @media (max-width:900px){
       .nav-links{display:none}
       .hamburger{display:inline-flex}
       header{padding:0 14px}
-      .social-fixed{right:12px}
-      .social-fixed a{width:52px;height:52px}
+      .social-fixed{position:relative;right:auto;top:auto;transform:none;display:flex;flex-direction:row;gap:12px;justify-content:center;margin:14px 0 6px;z-index:3}
+      .social-fixed a{width:48px;height:48px;border-radius:10px}
       .hero h1{font-size:clamp(28px,7vw,48px)}
+      /* stack hero container content and keep spacing */
+      .hero .container { z-index:4; position:relative; padding-bottom:36px; }
     }
 
-    /* Mobile nav overlay */
-    .mobile-nav{position:fixed;inset:0;background:linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.8));display:flex;align-items:center;justify-content:center;z-index:80;opacity:0;pointer-events:none;transition:opacity .25s ease}
-    .mobile-nav.open{opacity:1;pointer-events:auto}
-    .mobile-nav .panel{background:var(--card);padding:36px;border-radius:16px;max-width:420px;width:92%;border:1px solid var(--glass-border)}
+    /* Mobile nav overlay (top sheet) */
+    .mobile-nav{position:fixed;inset:0;background:transparent;display:flex;align-items:flex-start;justify-content:center;z-index:120;pointer-events:none}
+    .mobile-nav .sheet{width:100%;max-width:760px;background:linear-gradient(180deg, var(--card), rgba(0,0,0,0.02));border-radius:12px;margin-top:8px;border:1px solid var(--glass-border);transform:translateY(-12%);opacity:0;transition:transform .28s cubic-bezier(.2,.9,.25,1),opacity .28s ease;pointer-events:auto;box-shadow:0 30px 80px rgba(0,0,0,0.5)}
+    .mobile-nav.open .sheet{transform:translateY(0);opacity:1}
+    .mobile-nav .panel{padding:28px}
+    .mobile-nav .close-tab{display:flex;justify-content:flex-end}
+    .mobile-nav .close-btn{background:transparent;border:0;padding:8px;border-radius:8px;cursor:pointer}
+    .mobile-nav[aria-hidden="true"]{pointer-events:none}
+    .mobile-nav[aria-hidden="false"]{pointer-events:auto}
+
     .mobile-nav a{display:block;padding:12px 0;font-weight:700;text-decoration:none;color:var(--text)}
 
     .mobile-socials{display:flex;gap:12px;justify-content:center;margin-top:12px}
@@ -322,18 +315,13 @@
 
     /* ------------------------------
        LIGHT-MODE HEADER OVERRIDES
-       - make header background black in light mode
-       - force header text/links/mode button white in light mode
-       - ensure it overrides header.light-outside-hero
        ------------------------------ */
-
     [data-theme="light"] header,
     [data-theme="light"] header.light-outside-hero {
       background: #000000 !important;
       border-bottom-color: rgba(255,255,255,0.15) !important;
     }
 
-    /* header content (text, links, buttons, toggle) forced to white in light mode */
     [data-theme="light"] header .brand .text,
     [data-theme="light"] header .nav-links a,
     [data-theme="light"] header .btn,
@@ -344,12 +332,29 @@
       border-color: rgba(255,255,255,0.18) !important;
     }
 
-    /* brighter underline in header for light mode */
     [data-theme="light"] header .nav-links a::after{
       background: linear-gradient(120deg, rgba(255,255,255,0.18), rgba(255,255,255,0.36), rgba(255,255,255,0.18)) !important;
     }
 
     @media (prefers-reduced-motion: reduce){*{transition:none !important}}
+
+    /* ------------------------------
+       Improved hamburger icon (three bars -> X)
+       ------------------------------ */
+    .hamburger .bar{
+      display:block;
+      width:20px;
+      height:2px;
+      background:currentColor;
+      border-radius:2px;
+      transition: transform .22s cubic-bezier(.2,.9,.2,1), opacity .18s ease;
+    }
+    .hamburger { width:44px;height:44px;display:grid;place-items:center;color:var(--text);border:1px solid var(--glass-border);border-radius:10px;background:var(--glass-strong) }
+    .hamburger .bars{display:flex;flex-direction:column;gap:5px;align-items:center;justify-content:center;transform-origin:center}
+    .hamburger.open .bar:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+    .hamburger.open .bar:nth-child(2){ opacity:0; transform: scaleX(0.8); }
+    .hamburger.open .bar:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
+
   </style>
 </head>
 <body>
@@ -374,55 +379,51 @@
         <!-- Theme toggle (visible) -->
         <button class="btn" id="themeToggle" aria-pressed="false" title="Toggle dark / light mode" aria-label="Toggle theme" ></button>
 
+        <!-- Improved hamburger -->
         <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span class="bars" aria-hidden="true">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Mobile nav overlay -->
+  <!-- Mobile nav overlay (top sheet) -->
   <div class="mobile-nav" id="mobileNav" aria-hidden="true">
-    <div class="panel" role="dialog" aria-modal="true" aria-label="Mobile navigation">
-      <a href="#home" data-close>Home</a>
-      <a href="#about" data-close>About</a>
-      <a href="#projects" data-close>Projects</a>
-      <a href="#contact" data-close>Contact</a>
-      <div style="height:12px"></div>
-      <div class="mobile-socials" aria-hidden="false">
-        <a href="#" aria-label="Instagram">
-          <!-- Small Instagram -->
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M12 8.5A3.5 3.5 0 1 0 12 15.5 3.5 3.5 0 0 0 12 8.5z" stroke="currentColor" stroke-width="1.4" fill="none"/><circle cx="17.7" cy="6.3" r="0.7" fill="currentColor"/></svg>
-        </a>
-        <a href="#" aria-label="GitHub">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><path d="M12 2C7.6 2 4 5.6 4 10c0 3.5 2.3 6.4 5.5 7.4.4.1.6-.2.6-.5v-1.7c-2.2.5-2.6-1-2.6-1-.3-.8-.8-1.0-1.6-1.2-.5-.1-.3-.9.1-.9.6 0 1 .6 1.1.9.6 1.1 1.6.8 2 .6.1-.5.3-.8.6-1-1.8-.2-3.6-.9-3.6-4 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8A7.6 7.6 0 0 1 12 7.6c.7 0 1.4.1 2 .2 1.5-1 2.2-.8 2.2-.8.5 1.1.2 1.9.1 2.1.5.5.8 1.2.8 2.1 0 3.1-1.8 3.7-3.6 3.9.3.3.6.8.6 1.6v2.3c0 .3.2.7.6.5A8 8 0 0 0 20 10c0-4.4-3.6-8-8-8z" stroke="currentColor" stroke-width="0.8" fill="none"/></svg>
-        </a>
-        <a href="#" aria-label="LinkedIn">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M8.5 10.5v5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8.5" cy="8" r=".6" fill="currentColor"/><path d="M12.2 15.5v-3c0-.9.7-1.6 1.6-1.6s1.6.7 1.6 1.6v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-        </a>
-        <a href="mailto:your.email@example.com" aria-label="Email">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M4.5 7.5l7 5 7-5" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
+    <div class="sheet" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+      <div class="panel">
+        <div class="close-tab">
+          <button class="close-btn" id="mobileCloseBtn" aria-label="Close menu" title="Close menu">&times;</button>
+        </div>
+        <a href="#home" data-close>Home</a>
+        <a href="#about" data-close>About</a>
+        <a href="#projects" data-close>Projects</a>
+        <a href="#contact" data-close>Contact</a>
+        <div style="height:12px"></div>
+        <div class="mobile-socials" aria-hidden="false">
+          <a href="#" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4" fill="none"/><path d="M12 8.5A3.5 3.5 0 1 0 12 15.5 3.5 3.5 0 0 0 12 8.5z" stroke="currentColor" stroke-width="1.4" fill="none"/><circle cx="17.7" cy="6.3" r="0.7" fill="currentColor"/></svg>
+          </a>
+          <a href="#" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><path d="M12 2C7.6 2 4 5.6 4 10c0 3.5 2.3 6.4 5.5 7.4.4.1.6-.2.6-.5v-1.7c-2.2.5-2.6-1-2.6-1-.3-.8-.8-1.0-1.6-1.2-.5-.1-.3-.9.1-.9.6 0 1 .6 1.1.9.6 1.1 1.6.8 2 .6.1-.5.3-.8.6-1-1.8-.2-3.6-.9-3.6-4 0-.9.3-1.6.8-2.1-.1-.2-.4-1 .1-2.1 0 0 .7-.2 2.2.8A7.6 7.6 0 0 1 12 7.6c.7 0 1.4.1 2 .2 1.5-1 2.2-.8 2.2-.8.5 1.1.2 1.9.1 2.1.5.5.8 1.2.8 2.1 0 3.1-1.8 3.7-3.6 3.9.3.3.6.8.6 1.6v2.3c0 .3.2.7.6.5A8 8 0 0 0 20 10c0-4.4-3.6-8-8-8z" stroke="currentColor" stroke-width="0.8" fill="none"/></svg>
+          </a>
+          <a href="#" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M8.5 10.5v5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8.5" cy="8" r=".6" fill="currentColor"/><path d="M12.2 15.5v-3c0-.9.7-1.6 1.6-1.6s1.6.7 1.6 1.6v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </a>
+          <a href="mailto:your.email@example.com" aria-label="Email">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M4.5 7.5l7 5 7-5" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- ================= HERO / HOME ================= -->
   <section class="hero" id="home" aria-label="Home section">
-    <div class="overlay" aria-hidden="true"></div>
-    <div class="container content">
-      <div style="max-width:980px">
-        <div class="kicker">Designer • Developer • Futurist</div>
-        <h1>Designing minimal, futuristic experiences<br/><span style="opacity:.9">— in black &amp; white</span></h1>
-        <p>I'm Abhinand — I craft clean, high-contrast user interfaces with micro-interactions and thoughtful accessibility. This template uses a transparent header, responsive hamburger navigation, and a persistent dark/light toggle.</p>
-        <div class="actions">
-          <a class="primary" href="#projects">See Projects</a>
-          <a class="secondary" href="#contact">Get In Touch</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Floating social icons: intentionally inside hero so they show only on home -->
+    <!-- moved social above container so on mobile it appears above the text & linear -->
     <div class="social-fixed" aria-hidden="false">
       <!-- Instagram -->
       <a href="https://instagram.com" title="Instagram (opens in new tab)" aria-label="Instagram" target="_blank" rel="noopener">
@@ -443,6 +444,19 @@
       <a href="mailto:your.email@example.com" title="Email" aria-label="Email">
         <svg viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mailTitle"><title id="mailTitle">Email</title><rect x="2.5" y="4.5" width="19" height="15" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M4.5 7.5l7 5 7-5" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
+    </div>
+
+    <div class="overlay" aria-hidden="true"></div>
+    <div class="container content">
+      <div style="max-width:980px">
+        <div class="kicker">Designer • Developer • Futurist</div>
+        <h1>Designing minimal, futuristic experiences<br/><span style="opacity:.9">— in black &amp; white</span></h1>
+        <p>I'm Abhinand — I craft clean, high-contrast user interfaces with micro-interactions and thoughtful accessibility. This template uses a transparent header, responsive hamburger navigation, and a persistent dark/light toggle.</p>
+        <div class="actions">
+          <a class="primary" href="#projects">See Projects</a>
+          <a class="secondary" href="#contact">Get In Touch</a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -540,7 +554,6 @@
     }
 
     function updateHeaderContrast(){
-      // If theme is light AND hero is not visible -> set header to black text
       const theme = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
       if(theme === 'light' && !heroVisible) header.classList.add('light-outside-hero');
       else header.classList.remove('light-outside-hero');
@@ -550,13 +563,8 @@
       if(theme === 'dark') root.setAttribute('data-theme','dark');
       else root.setAttribute('data-theme','light');
       updateToggleUI(theme);
-      // keep hero social icons white
       document.querySelectorAll('.social-fixed a').forEach(a=> a.style.color = '#ffffff');
-
-      // ensure header links and buttons follow --text
       document.querySelectorAll('header .nav-links a, .btn, .primary, .secondary').forEach(el=> el.style.color = getComputedStyle(root).getPropertyValue('--text'));
-
-      // update header contrast based on hero visibility
       updateHeaderContrast();
     }
 
@@ -592,14 +600,48 @@
     }, { root: null, threshold: 0.22 });
     if(hero) heroObserver.observe(hero);
 
-    // Mobile nav
+
+    /* ==============
+       Mobile nav + hamburger handling (improved)
+       ============== */
     const mobileNav = document.getElementById('mobileNav');
     const hamburgerBtn = document.getElementById('hamburgerBtn');
-    function openMobile(){ mobileNav.classList.add('open'); hamburgerBtn.setAttribute('aria-expanded','true'); mobileNav.setAttribute('aria-hidden','false'); }
-    function closeMobile(){ mobileNav.classList.remove('open'); hamburgerBtn.setAttribute('aria-expanded','false'); mobileNav.setAttribute('aria-hidden','true'); }
-    hamburgerBtn.addEventListener('click', ()=>{ if(mobileNav.classList.contains('open')) closeMobile(); else openMobile(); });
+    const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+
+    function openMobile(){
+      mobileNav.classList.add('open');
+      mobileNav.setAttribute('aria-hidden','false');
+      hamburgerBtn.setAttribute('aria-expanded','true');
+      hamburgerBtn.classList.add('open');
+      // lock scroll
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    }
+    function closeMobile(){
+      mobileNav.classList.remove('open');
+      mobileNav.setAttribute('aria-hidden','true');
+      hamburgerBtn.setAttribute('aria-expanded','false');
+      hamburgerBtn.classList.remove('open');
+      // unlock scroll
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      // return focus to hamburger for accessibility
+      hamburgerBtn.focus();
+    }
+
+    hamburgerBtn.addEventListener('click', ()=>{
+      if(mobileNav.classList.contains('open')) closeMobile();
+      else openMobile();
+    });
+
+    mobileCloseBtn?.addEventListener('click', closeMobile);
     mobileNav.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click', closeMobile));
     window.addEventListener('resize', ()=>{ if(window.innerWidth > 900) closeMobile(); });
+
+    // Close on ESC
+    window.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && mobileNav.classList.contains('open')) closeMobile();
+    });
 
     // Smooth scroll for in-page links (keep this)
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
@@ -622,7 +664,6 @@
         entries.forEach(entry => {
           const id = entry.target.id ? `#${entry.target.id}` : null;
           if(entry.isIntersecting && id){
-            // set active
             Object.values(linkMap).forEach(l => { l.classList.remove('active'); l.removeAttribute('aria-current'); });
             const active = linkMap[id];
             if(active){ active.classList.add('active'); active.setAttribute('aria-current','true'); }
@@ -631,24 +672,17 @@
       },{ root: null, rootMargin: '-40% 0px -40% 0px', threshold: 0 });
 
       sections.forEach(s => observer.observe(s));
-
-      // ensure home link active on load if near top
       window.addEventListener('load', ()=>{
-        setTimeout(()=>{
-          sections.forEach(s => { /* trigger observer */ });
-        }, 60);
+        setTimeout(()=>{ sections.forEach(s => {}); }, 60);
       });
     })();
 
     /* ===========================
        Section snap on wheel & touch
-       - Moves to next/previous section on scroll or swipe
-       - Respects prefers-reduced-motion
-       - Uses scroll-margin-top (CSS) to account for fixed header
        =========================== */
     (function(){
       const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if(prefersReduced) return; // do nothing if reduced motion
+      if(prefersReduced) return;
 
       const sections = Array.from(document.querySelectorAll('section[id]'));
       if(!sections.length) return;
@@ -656,16 +690,14 @@
       let isAutoScrolling = false;
       let touchStartY = null;
       let lastWheelTime = 0;
-      const SCROLL_TIMEOUT = 800; // ms - prevent repeated triggers
+      const SCROLL_TIMEOUT = 800; // ms
 
       function indexOfNearestSection(){
         const scrollTop = window.scrollY || window.pageYOffset;
-        // find the section whose top is nearest but <= current scroll + offset
         let bestIndex = 0;
         let bestDistance = Infinity;
         for(let i=0;i<sections.length;i++){
           const rect = sections[i].getBoundingClientRect();
-          // compute distance from viewport top adjusted by header height (but we use absolute)
           const distance = Math.abs((rect.top + window.scrollY) - scrollTop);
           if(distance < bestDistance){ bestDistance = distance; bestIndex = i; }
         }
@@ -678,18 +710,14 @@
         const target = sections[i];
         if(!target) return;
         isAutoScrolling = true;
-        // Use scrollIntoView which will respect scroll-margin-top
         target.scrollIntoView({behavior: 'smooth', block: 'start'});
-        // Unlock after timeout (approximate)
         clearTimeout(window._sectionSnapTimer);
         window._sectionSnapTimer = setTimeout(()=>{ isAutoScrolling = false; }, SCROLL_TIMEOUT);
       }
 
-      // Wheel handler
       function onWheel(e){
         if(isAutoScrolling) { e.preventDefault(); return; }
         const now = Date.now();
-        // throttle - ignore if last wheel recently triggered
         if(now - lastWheelTime < 120) return;
         lastWheelTime = now;
 
@@ -699,22 +727,13 @@
         e.preventDefault();
 
         const currentIndex = indexOfNearestSection();
-        if(delta > 0){
-          // scroll down -> next
-          scrollToSectionIndex(currentIndex + 1);
-        } else {
-          // scroll up -> prev
-          scrollToSectionIndex(currentIndex - 1);
-        }
+        if(delta > 0) scrollToSectionIndex(currentIndex + 1);
+        else scrollToSectionIndex(currentIndex - 1);
       }
 
-      // Touch handlers for mobile swipe
       function onTouchStart(e){
-        if(e.touches && e.touches.length === 1){
-          touchStartY = e.touches[0].clientY;
-        } else {
-          touchStartY = null;
-        }
+        if(e.touches && e.touches.length === 1) touchStartY = e.touches[0].clientY;
+        else touchStartY = null;
       }
       function onTouchEnd(e){
         if(isAutoScrolling || touchStartY === null) return;
@@ -722,48 +741,27 @@
         if(touchEndY === null) return;
         const diff = touchStartY - touchEndY;
         const abs = Math.abs(diff);
-        const THRESHOLD = Math.max(40, window.innerHeight * 0.06); // ~6% of viewport or 40px
+        const THRESHOLD = Math.max(40, window.innerHeight * 0.06);
         if(abs < THRESHOLD) return;
         const currentIndex = indexOfNearestSection();
-        if(diff > 0){
-          // swipe up -> go next
-          scrollToSectionIndex(currentIndex + 1);
-        } else {
-          // swipe down -> go prev
-          scrollToSectionIndex(currentIndex - 1);
-        }
+        if(diff > 0) scrollToSectionIndex(currentIndex + 1);
+        else scrollToSectionIndex(currentIndex - 1);
         touchStartY = null;
       }
 
-      // Add passive:false to wheel/touch to be able to preventDefault
       window.addEventListener('wheel', onWheel, {passive:false});
       window.addEventListener('touchstart', onTouchStart, {passive:true});
       window.addEventListener('touchend', onTouchEnd, {passive:false});
 
-      // Optionally allow keyboard navigation (PageUp/PageDown/ArrowKeys/Home/End)
       window.addEventListener('keydown', (e) => {
         if(isAutoScrolling) return;
         const key = e.key;
         let currentIndex = indexOfNearestSection();
-        if(key === 'PageDown' || key === 'ArrowDown'){
-          e.preventDefault();
-          scrollToSectionIndex(currentIndex + 1);
-        } else if(key === 'PageUp' || key === 'ArrowUp'){
-          e.preventDefault();
-          scrollToSectionIndex(currentIndex - 1);
-        } else if(key === 'Home'){
-          e.preventDefault();
-          scrollToSectionIndex(0);
-        } else if(key === 'End'){
-          e.preventDefault();
-          scrollToSectionIndex(sections.length - 1);
-        }
+        if(key === 'PageDown' || key === 'ArrowDown'){ e.preventDefault(); scrollToSectionIndex(currentIndex + 1); }
+        else if(key === 'PageUp' || key === 'ArrowUp'){ e.preventDefault(); scrollToSectionIndex(currentIndex - 1); }
+        else if(key === 'Home'){ e.preventDefault(); scrollToSectionIndex(0); }
+        else if(key === 'End'){ e.preventDefault(); scrollToSectionIndex(sections.length - 1); }
       });
-
-      // If user uses mouse wheel but then manually scrolls, we still want to normalize header contrast:
-      window.addEventListener('scroll', () => {
-        // nothing heavy here; hero observer handles header contrast
-      }, {passive:true});
     })();
   </script>
 </body>

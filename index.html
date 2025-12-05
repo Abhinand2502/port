@@ -3,13 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Futuristic — Portfolio (Updated)</title>
+  <title>Futuristic — Portfolio (Fixed)</title>
   <style>
     /* ------------------------------
        Design tokens
        ------------------------------ */
     :root{
-      /* Light-mode (user requested): slightly lighter dark grey background + white text/icons */
       --bg: #ffffff;
       --surface: rgba(255,255,255,0.04);
       --text: #ffffff;
@@ -31,16 +30,13 @@
       --link-anim-start: rgba(255,255,255,0.06);
       --link-anim-end: rgba(255,255,255,0.12);
 
-      /* header background for light theme (subtle grey) */
       --header-bg: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
       --header-border: rgba(255,255,255,0.06);
 
-      /* hero background brightness control (less dark than before) - increased for lighter image visibility in both themes */
-      --hero-brightness: 0.62; /* light mode baseline (less dark) */
-      --hero-overlay-start: rgba(0,0,0,0.24); /* lighter overlay */
+      --hero-brightness: 0.62;
+      --hero-overlay-start: rgba(0,0,0,0.24);
       --hero-overlay-end: rgba(0,0,0,0.32);
 
-      /* section bg for light mode (greyish white for other pages) */
       --section-bg-light: #f5f5f5;
       --section-card-light: #ffffff;
     }
@@ -60,11 +56,9 @@
       --link-anim-end: rgba(255,255,255,0.12);
       --social-bg: rgba(0,0,0,0.65);
 
-      /* darker header in dark theme */
       --header-bg: linear-gradient(180deg, rgba(0,0,0,0.22), rgba(0,0,0,0.12));
       --header-border: rgba(255,255,255,0.04);
 
-      /* slightly brighter hero for dark theme (reduced darkness) */
       --hero-brightness: 0.42;
       --hero-overlay-start: rgba(0,0,0,0.35);
       --hero-overlay-end: rgba(0,0,0,0.45);
@@ -91,16 +85,7 @@
       scroll-behavior: smooth;
       scroll-snap-type: y mandatory;
     }
-
-    section{
-      scroll-snap-align: start;
-      scroll-margin-top: calc(var(--nav-height) + 8px);
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      html,body{ scroll-behavior: auto; scroll-snap-type: none; }
-      section{ scroll-snap-align: none; scroll-margin-top: 0; }
-    }
+    section{ scroll-snap-align: start; scroll-margin-top: calc(var(--nav-height) + 8px); }
 
     .container{max-width:var(--max-width);margin:0 auto;padding:0 20px;}
 
@@ -109,7 +94,7 @@
 
     /* Header / Nav */
     header{
-      position:fixed;inset:0 0 auto 0;height:var(--nav-height);display:flex;align-items:center;z-index:60;
+      position:fixed;inset:0 0 auto 0;height:var(--nav-height);display:flex;align-items:center;z-index:120;
       backdrop-filter: blur(8px) saturate(120%);
       background: var(--header-bg);
       border-bottom:1px solid var(--header-border);
@@ -142,7 +127,6 @@
       font-weight:700;
       position:relative;
       transition:color .25s ease, transform .18s ease;
-      overflow:visible;
       display:inline-block;
       letter-spacing:0.02em;
     }
@@ -161,34 +145,20 @@
       background-position: 0% 50%;
     }
 
-    .nav-links a:hover::after,
-    .nav-links a:focus::after{
-      opacity:1;
-      transform: translateY(0) scaleX(1);
-      animation: shimmer 1s linear infinite;
-    }
-
-    @keyframes shimmer{
-      0%{ background-position: 0% 50%;}
-      100%{ background-position: 200% 50%;}
-    }
-
+    .nav-links a:hover::after,.nav-links a:focus::after{ opacity:1; transform: translateY(0) scaleX(1); animation: shimmer 1s linear infinite; }
+    @keyframes shimmer{ 0%{ background-position: 0% 50%;} 100%{ background-position: 200% 50%;} }
     .nav-links a:hover{ transform: translateY(-3px); }
-
     .nav-links a.active{ color:var(--accent-anim); }
-    .nav-links a.active::after{
-      opacity:1; transform: translateY(0) scaleX(1);
-      background: linear-gradient(90deg, var(--accent-anim), #8ab4ff, #ffffff);
-      animation: activeGradient 2.8s linear infinite;
-    }
+    .nav-links a.active::after{ opacity:1; transform: translateY(0) scaleX(1); background: linear-gradient(90deg, var(--accent-anim), #8ab4ff, #ffffff); animation: activeGradient 2.8s linear infinite; }
     @keyframes activeGradient{ 0%{ background-position:0% 50%; } 100%{ background-position:200% 50%; } }
 
     .actions{display:flex;align-items:center;gap:10px}
     .btn{display:inline-flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;border:1px solid var(--glass-border);background:transparent;font-weight:600;cursor:pointer;color:var(--text)}
     .btn:focus{outline:2px solid rgba(255,255,255,0.06);outline-offset:2px}
 
-    /* Default: hide hamburger on larger screens */
-    .hamburger{display:none;border:0;background:transparent;padding:8px;border-radius:8px;cursor:pointer}
+    /* Hamburger & theme styling */
+    .hamburger{display:none;border:0;background:transparent;padding:8px;border-radius:8px;cursor:pointer;color:var(--text)}
+    .hamburger svg{ stroke:currentColor; display:block; }
     .hamburger:focus{outline:3px solid rgba(255,255,255,0.08);outline-offset:3px}
 
     #themeToggle{
@@ -198,6 +168,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.06);
       padding:0;
     }
+    #themeToggle svg{ display:block; stroke:currentColor; }
     #themeToggle:active{ transform: translateY(1px) }
     #themeToggle:focus{ outline: 3px solid rgba(255,255,255,0.08); outline-offset:3px; }
 
@@ -205,26 +176,26 @@
        Hero / Home
        ------------------------------ */
     .hero{
-      /* ensure hero content sits centered *below* the fixed header */
+      /* Respect fixed header: full viewport minus header */
       min-height: calc(100vh - var(--nav-height));
-      padding-top: 0;
+      padding-top: var(--nav-height);
       display:flex;
       align-items:center;
       justify-content:center;
-      position:relative;overflow:hidden;
+      position:relative; overflow:hidden;
       background: none;
       flex-direction:column;
     }
-    /* pseudo-background so content stays independent; keep B&W look in both themes */
     .hero::before{
       content:"";
       position:absolute;inset:0;
       background-image: url('assets/bg.jpg');
-      background-size:cover;background-position:center center;background-repeat:no-repeat;
+      /* ensure the image covers and is centered on all viewports */
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
       z-index:1;
-      /* grayscale + controlled brightness so image is slightly more visible/grey */
       filter: grayscale(100%) contrast(1.06) brightness(var(--hero-brightness)) saturate(0.6);
-      mix-blend-mode:normal;
       transition: filter .35s ease, opacity .35s ease, transform .35s ease;
       transform-origin:center;
     }
@@ -232,23 +203,24 @@
     .hero .overlay{position:absolute;inset:0;z-index:2;pointer-events:none}
     .hero .overlay{ background: linear-gradient(180deg, var(--hero-overlay-start), var(--hero-overlay-end)); }
 
-    /* center the content block both vertically and horizontally and keep it constrained */
-    .hero .content{position:relative;z-index:3; width:100%}
+    /* center content block */
+    .hero .content{position:relative;z-index:3;width:100%;display:flex;align-items:center;justify-content:center}
     .hero .container.content{
       display:flex;
+      flex-direction:column;
       align-items:center;
       justify-content:center;
       text-align:center;
       z-index:4;
-      padding: 40px 20px;
+      padding: 48px 20px;
       box-sizing: border-box;
     }
 
     .hero .kicker{font-size:14px;letter-spacing:0.28em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
-    .hero h1{font-size:clamp(34px,6vw,68px);margin:0;line-height:0.92;letter-spacing:-0.02em}
-    .hero p{max-width:720px;font-size:clamp(16px,1.2vw,18px);color:var(--muted);}    
+    .hero h1{font-size:clamp(34px,6vw,68px);margin:0;line-height:0.96;letter-spacing:-0.02em}
+    .hero p{max-width:720px;font-size:clamp(16px,1.2vw,18px);color:var(--muted);margin-top:14px}
 
-    .hero .actions{margin-top:28px}
+    .hero .actions{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap; justify-content:center}
     .primary{background:transparent;border:1px solid var(--accent);padding:12px 18px;border-radius:12px;font-weight:700;color:var(--text)}
     .secondary{background:transparent;border:1px dashed var(--glass-border);padding:10px 16px;border-radius:10px;color:var(--text)}
 
@@ -270,7 +242,7 @@
     textarea{min-height:120px}
 
     /* Floating social (positioned within home only) */
-    .social-fixed{position:absolute;right:20px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;z-index:55}
+    .social-fixed{position:absolute;right:20px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;z-index:110}
     .social-fixed a{
       display:inline-grid;place-items:center;
       width:64px;height:64px;border-radius:14px;border:1px solid rgba(255,255,255,0.06);
@@ -282,54 +254,42 @@
     .social-fixed a:hover{ transform: translateY(-8px); box-shadow: 0 18px 40px rgba(0,0,0,0.18); }
     .social-fixed svg{ width:28px;height:28px; display:block; stroke:currentColor; fill:currentColor; }
 
-    section.section{
-      padding: 80px 0;
-    }
-    [data-theme="light"] section.section{
-      background: var(--section-bg-light);
-      color: #0a0a0a;
-    }
-    [data-theme="light"] section.section .card{
-      background: var(--section-card-light);
-      color: #0a0a0a;
-      border-color: rgba(0,0,0,0.06);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-    }
-    /* Keep hero untouched */
-    #home.section{ background: none; }
+    section.section{ padding: 80px 0; }
+    [data-theme="light"] section.section{ background: var(--section-bg-light); color: #0a0a0a; }
+    [data-theme="light"] section.section .card{ background: var(--section-card-light); color: #0a0a0a; border-color: rgba(0,0,0,0.06); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
 
     /* Mobile adjustments */
     @media (max-width:900px){
       .nav-links{display:none}
-      /* show simple hamburger in mobile only */
       .hamburger{display:inline-flex}
       header{padding:0 14px}
-      /* Move social to bottom area on mobile for better layout */
       .social-fixed{position:relative;right:auto;top:auto;transform:none;display:flex;flex-direction:row;gap:12px;justify-content:center;margin:14px 0 6px;z-index:3}
       .social-fixed a{width:48px;height:48px;border-radius:10px}
       .hero h1{font-size:clamp(28px,7vw,48px)}
       .hero .container { z-index:4; position:relative; padding-bottom:36px; }
 
-      /* *** NEW: hide brand text to prevent header overflow on small screens *** */
       .brand .text { display: none; }
-
-      /* Make header actions align nicely when nav hidden */
       .actions { margin-left: 8px; }
-      /* Slightly reduce logo on small phones */
       .brand .logo { width:32px; height:32px; }
 
-      /* improve spacing for hero content on mobile */
       .hero .container.content { padding-top: 22px; padding-bottom: 32px; align-items: center; text-align: center; }
-
-      /* bigger tappable area for hamburger and theme toggle */
       #themeToggle, .hamburger { width:48px; height:48px; }
       #themeToggle { border-radius: 12px; }
     }
 
-    /* Mobile nav overlay (top sheet)
-       minimal style changes only — keep your original look but prevent the sheet from exceeding viewport */
-    .mobile-nav{position:fixed;inset:0;background:transparent;display:flex;align-items:flex-start;justify-content:center;z-index:120;pointer-events:none}
-    /* more robust sheet sizing and centering on narrow screens */
+    /* Mobile nav overlay (sheet) improvements */
+    .mobile-nav{
+      position:fixed;inset:0;display:flex;align-items:flex-start;justify-content:center;z-index:140;
+      /* hide by default (visibility prevents accidental interaction / display jumps) */
+      visibility:hidden;
+      pointer-events:none;
+    }
+
+    .mobile-nav.open{
+      visibility:visible;
+      pointer-events:auto;
+    }
+
     .mobile-nav .sheet{
       width: calc(100% - 32px);
       max-width:760px;
@@ -337,53 +297,32 @@
       border-radius:12px;
       margin:12px auto 0;
       border:1px solid var(--glass-border);
-      transform:translateY(-6%);
+      transform:translateY(-12%);
       opacity:0;
-      transition:transform .28s cubic-bezier(.2,.9,.25,1),opacity .28s ease;
-      pointer-events:auto;
+      visibility:hidden;
+      transition:transform .28s cubic-bezier(.2,.9,.25,1),opacity .28s ease,visibility .18s;
       box-shadow:0 30px 80px rgba(0,0,0,0.5);
       max-height: calc(100vh - 48px);
       overflow: auto;
       -webkit-overflow-scrolling: touch;
     }
-    .mobile-nav.open .sheet{transform:translateY(0);opacity:1}
+    .mobile-nav.open .sheet{
+      transform:translateY(0);
+      opacity:1;
+      visibility:visible;
+    }
     .mobile-nav .panel{padding:22px}
     .mobile-nav .close-tab{display:flex;justify-content:flex-end}
     .mobile-nav .close-btn{background:transparent;border:0;padding:8px;border-radius:8px;cursor:pointer;font-size:22px;line-height:1}
-    .mobile-nav[aria-hidden="true"]{pointer-events:none}
-    .mobile-nav[aria-hidden="false"]{pointer-events:auto}
-
-    /* *** NEW: ensure sheet is scrollable and never taller than viewport on small screens *** */
-    .mobile-nav .sheet { /* already set above */ }
-
     .mobile-nav a{display:block;padding:12px 0;font-weight:700;text-decoration:none;color:var(--text); font-size:18px}
     .mobile-nav a:focus{ outline: 3px solid rgba(255,255,255,0.08); outline-offset:6px; border-radius:6px; }
-
     .mobile-socials{display:flex;gap:12px;justify-content:center;margin-top:12px}
     .mobile-socials a{width:46px;height:46px;border-radius:10px;display:grid;place-items:center;background:var(--social-bg);color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,0.04)}
 
-    /* ------------------------------
-       LIGHT-MODE HEADER OVERRIDES
-       ------------------------------ */
-    [data-theme="light"] header,
-    [data-theme="light"] header.light-outside-hero {
-      background: #000000 !important;
-      border-bottom-color: rgba(255,255,255,0.15) !important;
-    }
-
-    [data-theme="light"] header .brand .text,
-    [data-theme="light"] header .nav-links a,
-    [data-theme="light"] header .btn,
-    [data-theme="light"] header .primary,
-    [data-theme="light"] header .secondary,
-    [data-theme="light"] header #themeToggle {
-      color: #ffffff !important;
-      border-color: rgba(255,255,255,0.18) !important;
-    }
-
-    [data-theme="light"] header .nav-links a::after{
-      background: linear-gradient(120deg, rgba(255,255,255,0.18), rgba(255,255,255,0.36), rgba(255,255,255,0.18)) !important;
-    }
+    /* LIGHT-MODE HEADER OVERRIDES */
+    [data-theme="light"] header, [data-theme="light"] header.light-outside-hero { background: #000000 !important; border-bottom-color: rgba(255,255,255,0.15) !important; }
+    [data-theme="light"] header .brand .text, [data-theme="light"] header .nav-links a, [data-theme="light"] header .btn, [data-theme="light"] header .primary, [data-theme="light"] header .secondary, [data-theme="light"] header #themeToggle { color: #ffffff !important; border-color: rgba(255,255,255,0.18) !important; }
+    [data-theme="light"] header .nav-links a::after{ background: linear-gradient(120deg, rgba(255,255,255,0.18), rgba(255,255,255,0.36), rgba(255,255,255,0.18)) !important; }
 
     @media (prefers-reduced-motion: reduce){*{transition:none !important}}
   </style>
@@ -410,7 +349,7 @@
         <!-- Theme toggle (visible) -->
         <button class="btn" id="themeToggle" aria-pressed="false" title="Toggle dark / light mode" aria-label="Toggle theme" ></button>
 
-        <!-- SIMPLE (idiot) hamburger - visible only on mobile (CSS) -->
+        <!-- hamburger (shows on mobile) -->
         <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
         </button>
@@ -450,24 +389,16 @@
 
   <!-- ================= HERO / HOME ================= -->
   <section class="hero" id="home" aria-label="Home section">
-    <!-- moved social above container so on mobile it appears above the text & linear -->
     <div class="social-fixed" aria-hidden="false">
-      <!-- Instagram -->
       <a href="https://instagram.com" title="Instagram (opens in new tab)" aria-label="Instagram" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="igTitle"><title id="igTitle">Instagram</title><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.3" fill="none" /><path d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8z" stroke="currentColor" stroke-width="1.3" fill="none"/><circle cx="17.7" cy="6.3" r="0.6" fill="currentColor"/></svg>
       </a>
-
-      <!-- GitHub -->
       <a href="https://github.com" title="GitHub (opens in new tab)" aria-label="GitHub" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ghTitle"><title id="ghTitle">GitHub</title><path d="M12 2C7.58 2 4 5.58 4 10c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.35c-2.22.48-2.69-1.05-2.69-1.05-.36-.92-.88-1.17-.88-1.17-.72-.5.05-.49.05-.49.8.06 1.22.82 1.22.82.71 1.21 1.86.86 2.31.66.07-.52.28-.86.5-1.06-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.58.82-2.13-.08-.2-.36-1 .1-2.1 0 0 .67-.22 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.52-1.04 2.19-.82 2.19-.82.44 1.1.16 1.92.08 2.12.51.55.82 1.26.82 2.13 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 20 10c0-4.42-3.58-8-8-8z" fill="currentColor"/></svg>
       </a>
-
-      <!-- LinkedIn -->
       <a href="https://linkedin.com" title="LinkedIn (opens in new tab)" aria-label="LinkedIn" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="liTitle"><title id="liTitle">LinkedIn</title><rect x="3" y="3" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M8.5 10.8v5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="8.5" cy="8.2" r="0.6" fill="currentColor"/><path d="M12.2 15.8v-3c0-.95.77-1.72 1.72-1.72s1.72.77 1.72 1.72v3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
       </a>
-
-      <!-- Email -->
       <a href="mailto:your.email@example.com" title="Email" aria-label="Email">
         <svg viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mailTitle"><title id="mailTitle">Email</title><rect x="2.5" y="4.5" width="19" height="15" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M4.5 7.5l7 5 7-5" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
@@ -559,7 +490,7 @@
     // Initialize year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Theme toggle (robust, persists to localStorage, respects system changes when not explicitly set)
+    // Theme toggle (persist, respect system)
     const root = document.documentElement;
     const THEME_KEY = 'fw_theme_mode';
     const themeToggle = document.getElementById('themeToggle');
@@ -569,7 +500,7 @@
     const sunSvg = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>';
     const moonSvg = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>';
 
-    let heroVisible = true; // tracks if hero is in view
+    let heroVisible = true;
 
     function updateToggleUI(theme){
       themeToggle.innerHTML = theme === 'dark' ? moonSvg : sunSvg;
@@ -618,7 +549,7 @@
     });
     themeToggle.addEventListener('keyup', (e)=>{ if(e.key === 'Enter' || e.key === ' ') themeToggle.click(); });
 
-    // Observe hero visibility to toggle header text color in light-mode
+    // Observe hero visibility
     const heroObserver = new IntersectionObserver((entries)=>{
       entries.forEach(entry => {
         heroVisible = entry.isIntersecting;
@@ -628,87 +559,101 @@
     if(hero) heroObserver.observe(hero);
 
 
-    /* ==============
-       Mobile nav + hamburger handling (kept original behaviour; added small fixes)
-       ============== */
+    /* Mobile nav + hamburger handling (robust) */
     const mobileNav = document.getElementById('mobileNav');
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const mobileCloseBtn = document.getElementById('mobileCloseBtn');
 
+    // Force an initial closed state to prevent accidental open on some browsers
+    (function initMobileState(){
+      try{
+        if(mobileNav){
+          mobileNav.classList.remove('open');
+          mobileNav.setAttribute('aria-hidden','true');
+          // if style applied inline earlier by some script, remove it
+          mobileNav.style.visibility = '';
+          mobileNav.style.pointerEvents = '';
+        }
+        if(hamburgerBtn) hamburgerBtn.setAttribute('aria-expanded','false');
+      }catch(e){ /* silent fallback */ }
+    })();
+
     function openMobile(){
+      if(!mobileNav) return;
       mobileNav.classList.add('open');
       mobileNav.setAttribute('aria-hidden','false');
-      hamburgerBtn.setAttribute('aria-expanded','true');
-      // keep focus and lock scroll
+      hamburgerBtn?.setAttribute('aria-expanded','true');
       document.documentElement.style.overflow = 'hidden';
       document.body.style.overflow = 'hidden';
-
-      // focus first close-able link for keyboard users
+      // focus first link
       const firstLink = mobileNav.querySelector('[data-close]');
       if(firstLink) firstLink.focus();
     }
     function closeMobile(){
+      if(!mobileNav) return;
       mobileNav.classList.remove('open');
       mobileNav.setAttribute('aria-hidden','true');
-      hamburgerBtn.setAttribute('aria-expanded','false');
+      hamburgerBtn?.setAttribute('aria-expanded','false');
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
-      // restore focus to hamburger for keyboard users
-      try { hamburgerBtn.focus(); } catch(e) {}
+      try{ hamburgerBtn?.focus(); }catch(e){}
     }
 
-    // ensure elements exist before attaching listeners (robust in older browsers)
-    if(hamburgerBtn){
-      hamburgerBtn.addEventListener('click', ()=>{
+    // attach listeners safely
+    if(hamburgerBtn && mobileNav){
+      hamburgerBtn.addEventListener('click', (e)=>{
+        e.stopPropagation();
         if(mobileNav.classList.contains('open')) closeMobile();
         else openMobile();
       });
-      // keyboard open via Enter/Space
       hamburgerBtn.addEventListener('keyup', (e)=>{ if(e.key === 'Enter' || e.key === ' ') hamburgerBtn.click(); });
     }
 
     if(mobileCloseBtn){
-      mobileCloseBtn.addEventListener('click', closeMobile);
+      mobileCloseBtn.addEventListener('click', (e)=>{ e.stopPropagation(); closeMobile(); });
       mobileCloseBtn.addEventListener('keyup', (e)=>{ if(e.key === 'Enter' || e.key === ' ') closeMobile(); });
     }
 
-    // close when clicking any link
-    mobileNav.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click', closeMobile));
-    // close when clicking outside sheet (on the mobileNav parent)
-    mobileNav.addEventListener('click', (e)=>{
-      if(e.target === mobileNav) closeMobile();
-    });
+    // close when clicking any link inside sheet
+    if(mobileNav){
+      mobileNav.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click', (e)=>{
+        // small delay to allow anchor to process if needed, but immediate close is fine for SPA
+        closeMobile();
+      }));
 
-    // ensure we close mobile on desktop resize (keeps original behaviour)
+      // close when clicking outside the sheet (i.e. backdrop)
+      mobileNav.addEventListener('click', (e)=>{
+        if(e.target === mobileNav) closeMobile();
+      });
+    }
+
+    // ensure we close mobile on desktop resize
     window.addEventListener('resize', ()=>{ if(window.innerWidth > 900) closeMobile(); });
 
-    // Close on ESC
+    // Close on ESC globally
     window.addEventListener('keydown', (e) => {
-      if(e.key === 'Escape' && mobileNav.classList.contains('open')) closeMobile();
+      if(e.key === 'Escape' && mobileNav && mobileNav.classList.contains('open')) closeMobile();
     });
 
-    // Smooth scroll for in-page links (keep this)
+    // Smooth scroll for in-page links
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
       a.addEventListener('click', function(e){
         const href = this.getAttribute('href');
-        if(href === '#') return;
+        if(!href || href === '#') return;
         const target = document.querySelector(href);
         if(target){
           e.preventDefault();
-          // close mobile menu when a link is clicked (keeps nav tidy)
-          if(mobileNav.classList.contains('open')) closeMobile();
+          if(mobileNav && mobileNav.classList.contains('open')) closeMobile();
           target.scrollIntoView({behavior:'smooth',block:'start'});
         }
       });
     });
 
-    // Scrollspy: highlight nav link for the section in view and add animated color
+    // Scrollspy (unchanged)
     (function(){
       const sections = document.querySelectorAll('section[id]');
       const navLinks = document.querySelectorAll('.nav-links a');
-
       const linkMap = Array.from(navLinks).reduce((acc, a) => { acc[a.getAttribute('href')] = a; return acc; }, {});
-
       const observer = new IntersectionObserver((entries)=>{
         entries.forEach(entry => {
           const id = entry.target.id ? `#${entry.target.id}` : null;
@@ -719,32 +664,20 @@
           }
         });
       },{ root: null, rootMargin: '-40% 0px -40% 0px', threshold: 0 });
-
       sections.forEach(s => observer.observe(s));
-      window.addEventListener('load', ()=>{
-        setTimeout(()=>{ sections.forEach(s => {}); }, 60);
-      });
+      window.addEventListener('load', ()=>{ setTimeout(()=>{}, 60); });
     })();
 
-    /* ===========================
-       Section snap on wheel & touch
-       =========================== */
+    /* Section snap (unchanged) */
     (function(){
       const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if(prefersReduced) return;
-
       const sections = Array.from(document.querySelectorAll('section[id]'));
       if(!sections.length) return;
-
-      let isAutoScrolling = false;
-      let touchStartY = null;
-      let lastWheelTime = 0;
-      const SCROLL_TIMEOUT = 800; // ms
-
+      let isAutoScrolling = false; let touchStartY = null; let lastWheelTime = 0; const SCROLL_TIMEOUT = 800;
       function indexOfNearestSection(){
         const scrollTop = window.scrollY || window.pageYOffset;
-        let bestIndex = 0;
-        let bestDistance = Infinity;
+        let bestIndex = 0; let bestDistance = Infinity;
         for(let i=0;i<sections.length;i++){
           const rect = sections[i].getBoundingClientRect();
           const distance = Math.abs((rect.top + window.scrollY) - scrollTop);
@@ -752,10 +685,8 @@
         }
         return bestIndex;
       }
-
       function scrollToSectionIndex(i){
-        if(i < 0) i = 0;
-        if(i >= sections.length) i = sections.length - 1;
+        if(i < 0) i = 0; if(i >= sections.length) i = sections.length - 1;
         const target = sections[i];
         if(!target) return;
         isAutoScrolling = true;
@@ -763,33 +694,24 @@
         clearTimeout(window._sectionSnapTimer);
         window._sectionSnapTimer = setTimeout(()=>{ isAutoScrolling = false; }, SCROLL_TIMEOUT);
       }
-
       function onWheel(e){
         if(isAutoScrolling) { e.preventDefault(); return; }
         const now = Date.now();
         if(now - lastWheelTime < 120) return;
         lastWheelTime = now;
-
         const delta = e.deltaY;
         if(Math.abs(delta) < 10) return;
-
         e.preventDefault();
-
         const currentIndex = indexOfNearestSection();
         if(delta > 0) scrollToSectionIndex(currentIndex + 1);
         else scrollToSectionIndex(currentIndex - 1);
       }
-
-      function onTouchStart(e){
-        if(e.touches && e.touches.length === 1) touchStartY = e.touches[0].clientY;
-        else touchStartY = null;
-      }
+      function onTouchStart(e){ if(e.touches && e.touches.length === 1) touchStartY = e.touches[0].clientY; else touchStartY = null; }
       function onTouchEnd(e){
         if(isAutoScrolling || touchStartY === null) return;
         const touchEndY = (e.changedTouches && e.changedTouches[0] && e.changedTouches[0].clientY) || null;
         if(touchEndY === null) return;
-        const diff = touchStartY - touchEndY;
-        const abs = Math.abs(diff);
+        const diff = touchStartY - touchEndY; const abs = Math.abs(diff);
         const THRESHOLD = Math.max(40, window.innerHeight * 0.06);
         if(abs < THRESHOLD) return;
         const currentIndex = indexOfNearestSection();
@@ -797,15 +719,12 @@
         else scrollToSectionIndex(currentIndex - 1);
         touchStartY = null;
       }
-
       window.addEventListener('wheel', onWheel, {passive:false});
       window.addEventListener('touchstart', onTouchStart, {passive:true});
       window.addEventListener('touchend', onTouchEnd, {passive:false});
-
       window.addEventListener('keydown', (e) => {
         if(isAutoScrolling) return;
-        const key = e.key;
-        let currentIndex = indexOfNearestSection();
+        const key = e.key; let currentIndex = indexOfNearestSection();
         if(key === 'PageDown' || key === 'ArrowDown'){ e.preventDefault(); scrollToSectionIndex(currentIndex + 1); }
         else if(key === 'PageUp' || key === 'ArrowUp'){ e.preventDefault(); scrollToSectionIndex(currentIndex - 1); }
         else if(key === 'Home'){ e.preventDefault(); scrollToSectionIndex(0); }

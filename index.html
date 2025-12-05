@@ -125,10 +125,6 @@
       border-color: rgba(0,0,0,0.08) !important;
     }
 
-    header.light-outside-hero .nav-links a::after{
-      background: linear-gradient(120deg, rgba(0,0,0,0.06), rgba(0,0,0,0.12), rgba(0,0,0,0.06));
-    }
-
     .brand{font-weight:700;letter-spacing:0.06em;font-size:clamp(18px,1.6vw,22px);display:flex;align-items:center;gap:12px}
     .brand .logo{
       width:36px;height:36px;border-radius:8px;display:grid;place-items:center;font-weight:800;
@@ -209,9 +205,15 @@
        Hero / Home
        ------------------------------ */
     .hero{
-      min-height:100vh;padding-top:var(--nav-height);display:block;align-items:center;position:relative;overflow:hidden;
+      /* ensure hero content sits centered *below* the fixed header */
+      min-height: calc(100vh - var(--nav-height));
+      padding-top: 0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;overflow:hidden;
       background: none;
-      display:flex;flex-direction:column;align-items:stretch;
+      flex-direction:column;
     }
     /* pseudo-background so content stays independent; keep B&W look in both themes */
     .hero::before{
@@ -230,7 +232,17 @@
     .hero .overlay{position:absolute;inset:0;z-index:2;pointer-events:none}
     .hero .overlay{ background: linear-gradient(180deg, var(--hero-overlay-start), var(--hero-overlay-end)); }
 
-    .hero .content{position:relative;z-index:3}
+    /* center the content block both vertically and horizontally and keep it constrained */
+    .hero .content{position:relative;z-index:3; width:100%}
+    .hero .container.content{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      z-index:4;
+      padding: 40px 20px;
+      box-sizing: border-box;
+    }
 
     .hero .kicker{font-size:14px;letter-spacing:0.28em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
     .hero h1{font-size:clamp(34px,6vw,68px);margin:0;line-height:0.92;letter-spacing:-0.02em}
@@ -292,6 +304,7 @@
       /* show simple hamburger in mobile only */
       .hamburger{display:inline-flex}
       header{padding:0 14px}
+      /* Move social to bottom area on mobile for better layout */
       .social-fixed{position:relative;right:auto;top:auto;transform:none;display:flex;flex-direction:row;gap:12px;justify-content:center;margin:14px 0 6px;z-index:3}
       .social-fixed a{width:48px;height:48px;border-radius:10px}
       .hero h1{font-size:clamp(28px,7vw,48px)}
@@ -304,23 +317,47 @@
       .actions { margin-left: 8px; }
       /* Slightly reduce logo on small phones */
       .brand .logo { width:32px; height:32px; }
+
+      /* improve spacing for hero content on mobile */
+      .hero .container.content { padding-top: 22px; padding-bottom: 32px; align-items: center; text-align: center; }
+
+      /* bigger tappable area for hamburger and theme toggle */
+      #themeToggle, .hamburger { width:48px; height:48px; }
+      #themeToggle { border-radius: 12px; }
     }
 
     /* Mobile nav overlay (top sheet)
        minimal style changes only — keep your original look but prevent the sheet from exceeding viewport */
     .mobile-nav{position:fixed;inset:0;background:transparent;display:flex;align-items:flex-start;justify-content:center;z-index:120;pointer-events:none}
-    .mobile-nav .sheet{width:100%;max-width:760px;background:linear-gradient(180deg, var(--card), rgba(0,0,0,0.02));border-radius:12px;margin-top:8px;border:1px solid var(--glass-border);transform:translateY(-12%);opacity:0;transition:transform .28s cubic-bezier(.2,.9,.25,1),opacity .28s ease;pointer-events:auto;box-shadow:0 30px 80px rgba(0,0,0,0.5)}
+    /* more robust sheet sizing and centering on narrow screens */
+    .mobile-nav .sheet{
+      width: calc(100% - 32px);
+      max-width:760px;
+      background:linear-gradient(180deg, var(--card), rgba(0,0,0,0.02));
+      border-radius:12px;
+      margin:12px auto 0;
+      border:1px solid var(--glass-border);
+      transform:translateY(-6%);
+      opacity:0;
+      transition:transform .28s cubic-bezier(.2,.9,.25,1),opacity .28s ease;
+      pointer-events:auto;
+      box-shadow:0 30px 80px rgba(0,0,0,0.5);
+      max-height: calc(100vh - 48px);
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
     .mobile-nav.open .sheet{transform:translateY(0);opacity:1}
-    .mobile-nav .panel{padding:28px}
+    .mobile-nav .panel{padding:22px}
     .mobile-nav .close-tab{display:flex;justify-content:flex-end}
     .mobile-nav .close-btn{background:transparent;border:0;padding:8px;border-radius:8px;cursor:pointer;font-size:22px;line-height:1}
     .mobile-nav[aria-hidden="true"]{pointer-events:none}
     .mobile-nav[aria-hidden="false"]{pointer-events:auto}
 
     /* *** NEW: ensure sheet is scrollable and never taller than viewport on small screens *** */
-    .mobile-nav .sheet { max-height: calc(100vh - 48px); overflow: auto; -webkit-overflow-scrolling: touch; }
+    .mobile-nav .sheet { /* already set above */ }
 
-    .mobile-nav a{display:block;padding:12px 0;font-weight:700;text-decoration:none;color:var(--text)}
+    .mobile-nav a{display:block;padding:12px 0;font-weight:700;text-decoration:none;color:var(--text); font-size:18px}
+    .mobile-nav a:focus{ outline: 3px solid rgba(255,255,255,0.08); outline-offset:6px; border-radius:6px; }
 
     .mobile-socials{display:flex;gap:12px;justify-content:center;margin-top:12px}
     .mobile-socials a{width:46px;height:46px;border-radius:10px;display:grid;place-items:center;background:var(--social-bg);color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,0.04)}
@@ -422,7 +459,7 @@
 
       <!-- GitHub -->
       <a href="https://github.com" title="GitHub (opens in new tab)" aria-label="GitHub" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ghTitle"><title id="ghTitle">GitHub</title><path d="M12 2C7.58 2 4 5.58 4 10c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.35c-2.22.48-2.69-1.05-2.69-1.05-.36-.92-.88-1.17-.88-1.17-.72-.5.05-.49.05-.49.8.06 1.22.82 1.22.82.71 1.21 1.86.86 2.31.66.07-.52.28-.86.5-1.06-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.58.82-2.13-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.52-1.04 2.19-.82 2.19-.82.44 1.1.16 1.92.08 2.12.51.55.82 1.26.82 2.13 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 20 10c0-4.42-3.58-8-8-8z" fill="currentColor"/></svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ghTitle"><title id="ghTitle">GitHub</title><path d="M12 2C7.58 2 4 5.58 4 10c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.35c-2.22.48-2.69-1.05-2.69-1.05-.36-.92-.88-1.17-.88-1.17-.72-.5.05-.49.05-.49.8.06 1.22.82 1.22.82.71 1.21 1.86.86 2.31.66.07-.52.28-.86.5-1.06-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.58.82-2.13-.08-.2-.36-1 .1-2.1 0 0 .67-.22 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.52-1.04 2.19-.82 2.19-.82.44 1.1.16 1.92.08 2.12.51.55.82 1.26.82 2.13 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 20 10c0-4.42-3.58-8-8-8z" fill="currentColor"/></svg>
       </a>
 
       <!-- LinkedIn -->
@@ -513,7 +550,7 @@
   </main>
 
   <footer>
-    <div class="container">
+    <div class="container" style="padding:24px 0">
       <small>&copy; <span id="year"></span> Abhinand — Built with care.</small>
     </div>
   </footer>
@@ -617,19 +654,23 @@
       document.documentElement.style.overflow = '';
       document.body.style.overflow = '';
       // restore focus to hamburger for keyboard users
-      hamburgerBtn.focus();
+      try { hamburgerBtn.focus(); } catch(e) {}
     }
 
-    hamburgerBtn.addEventListener('click', ()=>{
-      if(mobileNav.classList.contains('open')) closeMobile();
-      else openMobile();
-    });
+    // ensure elements exist before attaching listeners (robust in older browsers)
+    if(hamburgerBtn){
+      hamburgerBtn.addEventListener('click', ()=>{
+        if(mobileNav.classList.contains('open')) closeMobile();
+        else openMobile();
+      });
+      // keyboard open via Enter/Space
+      hamburgerBtn.addEventListener('keyup', (e)=>{ if(e.key === 'Enter' || e.key === ' ') hamburgerBtn.click(); });
+    }
 
-    // keyboard open via Enter/Space
-    hamburgerBtn.addEventListener('keyup', (e)=>{ if(e.key === 'Enter' || e.key === ' ') hamburgerBtn.click(); });
-
-    mobileCloseBtn?.addEventListener('click', closeMobile);
-    mobileCloseBtn?.addEventListener('keyup', (e)=>{ if(e.key === 'Enter' || e.key === ' ') closeMobile(); });
+    if(mobileCloseBtn){
+      mobileCloseBtn.addEventListener('click', closeMobile);
+      mobileCloseBtn.addEventListener('keyup', (e)=>{ if(e.key === 'Enter' || e.key === ' ') closeMobile(); });
+    }
 
     // close when clicking any link
     mobileNav.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click', closeMobile));

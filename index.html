@@ -428,17 +428,21 @@ html {
     margin: 156px auto 20px auto; /* 80px + 76px = 156px from top */
     padding: 15px 15px 20px 15px;
     max-height: calc(100vh - 100px); /* prevent overflow on all screen sizes */
-    /* Mobile Optimization */
+  }
+/* Mobile Optimization */
 @media screen and (max-width: 768px) {
   .close {
     top: 18px;
     right: 18px;
     font-size: 34px; /* bigger for touch */
     padding: 8px;    /* larger touch area */
-  }
-}
+    color: #000;     /* black color on mobile */
   }
 
+  .close:hover {
+    color: #ff4d4d; /* keep hover accent even on mobile */
+  }
+}
   .resume-image {
     max-height: 60vh; /* fit mobile screen */
   }

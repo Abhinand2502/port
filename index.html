@@ -125,13 +125,15 @@
     .btn{display:inline-flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;border:1px solid var(--glass-border);background:transparent;font-weight:600;cursor:pointer;color:var(--text)}
     .btn:focus{outline:2px solid rgba(255,255,255,0.06);outline-offset:2px}
 
-    /* Hamburger (CSS animated) & theme styling */
+    /* ------------------------------
+       Modern Hamburger (updated)
+       ------------------------------ */
     .hamburger{
       display:none;
       border:0;
-      background:transparent;
-      padding:8px;
-      border-radius:10px;
+      background:var(--glass-strong);
+      padding:0;
+      border-radius:12px;
       cursor:pointer;
       color:var(--text);
       width:48px;
@@ -139,27 +141,51 @@
       align-items:center;
       justify-content:center;
       position:relative;
+      display:inline-flex;
+      transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+      -webkit-tap-highlight-color: transparent;
     }
     .hamburger:focus{outline:3px solid rgba(255,255,255,0.08);outline-offset:3px}
+    .hamburger .bars{ display:inline-flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; width:28px; height:20px; position:relative; }
     .hamburger .bar{
       display:block;
-      width:20px;
-      height:2.6px;
+      width:28px;
+      height:3px;
       background:currentColor;
-      border-radius:3px;
-      transition: transform .32s cubic-bezier(.2,.9,.2,1), opacity .2s ease;
+      border-radius:99px;
+      transition: transform .36s cubic-bezier(.2,.9,.2,1), opacity .2s ease, width .28s ease;
       transform-origin:center;
     }
-    .hamburger .bar + .bar{ margin-top:6px; }
+    .hamburger .bar.small{ width:18px; opacity:0.95 }
 
-    /* Open state (morph into X) */
-    .hamburger.open .bar1{ transform: translateY(8px) rotate(45deg); }
-    .hamburger.open .bar2{ opacity:0; transform: scaleX(.7); }
-    .hamburger.open .bar3{ transform: translateY(-8px) rotate(-45deg); }
+    /* Animated ring (subtle) */
+    .hamburger::after{
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      pointer-events: none;
+      transition: transform .28s cubic-bezier(.2,.9,.2,1), opacity .2s ease, border-color .28s ease;
+      transform: scale(.88);
+      opacity: 0;
+    }
+    .hamburger:hover{ transform: translateY(-2px); }
 
-    /* subtle hover / active */
-    .hamburger:hover{ transform: translateY(-2px); transition: transform .18s ease; }
+    /* Open state: morph into X with ring */
+    .hamburger.open .bar1{ transform: translateY(6px) rotate(45deg); }
+    .hamburger.open .bar2{ opacity:0; transform: scaleX(.4); }
+    .hamburger.open .bar3{ transform: translateY(-6px) rotate(-45deg); }
+    .hamburger.open::after{ opacity:1; transform: scale(1); border-color: var(--accent-anim); box-shadow: 0 8px 30px rgba(0,0,0,0.18); }
 
+    /* subtle pressed */
+    .hamburger:active{ transform: translateY(1px) scale(.995) }
+
+    /* Ensure accessible focus outline for each bar when keyboard-focused */
+    .hamburger:focus .bar{ box-shadow: 0 0 0 4px rgba(255,255,255,0.04); }
+
+    /* Theme toggle */
     #themeToggle{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;border:1px solid var(--glass-border);background:var(--glass-strong); color:var(--text); cursor:pointer;transition: transform .12s ease, box-shadow .12s ease, background .18s ease;box-shadow: 0 4px 12px rgba(0,0,0,0.06);padding:0}
     #themeToggle svg{ display:block; stroke:currentColor; }
     #themeToggle:active{ transform: translateY(1px) }
@@ -237,17 +263,32 @@
     }
 
     /* Mobile nav overlay (sheet)
-       NOTE: panel background is now solid (not transparent) and close button removed.
+       - sheet starts below header (so header remains visible).
+       - sheet is slightly transparent with backdrop blur so content beneath subtly shows through.
+       - text inside sheet is explicitly colored for dark/light themes so readability is preserved.
     */
-    .mobile-nav{position:fixed;inset:0;display:flex;align-items:flex-start;justify-content:center;z-index:180;visibility:hidden;pointer-events:none;background: rgba(0,0,0,0.12);-webkit-backdrop-filter: blur(6px)}
+    .mobile-nav{
+      position:fixed;
+      /* start the overlay below the header so the header remains visible above the sheet */
+      inset: var(--nav-height) 0 0 0;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      z-index:150; /* lower than header (160) so header remains above the sheet */
+      visibility:hidden;
+      pointer-events:none;
+      background: rgba(0,0,0,0.12);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+    }
 
     .mobile-nav.open{visibility:visible;pointer-events:auto}
 
-    /* Make sheet use solid background colors (not translucent gradient) */
+    /* Slightly transparent sheet with blur for readability */
     .mobile-nav .sheet{
       width: calc(100% - 32px);
       max-width:760px;
-      background: var(--card); /* dark: #0b0b0b or rgba fallback */
+      /* slightly transparent backgrounds for both themes are set below */
       border-radius:12px;
       margin:12px auto 0;
       border:1px solid var(--glass-border);
@@ -256,17 +297,28 @@
       visibility:hidden;
       transition:transform .28s cubic-bezier(.2,.9,.25,1),opacity .28s ease,visibility .18s;
       box-shadow:0 30px 80px rgba(0,0,0,0.5);
-      max-height: calc(100vh - 48px);
+      max-height: calc(100vh - (var(--nav-height) + 48px));
       overflow: auto;
       -webkit-overflow-scrolling: touch;
+      /* ensure sheet text uses theme text by default (dark = white text) */
+      color: var(--text);
+      backdrop-filter: blur(8px) saturate(120%);
+      -webkit-backdrop-filter: blur(8px) saturate(120%);
     }
     .mobile-nav.open .sheet{transform:translateY(0);opacity:1;visibility:visible}
 
-    /* Light-theme override: ensure fully solid white panel in light mode */
+    /* Base: dark-theme style (when data-theme is dark or not set and prefers dark) */
+    .mobile-nav .sheet{
+      background: rgba(11,11,11,0.92); /* slightly transparent dark sheet */
+      border-color: rgba(255,255,255,0.04);
+    }
+
+    /* Light-theme override: slightly transparent white sheet but keep text dark */
     [data-theme="light"] .mobile-nav .sheet{
-      background: var(--section-card-light);
+      background: rgba(255,255,255,0.96); /* slightly transparent light sheet */
       border-color: rgba(0,0,0,0.06);
       box-shadow: 0 18px 40px rgba(0,0,0,0.06);
+      color: #0a0a0a; /* ensure links/text are dark in light mode */
     }
 
     .mobile-nav .panel{padding:18px}
@@ -283,11 +335,18 @@
     }
     .mobile-nav .close-btn:focus{ outline: 3px solid rgba(255,255,255,0.08); outline-offset:6px; }
 
-    .mobile-nav a{display:block;padding:12px 0;font-weight:700;text-decoration:none;color:var(--text); font-size:18px}
-    .mobile-nav a:focus{ outline: 3px solid rgba(255,255,255,0.08); outline-offset:6px; border-radius:6px; }
+    /* Links inherit sheet text color so they stay visible in both themes */
+    .mobile-nav a{display:block;padding:12px 0;font-weight:700;text-decoration:none;color:inherit; font-size:18px}
+    /* focus outlines adapt to theme so they are visible on both backgrounds */
+    .mobile-nav a:focus{ outline-offset:6px; border-radius:6px; }
+    /* dark theme outline */
+    .mobile-nav a:focus{ outline: 3px solid rgba(255,255,255,0.08); }
+    /* light theme outline override */
+    [data-theme="light"] .mobile-nav a:focus{ outline: 3px solid rgba(0,0,0,0.08); }
 
     .mobile-socials{display:flex;gap:12px;justify-content:center;margin-top:12px}
     .mobile-socials a{width:56px;height:56px;border-radius:12px;display:grid;place-items:center;background:var(--social-bg);color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,0.04)}
+    [data-theme="light"] .mobile-socials a{ background: rgba(0,0,0,0.06); color: #0a0a0a; border-color: rgba(0,0,0,0.04); }
 
     @media (max-width:420px){.mobile-socials a{width:48px;height:48px;border-radius:10px}.mobile-nav a{font-size:17px}}
 
@@ -318,11 +377,13 @@
       </nav>
 
       <div class="actions" style="margin-left:12px">
-        <!-- hamburger: static markup (animated via CSS class .open) -->
+        <!-- hamburger: only visible on mobile (via CSS media query) -->
         <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-controls="mobileNav" aria-expanded="false" title="Open menu">
-          <span class="bar bar1" aria-hidden="true"></span>
-          <span class="bar bar2" aria-hidden="true"></span>
-          <span class="bar bar3" aria-hidden="true"></span>
+          <span class="bars" aria-hidden="true">
+            <span class="bar bar1"></span>
+            <span class="bar bar2 small"></span>
+            <span class="bar bar3"></span>
+          </span>
         </button>
 
         <!-- Theme toggle -->
@@ -337,7 +398,7 @@
       <div class="panel">
         <h2 id="mobileNavLabel" class="visually-hidden">Mobile navigation</h2>
 
-        <!-- NOTE: close button removed per request. Panel has solid background now. -->
+        <!-- NOTE: close button removed per request. Panel has semi-transparent background now. -->
         <a href="#home" data-close>Home</a>
         <a href="#about" data-close>About</a>
         <a href="#projects" data-close>Projects</a>
@@ -353,7 +414,7 @@
 
           <!-- GitHub (official silhouette) -->
           <a href="https://github.com" aria-label="GitHub" title="GitHub (opens in new tab)" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M12 .5C5.73.5.8 5.43.8 11.7c0 4.87 3.16 9 7.55 10.46.55.1.75-.24.75-.53v-1.86c-3.07.66-3.72-1.48-3.72-1.48-.5-1.28-1.22-1.62-1.22-1.62-.99-.67.07-.66.07-.66 1.09.08 1.67 1.12 1.67 1.12.98 1.68 2.57 1.2 3.2.92.1-.73.38-1.2.7-1.48-2.45-.28-5.03-1.22-5.03-5.43 0-1.2.42-2.18 1.1-2.95-.11-.27-.48-1.36.1-2.84 0 0 .9-.29 2.95 1.11a10.3 10.3 0 0 1 2.68-.36c.91 0 1.83.12 2.68.36 2.05-1.4 2.95-1.11 2.95-1.11.58 1.48.21 2.57.1 2.84.69.77 1.1 1.75 1.1 2.95 0 4.22-2.59 5.14-5.05 5.42.39.34.73 1 .73 2.05v3.04c0 .29.2.64.76.53C19 20.7 22.2 16.57 22.2 11.7 22.2 5.43 17.27.5 12 .5z" fill="currentColor"/></svg>
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M12 .5C5.73.5.8 5.43.8 11.7c0 4.87 3.16 9 7.55 10.46.55.1.75-.24.75-.53v-1.86c-3.07.66-3.72-1.48-3.72-1.48-.5-1.28-1.22-1.62-1.22-1.62-.99-.67.07-.66.07-.66 1.09.08 1.67 1.12 1.67 1.12.98 1.68 2.57 1.2 3.2.92.1-.73.38-1.2.7-1.48-2.45-.28-5.03-1.22-5.03-5.43 0-1.2.42-2.18 1.1-2.95-.11-.27-.48-1.36.1-2.84 0 0 .9-.29 2.95 1.11a10.3 10.3 0 0 1 2.68-.36c.91 0 1.83.12 2.68.36 2.05-1.4 2.95-1.11 2.95-1.11.58 1.48.21 2.57.10 2.84.69.77 1.1 1.75 1.1 2.95 0 4.22-2.59 5.14-5.05 5.42.39.34.73 1 .73 2.05v3.04c0 .29.2.64.76.53C19 20.7 22.2 16.57 22.2 11.7 22.2 5.43 17.27.5 12 .5z" fill="currentColor"/></svg>
           </a>
 
           <!-- LinkedIn (official glyph) -->
@@ -381,7 +442,7 @@
 
       <!-- GitHub -->
       <a href="https://github.com" title="GitHub (opens in new tab)" aria-label="GitHub" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M12 .5C5.73.5.8 5.43.8 11.7c0 4.87 3.16 9 7.55 10.46.55.1.75-.24.75-.53v-1.86c-3.07.66-3.72-1.48-3.72-1.48-.5-1.28-1.22-1.62-1.22-1.62-.99-.67.07-.66.07-.66 1.09.08 1.67 1.12 1.67 1.12.98 1.68 2.57 1.2 3.2.92.1-.73.38-1.2.7-1.48-2.45-.28-5.03-1.22-5.03-5.43 0-1.2.42-2.18 1.1-2.95-.11-.27-.48-1.36.1-2.84 0 0 .9-.29 2.95 1.11a10.3 10.3 0 0 1 2.68-.36c.91 0 1.83.12 2.68.36 2.05-1.4 2.95-1.11 2.95-1.11.58 1.48.21 2.57.1 2.84.69.77 1.1 1.75 1.1 2.95 0 4.22-2.59 5.14-5.05 5.42.39.34.73 1 .73 2.05v3.04c0 .29.2.64.76.53C19 20.7 22.2 16.57 22.2 11.7 22.2 5.43 17.27.5 12 .5z" fill="currentColor"/></svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M12 .5C5.73.5.8 5.43.8 11.7c0 4.87 3.16 9 7.55 10.46.55.1.75-.24.75-.53v-1.86c-3.07.66-3.72-1.48-3.72-1.48-.5-1.28-1.22-1.62-1.22-1.62-.99-.67.07-.66.07-.66 1.09.08 1.67 1.12 1.67 1.12.98 1.68 2.57 1.2 3.2.92.1-.73.38-1.2.7-1.48-2.45-.28-5.03-1.22-5.03-5.43 0-1.2.42-2.18 1.1-2.95-.11-.27-.48-1.36.1-2.84 0 0 .9-.29 2.95 1.11a10.3 10.3 0 0 1 2.68-.36c.91 0 1.83.12 2.68.36 2.05-1.4 2.95-1.11 2.95-1.11.58 1.48.21 2.57.10 2.84.69.77 1.1 1.75 1.1 2.95 0 4.22-2.59 5.14-5.05 5.42.39.34.73 1 .73 2.05v3.04c0 .29.2.64.76.53C19 20.7 22.2 16.57 22.2 11.7 22.2 5.43 17.27.5 12 .5z" fill="currentColor"/></svg>
       </a>
 
       <!-- LinkedIn -->

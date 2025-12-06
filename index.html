@@ -339,6 +339,11 @@
     .mobile-nav a{display:block;padding:12px 0;font-weight:700;text-decoration:none;color:#0a84ff; font-size:18px}
     [data-theme="light"] .mobile-nav a{ color: #0a0a0a; } /* <-- changed: hamburger links black in light mode only */
 
+    /* --------- NEW: When in light mode AND we are on the home section, make mobile links white ---------
+       We will toggle the `home-white` class on the .mobile-nav element via JS when on the home section.
+       This rule intentionally comes after the earlier [data-theme="light"] rule so it overrides it. */
+    [data-theme="light"] .mobile-nav.home-white a { color: #ffffff; }
+
     /* focus outlines adapt to theme so they are visible on both backgrounds */
     .mobile-nav a:focus{ outline-offset:6px; border-radius:6px; }
     /* dark theme outline */
@@ -615,6 +620,18 @@ function openEmail() {
       const theme = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
       if(theme === 'light' && !heroVisible) header.classList.add('light-outside-hero');
       else header.classList.remove('light-outside-hero');
+
+      // NEW: toggle mobile nav link color when in light mode AND we are on the home section
+      // - when both true, add 'home-white' class to the mobileNav element so CSS makes links white
+      // - otherwise ensure the class is removed so light-mode links remain black (original behavior)
+      try {
+        if (mobileNav) {
+          if (theme === 'light' && heroVisible) mobileNav.classList.add('home-white');
+          else mobileNav.classList.remove('home-white');
+        }
+      } catch (e) {
+        // silent fail-safe; we intentionally do not break other behavior
+      }
     }
 
     function applyTheme(theme){

@@ -210,21 +210,30 @@
     .hero .actions{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap; justify-content:center}
     .primary {
   background: transparent;
-  color: #fff;
-  padding: 12px 28px;
-  border-radius: 12px;
-  font-weight: 600;
-  border: 2px solid;
-  border-image: linear-gradient(90deg, #1e90ff, #ffffff) 1;
-  cursor: pointer;
-  text-decoration: none; /* removes underline */
-  transition: .3s ease;
+  padding: 12px 22px;
+  font-weight: 700;
+  color: var(--text);
+  border-radius: 16px;
+  text-decoration: none;
+
+  /* Gradient border */
+  border: 2px solid transparent;
+  background-image: 
+    linear-gradient(var(--bg), var(--bg)), 
+    linear-gradient(to right, #007bff, #ffffff);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+
+  transition: all 0.3s ease;
+  display: inline-block;
 }
 
+/* Hover / movement animation */
 .primary:hover {
-  background: rgba(30,144,255,0.15); /* light blue glow */
-  color: #fff;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  background-image: 
+    linear-gradient(var(--bg), var(--bg)), 
+    linear-gradient(to right, #ffffff, #007bff);
 }
 
     .secondary{background:transparent;border:1px dashed var(--glass-border);padding:10px 16px;border-radius:10px;color:var(--text)}

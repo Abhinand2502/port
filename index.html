@@ -260,6 +260,11 @@
       /* SWITCHED ORDER: theme toggle first, hamburger second on mobile */
       .hamburger{ order: 2 }
       #themeToggle{ order: 1 }
+
+      /* MOBILE-SPECIFIC BACKGROUND IMAGE (changed per request):
+         use assets/bg1.jpg on mobile while preserving desktop image (assets/bg.jpg)
+      */
+      .hero::before{ background-image: url('assets/bg1.jpg'); }
     }
 
     /* Ensure hamburger is never shown on desktop explicitly */
@@ -268,7 +273,7 @@
     }
 
     /* Mobile nav overlay (sheet)
-       - sheet starts below header (so header remains visible).
+       - sheet starts below the header (so header remains visible).
        - sheet is slightly transparent with backdrop blur so content beneath subtly shows through.
        - text inside sheet is explicitly colored for dark/light themes so readability is preserved.
     */
@@ -330,8 +335,10 @@
     }
     .mobile-nav .close-btn:focus{ outline: 3px solid rgba(255,255,255,0.08); outline-offset:6px; }
 
-    /* Links: blue in both modes per request */
+    /* Links: blue by default; override to black in light mode only (per your request) */
     .mobile-nav a{display:block;padding:12px 0;font-weight:700;text-decoration:none;color:#0a84ff; font-size:18px}
+    [data-theme="light"] .mobile-nav a{ color: #0a0a0a; } /* <-- changed: hamburger links black in light mode only */
+
     /* focus outlines adapt to theme so they are visible on both backgrounds */
     .mobile-nav a:focus{ outline-offset:6px; border-radius:6px; }
     /* dark theme outline */
@@ -613,7 +620,7 @@
 
     /* ==============
        Mobile nav + hamburger handling (robust + CSS animated icon)
-       ==============
+       ============== 
     */
 
     // Force an initial closed state to prevent accidental open on some browsers

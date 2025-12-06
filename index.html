@@ -202,8 +202,20 @@
 
     .hero .content{position:relative;z-index:3;width:100%;display:flex;align-items:center;justify-content:center}
     .hero .container.content{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:4;padding: calc(var(--nav-height) + 24px) 20px 48px 20px;box-sizing: border-box;max-width: 1100px;margin: 0 auto}
-
-    .hero .kicker{font-size:14px;letter-spacing:0.28em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+h1 {
+    position: relative;
+    top: -1.5cm;
+    font-size: 3.4rem; /* larger HELLO text */
+    line-height: 1.15;
+  }
+.content p {
+    position: relative;
+    top: -0.6cm;
+    font-size: 1.4rem; /* larger paragraph */
+    line-height: 1.7;
+  }
+    .hero .kicker{position: relative;
+    top: -1.5cm;font-size:14px;letter-spacing:0.28em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
    @media (max-width: 768px) {
 
   .kicker {
@@ -741,7 +753,18 @@ function openEmail() {
     <div class="container content">
       <div style="max-width:980px">
         <div class="kicker">Designer • Developer • Futurist</div>
-        <h1>HELLO<br/><span style="opacity:.9"><p></p>I'm Abhinand Babu</span></h1>
+        <h1>
+  <span style="
+    background: linear-gradient(to right, #1e90ff, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+  ">
+    HELLO
+  </span><br/><p></p>
+  <span style="opacity:.9">I'm Abhinand Babu</span>
+</h1>
+
         <p>B.Tech Computer Science Engineer with a strong foundation in software development and web technologies.</p>
         <div class="actions">
           <!-- View Resume Button -->

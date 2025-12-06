@@ -386,16 +386,22 @@ html {
   margin-bottom: 20px;
 }
 
-/* Close button */
+/* Modern Close Button */
 .close {
   position: absolute;
   top: 12px;
-  right: 18px;
+  right: 12px;
   color: #fff; /* white color */
   font-size: 28px;
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
-  text-shadow: 0 0 4px rgba(0,0,0,0.5);
+  transition: color 0.3s, transform 0.2s;
+  z-index: 1001;
+}
+
+.close:hover {
+  color: #1ba7d1; /* subtle accent on hover */
+  transform: rotate(90deg); /* smooth rotation effect */
 }
 
 /* Download button */
@@ -422,6 +428,15 @@ html {
     margin: 156px auto 20px auto; /* 80px + 76px = 156px from top */
     padding: 15px 15px 20px 15px;
     max-height: calc(100vh - 100px); /* prevent overflow on all screen sizes */
+    /* Mobile Optimization */
+@media screen and (max-width: 768px) {
+  .close {
+    top: 18px;
+    right: 18px;
+    font-size: 34px; /* bigger for touch */
+    padding: 8px;    /* larger touch area */
+  }
+}
   }
 
   .resume-image {

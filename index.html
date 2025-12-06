@@ -414,20 +414,29 @@ html {
   background: rgba(0,123,255,1); /* solid on hover */
 }
 
-/* Responsive for mobile devices */
 @media screen and (max-width: 768px) {
+
+  /* Center the modal box */
+  .modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;   /* vertical center */
+    padding: 20px;         /* avoid touching edges */
+  }
+
   .modal-content {
     width: 95%;
     max-width: 95%;
-    margin: 80px auto 20px auto; /* 80px to leave space for header */
+    margin: 0 auto;        /* remove top spacing */
     padding: 15px 15px 20px 15px;
-    max-height: calc(100vh - 100px); /* prevent overflow on all screen sizes */
+    max-height: 80vh;      /* avoid overflow */
   }
 
   .resume-image {
-    max-height: 60vh; /* fit mobile screen */
+    max-height: 60vh;      /* good fit inside modal */
   }
 }
+
 
 
    .secondary {

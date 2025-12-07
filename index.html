@@ -886,36 +886,32 @@ function openEmail() {
     #projects > .section-inner { height:auto !important; min-height:0 !important; display:block !important; padding-top:0 !important; }
     #projects .box { width:100%; max-width:1400px; margin:0 auto; padding:18px 24px; box-sizing:border-box; }
 
-    /* Modern Projects Title */
+    /* Title — Transparent Glass Style */
 #projectsTitle {
-  font-size: clamp(30px, 4vw, 48px);
+  font-size: clamp(28px, 3.8vw, 40px);
+  margin: 6px 0 18px 0;
   font-weight: 900;
   text-align: center;
-  letter-spacing: -0.03em;
-  margin: 0 auto 22px auto;
+  letter-spacing: -0.02em;
+  color: var(--projects-text);
+  padding: 10px 22px;
+  backdrop-filter: blur(10px) saturate(160%);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  background: rgba(255, 255, 255, 0.15); /* transparent glass */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
 
-  /* modern gradient text highlight */
-  background: linear-gradient(90deg, var(--projects-primary), #6aa8ff);
-  -webkit-background-clip: text;
-  color: transparent;
+  /* Modern glass shadow */
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
 
-  /* subtle glow on dark and depth in light mode */
-  text-shadow: 0 2px 6px rgba(0,0,0,0.25);
-  line-height: 1.15;
-  width: fit-content;
+  /* Blue glow accent */
+  text-shadow: 0 0 12px rgba(42, 124, 241, 0.5);
 }
 
-/* Light mode variation */
-html.light #projectsTitle,
-body.light #projectsTitle,
-[data-theme="light"] #projectsTitle {
-  text-shadow: 0 2px 6px rgba(0,0,0,0.08);
-}
-
-/* Move title down by 2cm on mobile */
-@media (max-width: 768px) {
+/* Mobile spacing enhancement */
+@media (max-width: 600px) {
   #projectsTitle {
-    margin-top: 2cm;
+    margin-top: 32px; /* ~2cm visual downshift depending on screen */
   }
 }
 

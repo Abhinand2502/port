@@ -865,28 +865,35 @@ function openEmail() {
       </div>
     </section>
 
-<!-- ===== FULL PROJECTS SECTION (complete content) ===== -->
+<!-- ===== PROJECTS: improved linear slider + mobile-first full-screen fit + enhanced lightbox ===== -->
 <section id="projects" aria-labelledby="projectsTitle">
   <style>
-    /* ===== Scoped styles for PROJECTS (complete, responsive, accessible) ===== */
+    /* Scoped styles for the projects section (mobile-first) */
     :root{
       --projects-glass: rgba(0,0,0,0.08);
       --projects-primary:#2a7cf1;
       --projects-text:#111;
-      --projects-muted:#6b6b6b;
+      --projects-muted:#7a7a7a;
       --projects-header-h:72px;
       --projects-card-radius:12px;
-      --projects-thumb-interval: 1800ms; /* ms */
-      --projects-card-bg: rgba(255,255,255,0.02);
-      --projects-gap: 20px;
-      --projects-mobile-gap: 12px;
-      --lb-control-size: 48px;
+      --projects-thumb-interval:1800; /* milliseconds number */
+      --projects-card-bg: transparent;
+      --projects-control-size:44px;
+      --projects-control-size-mobile:56px;
+      --projects-gap:20px;
     }
 
     /* container */
-    #projects { padding-top: calc(var(--projects-header-h) + 10px); padding-bottom: 56px; background: transparent; position: relative; z-index: 1; }
-    #projects > .section-inner { height:auto !important; display:block !important; padding-top:0 !important; }
-    #projects .box { width:100%; max-width:1400px; margin:0 auto; padding:18px 20px; box-sizing:border-box; }
+    #projects {
+      padding-top: calc(var(--projects-header-h) + 10px);
+      padding-bottom: 0;
+      background: transparent;
+      position: relative;
+      z-index: 1;
+      box-sizing: border-box;
+    }
+    #projects > .section-inner { height:auto !important; min-height:0 !important; display:block !important; padding-top:0 !important; }
+    #projects .box { width:100%; max-width:1400px; margin:0 auto; padding:12px 18px; box-sizing:border-box; }
 
     /* Title */
     #projectsTitle {
@@ -898,104 +905,153 @@ function openEmail() {
       color: var(--projects-text);
     }
 
-    /* Grid (horizontal slider) */
+    /* Horizontal slider container (mobile-first) */
     .folio-grid {
       display:flex;
       gap:var(--projects-gap);
       overflow-x:auto;
       -webkit-overflow-scrolling: touch;
       scroll-snap-type: x mandatory;
-      padding: 12px 8px;
+      padding: 12px 6px 22px 6px;
       align-items: stretch;
-      scrollbar-gutter: stable;
+      scroll-behavior: smooth;
+      align-content: start;
     }
-    .folio-grid:focus { outline:none; }
     .folio-grid::-webkit-scrollbar { height: 10px; }
     .folio-grid::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius:10px; }
+    .folio-grid:focus { outline: none; }
 
-    /* card */
+    /* slide (project card) */
     .folio-item {
-      flex: 0 0 88%;
-      max-width:1100px;
+      flex: 0 0 94%;
+      max-width: 100%;
       scroll-snap-align: center;
-      border-radius: var(--projects-card-radius);
-      position: relative;
+      display:flex;
+      flex-direction:column;
+      overflow:visible;
+      border-radius:var(--projects-card-radius);
+      position:relative;
       border:1px solid var(--projects-glass);
-      background: var(--projects-card-bg);
-      overflow: visible;
       transition: transform .18s ease, box-shadow .18s ease;
-      cursor: pointer;
+      cursor:pointer;
+      background:var(--projects-card-bg);
+      padding:0;
       box-sizing: border-box;
-      min-width: min(92%, 980px);
+      min-height: calc(100vh - var(--projects-header-h) - 40px); /* mobile: make item full screen */
     }
-    .folio-item:focus, .folio-item:hover { transform: translateY(-6px); box-shadow: 0 24px 80px rgba(16,24,40,0.12); outline:none; }
+    .folio-item:focus, .folio-item:hover { transform: translateY(-6px); box-shadow: 0 28px 80px rgba(16,24,40,0.12); outline:none; }
 
-    @media (min-width:760px){ .folio-item { flex: 0 0 70%; min-width: 640px; } }
-    @media (min-width:1100px){ .folio-item { flex: 0 0 54%; min-width: 520px; } }
-    @media (min-width:1400px){ .folio-item { flex:0 0 46%; } }
+    /* thumbnail */
+    .thumb-wrap { width:100%; position:relative; overflow:hidden; border-radius:var(--projects-card-radius) var(--projects-card-radius) 8px 8px; background:#000; display:block; flex:1 1 auto; min-height:0; }
+    .thumb-wrap img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; opacity:0; transform: scale(1.03) translateZ(0); transition: opacity .45s ease, transform .6s cubic-bezier(.2,.9,.2,1); backface-visibility:hidden; will-change: opacity, transform; }
+    .thumb-wrap img.active { opacity:1; transform: scale(1); z-index:1; }
 
-    /* thumbnail area */
-    .thumb-wrap { width:100%; aspect-ratio: 16/9; position:relative; overflow:hidden; border-radius: var(--projects-card-radius) var(--projects-card-radius) 8px 8px; background:#000; display:block; }
-    @media (max-width:420px){ .thumb-wrap { aspect-ratio: 4/3; } }
-    .thumb-wrap img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; opacity:0; transform:scale(1.03); transition: opacity .45s ease, transform .6s cubic-bezier(.2,.9,.2,1); will-change: opacity, transform; }
-    .thumb-wrap img.active { opacity:1; transform:scale(1); z-index:1; }
-
-    /* caption overlay */
-    .folio-caption { position:absolute; left:12px; bottom:12px; right:12px; padding:10px 14px; border-radius:10px; background: rgba(0,0,0,0.56); color:#fff; font-weight:900; font-size:15px; display:flex; gap:12px; align-items:center; backdrop-filter: blur(6px); z-index: 10; }
+    /* caption */
+    .folio-caption {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      right: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.56);
+      color: #fff;
+      font-weight: 900;
+      font-size: 15px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      backdrop-filter: blur(6px);
+      z-index: 10;
+    }
     .folio-caption .title { font-weight:900; letter-spacing:0.2px; color:#fff; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:15px; }
-    .folio-caption .view { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:6px 10px; border-radius:10px; background: rgba(255,255,255,0.06); color:#fff; font-weight:700; font-size:13px; min-width:54px; height:36px; }
+    .folio-caption .view { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:6px 10px; border-radius:10px; background: rgba(255,255,255,0.06); color:#fff; font-weight:700; font-size:13px; min-width:54px; height:36px; box-shadow: 0 6px 16px rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.06); }
 
-    @media (max-width:760px){
-      .folio-caption { padding:8px 10px; bottom:10px; left:8px; right:8px; }
-      .folio-caption .title { font-size:15px; white-space:normal; }
-      .folio-caption .view { padding:6px 8px; min-width:44px; height:34px; font-size:13px; }
-      .folio-item { flex: 0 0 100%; min-width: 100%; max-width: 720px; }
-      .folio-grid { gap: var(--projects-mobile-gap); padding-left: 12px; padding-right: 12px; }
-    }
-
-    /* lightbox */
+    /* Lightbox */
     .lightbox {
-      position:fixed; inset:0; display:flex; align-items:flex-start; justify-content:center;
-      padding-top: var(--projects-header-h); z-index:3000;
-      background: rgba(6,6,6,0.6); backdrop-filter: blur(6px);
-      opacity:0; pointer-events:none; transition: opacity .22s ease;
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding-top: var(--projects-header-h);
+      z-index:3000;
+      background: rgba(6,6,6,0.6);
+      backdrop-filter: blur(6px);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .22s ease;
     }
     .lightbox.open { opacity:1; pointer-events:auto; }
-    .lb-shell { width: calc(100vw - 48px); height: calc(100vh - var(--projects-header-h) - 48px); max-width:1200px; max-height:880px; border-radius:10px; overflow:hidden; display:grid; grid-template-columns: 1fr 360px; gap:12px; background: #ffffff; border:1px solid rgba(0,0,0,0.06); box-shadow: 0 40px 120px rgba(2,6,23,0.25); margin-top:8px; }
-    @media (max-width:980px){ .lb-shell { grid-template-columns: 1fr; width: calc(100vw - 12px); height: calc(100vh - var(--projects-header-h) - 12px); } }
-
+    .lb-shell {
+      width: calc(100vw - 48px);
+      height: calc(100vh - var(--projects-header-h) - 48px);
+      max-width:1200px;
+      max-height:880px;
+      border-radius:10px;
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:12px;
+      background: #ffffff;
+      border:1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 40px 120px rgba(2,6,23,0.25);
+      margin-top:8px;
+    }
+    @media (max-width:980px){
+      .lb-shell { grid-template-columns: 1fr; width: calc(100vw - 12px); height: calc(100vh - var(--projects-header-h) - 12px); border-radius:8px; }
+    }
     .lb-view { position:relative; background:#111; display:flex; align-items:center; justify-content:center; overflow:hidden; min-height:320px; }
-    .lb-track { display:flex; width:100%; height:100%; will-change: transform; transition: transform .45s cubic-bezier(.2,.9,.2,1); }
-    .lb-slide { flex:0 0 100%; display:flex; align-items:center; justify-content:center; position:relative; height:100%; padding:12px; box-sizing:border-box; }
+    .lb-track { display:flex; width:100%; height:100%; will-change: transform; transition: transform .45s cubic-bezier(.2,.9,.2,1); touch-action: pan-y pinch-zoom; }
+    .lb-slide { flex:0 0 100%; display:flex; align-items:center; justify-content:center; position:relative; height:100%; min-height:320px; padding:12px; box-sizing:border-box; }
     .lb-slide img { max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block; margin:auto; cursor:zoom-in; user-select:none; -webkit-user-drag:none; }
 
-    /* controls (desktop) */
+    /* desktop controls (top corners) */
     .lb-close, .lb-prev, .lb-next {
-      position:absolute; z-index:60; width:var(--lb-control-size); height:var(--lb-control-size); border-radius:12px; display:grid; place-items:center;
-      background: rgba(255,255,255,0.95); border:1px solid rgba(0,0,0,0.06); color:#111; font-size:18px; cursor:pointer; transition: transform .12s ease, opacity .12s ease; box-shadow: 0 8px 24px rgba(2,6,23,0.12);
+      position:absolute;
+      z-index:40;
+      width:var(--projects-control-size);
+      height:var(--projects-control-size);
+      border-radius:10px;
+      display:grid;
+      place-items:center;
+      background: rgba(0,0,0,0.6);
+      border:1px solid rgba(255,255,255,0.06);
+      color:#fff;
+      font-size:18px;
+      cursor:pointer;
+      transition: transform .12s ease, opacity .12s ease;
+      backdrop-filter: blur(6px);
     }
-    .lb-close { right:12px; top:12px; }
-    .lb-prev { left:12px; top:50%; transform:translateY(-50%); }
+    .lb-close { right:12px; top:12px; } 
+    .lb-prev { left:12px; top:50%; transform:translateY(-50%); } 
     .lb-next { right:12px; top:50%; transform:translateY(-50%); }
 
-    /* mobile: hide side arrows and show bottom pill controls */
-    @media (max-width:980px){
-      .lb-prev, .lb-next { display:none; }
-    }
-
-    .lb-controls-bottom {
-      display:none; width:100%; gap:12px; padding:12px; box-sizing:border-box; justify-content:center; align-items:center;
-    }
-    @media (max-width:980px){
-      .lb-controls-bottom { display:flex; background: linear-gradient(to top, rgba(255,255,255,0.98), rgba(255,255,255,0.00)); position:relative; z-index:70; }
-      .lb-controls-bottom .btn-btm {
-        flex:1 1 auto; max-width:440px; display:flex; gap:12px; align-items:center; justify-content:center;
-        padding:12px 16px; border-radius:999px; border:1px solid rgba(0,0,0,0.06); background:#fff; font-weight:800; color:#111; box-shadow: 0 10px 30px rgba(8,20,40,0.06); cursor:pointer;
+    /* mobile: reposition prev/next to bottom center, use larger round buttons and SVG chevrons */
+    @media (max-width:760px){
+      .lb-close { top:10px; right:10px; width:44px; height:44px; border-radius:10px; }
+      .lb-prev, .lb-next {
+        top: auto;
+        bottom: 18px;
+        width: var(--projects-control-size-mobile);
+        height: var(--projects-control-size-mobile);
+        border-radius:999px;
+        background: rgba(0,0,0,0.65);
+        border:1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 8px 24px rgba(2,6,23,0.32);
+        transform:none;
       }
-      .lb-controls-bottom svg { width:20px; height:20px; }
-      .lb-controls-bottom .label { font-size:13px; display:block; }
+      .lb-prev { left: 50%; transform: translateX(-140%); }
+      .lb-next { left: 50%; transform: translateX(40%); }
+
+      /* make the section occupy full screen better */
+      #projects { padding-bottom: 0; }
+      .folio-grid { padding-bottom: 8px; gap:12px; }
+      .folio-item { min-height: calc(100vh - var(--projects-header-h) - 28px); border-radius:12px; }
+      .folio-caption { left:10px; right:10px; bottom: 14px; padding:8px 12px; }
     }
 
+    /* meta column */
     .lb-meta { padding:18px; display:flex; flex-direction:column; gap:12px; overflow:auto; color:#111; background: #ffffff; }
     .lb-title { font-family:'Playfair Display', serif; font-size:20px; font-weight:900; margin:0; color:#111; }
     .lb-desc { color:var(--projects-muted); font-size:13px; line-height:1.45; margin:0; min-height:48px; color:#111; }
@@ -1005,130 +1061,140 @@ function openEmail() {
     .btn { padding:8px 12px; border-radius:10px; font-weight:800; border:1px solid var(--projects-glass); background:transparent; cursor:pointer; font-size:13px; text-decoration:none; display:inline-block; color:var(--projects-text); }
     .btn.primary { background:var(--projects-primary); color:#fff; border-color:var(--projects-primary); }
 
-    /* accessibility helpers */
+    /* ensure black text inside lightbox meta regardless of site theme */
+    .lightbox .lb-meta, .lightbox .lb-meta * { color: #111 !important; }
+    .lightbox .tech-badge { color:#111 !important; border-color: rgba(0,0,0,0.06) !important; }
+
+    /* accessibility helper */
     .sr-only { position:absolute !important; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
+
+    /* smaller screens and larger breakpoints for grid item width */
+    @media (min-width:760px){ .folio-item { flex: 0 0 70%; min-height: 420px; } }
+    @media (min-width:1100px){ .folio-item { flex: 0 0 54%; } }
+    @media (min-width:1400px){ .folio-item { flex: 0 0 46%; } }
+
+    /* if desktop: keep image aspect ratio pleasant */
+    @media (min-width:760px){
+      .thumb-wrap { aspect-ratio: 16/9; height:auto; }
+      .folio-item { min-height: 0; }
+    }
   </style>
 
   <div class="section-inner">
     <div class="box">
       <h1 id="projectsTitle" class="anim">My Projects</h1>
 
+      <!-- Horizontal slider (all projects visible in the scroll) -->
       <div class="folio-grid anim" id="folioGrid" aria-live="polite" tabindex="0">
 
-        <!-- DetexAI -->
+        <!-- --- Project cards (kept exactly as your original content) --- -->
         <button class="folio-item"
           data-images="assets/THOME.png,assets/TRESULT.png,assets/TRESULT1.png"
           data-lightbox="assets/TLOGIN (1).png,assets/THOME.png,assets/TPROF.png,assets/TUPLOAD.png,assets/TRESULT.png,assets/TRESULT1.png,assets/THIST.png,assets/THIST2.png,assets/TCOM.png,assets/ALOG.png,assets/AHOME.png,assets/AUSER.png,assets/AHIST.png,assets/ACOMP.png"
           data-link="https://github.com/Abhinand2502/DetexAI"
           data-title="DetexAI"
-          data-desc="DetexAI detects and classifies trash (land & water) using YOLOv8, enabling real-time identification for smarter cleanup and research."
-          data-tech="Python, Django, YOLOv8, HTML, CSS, JavaScript, SQLite"
+          data-desc="DetexAI is an AI-powered system using YOLOv8 to detect and classify trash in both land and aquatic environments, enabling real-time identification for smarter, faster cleanup."
+          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐YOLOv8,⭐SQLite"
           aria-label="Open DetexAI project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">DetexAI — AI Trash Detection</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">DetexAI – AI Trash Detection</span><span class="view">View details</span></div>
         </button>
 
-        <!-- Face recognition -->
         <button class="folio-item"
           data-images="assets/face.jpg,assets/face1.png,assets/face2.png"
           data-lightbox="assets/face.jpg,assets/face1.png,assets/face2.png,assets/face3.png,assets/face4.png,assets/face5.png,assets/face6.png"
           data-link="https://github.com/Abhinand2502/Face-recognition"
-          data-title="Face recognition Attendance Register"
-          data-desc="Automated student attendance using face recognition. Built with Python and Django, integrates camera capture and secure attendance logging."
-          data-tech="Python, Django, OpenCV, HTML, CSS, JavaScript"
+          data-title="Face recognition"
+          data-desc="Face recognition Attendance Register is an automated student attendance system that uses face recognition technology to mark attendance."
+          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript"
           aria-label="Open Face recognition project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Face recognition — Attendance Register</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">Face recognition - Attendance Register</span><span class="view">View details</span></div>
         </button>
 
-        <!-- AI-AssistCart -->
         <button class="folio-item"
           data-images="assets/login.png,assets/signup.png,assets/home.png"
           data-lightbox="assets/login.png,assets/signup.png,assets/home.png,assets/cash.png,assets/admin.png,assets/product.png,assets/orders.png"
           data-link="https://github.com/Abhinand2502/Ai-Assist-Cart"
           data-title="AI-AssistCart"
-          data-desc="AI-AssistCart — an AI powered e-commerce platform with TF-IDF recommendations, advanced admin tools and smooth UX."
-          data-tech="Python, Django, TF-IDF, AJAX, HTML, CSS, JavaScript"
+          data-desc="AI-AssistCart is an AI-powered e-commerce platform that automates product recommendations, streamlines checkout, and provides advanced admin management tools to enhance the online shopping experience. Developed using Django, it leverages TF-IDF to deliver personalized product suggestions."
+          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐AJAX,⭐SQLite"
           aria-label="Open AI-AssistCart project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">AI-AssistCart — AI Shopping Site</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">AI-AssistCart - AI Shopping Site</span><span class="view">View details</span></div>
         </button>
 
-        <!-- AI-Chatbot -->
         <button class="folio-item"
           data-images="assets/chat1 (1).png,assets/chat1 (2).png"
           data-lightbox="assets/chat1 (1).png,assets/chat1 (2).png"
           data-link="https://github.com/Abhinand2502/AiChatbot"
           data-title="AI-Chatbot"
-          data-desc="Bilingual AI chatbot (English & Malayalam) built using Django and external LLM APIs for conversational responses."
-          data-tech="Python, Django, Cohere API, HTML, CSS, JavaScript"
+          data-desc="An AI-powered bilingual chatbot built with Django, designed to communicate in both English and Malayalam."
+          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐Cohere API"
           aria-label="Open AI-Chatbot project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
           <div class="folio-caption"><span class="title">AI-Chatbot</span><span class="view">View details</span></div>
         </button>
 
-        <!-- Tic-Tac-Toe -->
         <button class="folio-item"
           data-images="assets/tic (2).png,assets/tic (3).png,assets/tic (1).png"
           data-lightbox="assets/tic (2).png,assets/tic (3).png,assets/tic (1).png"
           data-link="https://github.com/Abhinand2502/tic_tac_toe"
           data-title="Tic-Tac-Toe"
-          data-desc="Neon glassmorphism Tic-Tac-Toe with real-time multiplayer using Django Channels (WebSockets)."
-          data-tech="Python, Django Channels, WebSockets, HTML, CSS, JavaScript"
+          data-desc="A neon glassmorphism Tic-Tac-Toe game with real-time multiplayer using Django Channels (WebSockets)."
+          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐WebSockets"
           aria-label="Open Tic-Tac-Toe project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Tic-Tac-Toe — Multiplayer</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">Tic-Tac-Toe</span><span class="view">View details</span></div>
         </button>
 
-        <!-- Portfolio -->
         <button class="folio-item"
           data-images="assets/porto.png,assets/portfolio.jpg"
           data-lightbox="assets/porto.png,assets/portfolio.jpg"
           data-link="https://github.com/Abhinand2502/portofolio"
           data-title="Portfolio"
-          data-desc="My personal portfolio website: responsive, clean UI, projects, contact form and smooth interactions."
-          data-tech="HTML, CSS, JavaScript"
+          data-desc="My personal portfolio website."
+          data-tech="⭐HTML,⭐CSS,⭐JavaScript"
           aria-label="Open Portfolio project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Portfolio — Personal Site</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">Portfolio</span><span class="view">View details</span></div>
         </button>
 
-        <!-- To-Do App -->
         <button class="folio-item"
-          data-images="assets/todo.png,assets/todo2.png,assets/todo3.png"
-          data-lightbox="assets/todo.png,assets/todo2.png,assets/todo3.png"
+          data-images="assets/todo.png,assets/todo.png,assets/todo.png"
+          data-lightbox="assets/todo.png,assets/todo.png,assets/todo.png"
           data-link="https://github.com/Abhinand2502/to_do_app"
-          data-title="To-Do List App"
-          data-desc="Sleek To-Do app with real-time search and minimal design focused on productivity and quick interactions."
-          data-tech="Python, Django, HTML, CSS, JavaScript"
-          aria-label="Open To-Do app project details">
+          data-title="To-Do List app"
+          data-desc="To-Do App — a sleek, minimal task manager with real-time search filtering."
+          data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript"
+          aria-label="Open To-Do List app project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">To-Do List App</span><span class="view">View details</span></div>
+          <div class="folio-caption"><span class="title">To-Do List app</span><span class="view">View details</span></div>
         </button>
 
       </div> <!-- .folio-grid -->
     </div>
   </div>
 
-  <!-- Lightbox -->
+  <!-- lightbox -->
   <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="lbTitle" tabindex="-1">
     <div class="lb-shell" role="document" aria-live="polite">
       <div class="lb-view" id="lbView" aria-hidden="false">
         <div id="lbSlides" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
 
-        <!-- side arrows for desktop/tablet -->
+        <!-- SVG arrows (kept as buttons, replaced content for accessibility) -->
         <button class="lb-prev" id="lbPrev" aria-label="Previous">
-          <!-- chevron left -->
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 6 L9 12 L15 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-        </button>
-        <button class="lb-next" id="lbNext" aria-label="Next">
-          <!-- chevron right -->
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 6 L15 12 L9 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+          <!-- left chevron -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
 
-        <!-- close -->
+        <button class="lb-next" id="lbNext" aria-label="Next">
+          <!-- right chevron -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
         <button class="lb-close" id="lbClose" aria-label="Close (Esc)">
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6 L18 18 M6 18 L18 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
       </div>
 
@@ -1142,22 +1208,9 @@ function openEmail() {
           <a id="lbLink" class="btn primary" href="#" target="_blank" rel="noopener">Open Project</a>
         </div>
       </div>
-
-      <!-- bottom pill controls for mobile -->
-      <div class="lb-controls-bottom" id="lbControlsBottom" aria-hidden="true">
-        <button id="lbPrevBtm" class="btn-btm" aria-label="Previous">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6 L9 12 L15 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span class="label">Prev</span>
-        </button>
-        <button id="lbNextBtm" class="btn-btm" aria-label="Next">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6 L15 12 L9 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span class="label">Next</span>
-        </button>
-      </div>
     </div>
   </div>
 
-  <!-- ===== JavaScript (scoped to section) ===== -->
   <script>
     (function(){
       const grid = document.getElementById('folioGrid');
@@ -1172,19 +1225,13 @@ function openEmail() {
       const lbClose = document.getElementById('lbClose');
       const lbPrev = document.getElementById('lbPrev');
       const lbNext = document.getElementById('lbNext');
-      const lbPrevBtm = document.getElementById('lbPrevBtm');
-      const lbNextBtm = document.getElementById('lbNextBtm');
-      const lbControlsBottom = document.getElementById('lbControlsBottom');
 
-      /* parse CSS var interval like "1800ms" or "2000" */
-      function parseInterval(raw){
-        if(!raw) return 1800;
-        const digits = raw.replace(/\D/g,'');
-        return parseInt(digits,10) || 1800;
-      }
-      const THUMB_INTERVAL = parseInterval(getComputedStyle(document.documentElement).getPropertyValue('--projects-thumb-interval'));
+      const THUMB_INTERVAL = (function(){
+        const val = getComputedStyle(document.documentElement).getPropertyValue('--projects-thumb-interval') || '1800';
+        return parseInt(val,10) || 1800;
+      })();
 
-      /* Build thumbnail images for each card + autoplay */
+      // Build thumbnail images per card and autoplay them
       items.forEach((it) => {
         const wrap = it.querySelector('.thumb-wrap');
         const images = (it.dataset.images || '').split(',').map(s => s.trim()).filter(Boolean);
@@ -1200,27 +1247,41 @@ function openEmail() {
         it._thumbCount = imgs.length;
         it._thumbIndex = 0;
         it._thumbPaused = false;
+        // pause on interactions
         it.addEventListener('mouseenter', () => { it._thumbPaused = true; }, {passive:true});
         it.addEventListener('mouseleave', () => { it._thumbPaused = false; }, {passive:true});
         it.addEventListener('touchstart', () => { it._thumbPaused = true; }, {passive:true});
         it.addEventListener('touchend', () => { it._thumbPaused = false; }, {passive:true});
       });
 
-      let globalThumbTick = 1;
-      function thumbTick(){
-        items.forEach(it => {
-          if(it._thumbPaused) return;
-          const count = it._thumbCount || 1;
-          const newIndex = globalThumbTick % count;
-          const imgs = it.querySelectorAll('.thumb-wrap img');
-          imgs.forEach((img, idx) => img.classList.toggle('active', idx === newIndex));
-          it._thumbIndex = newIndex;
-        });
-        globalThumbTick++;
+      // central tick uses requestAnimationFrame for smoother updates
+      let globalThumbTick = 0;
+      let lastTickTime = performance.now();
+      let thumbTimerId = null;
+      function startThumbTimer(){
+        stopThumbTimer();
+        lastTickTime = performance.now();
+        thumbTimerId = requestAnimationFrame(thumbFrame);
       }
-      let thumbTimer = setInterval(thumbTick, THUMB_INTERVAL);
+      function stopThumbTimer(){ if(thumbTimerId) cancelAnimationFrame(thumbTimerId); thumbTimerId = null; }
+      function thumbFrame(now){
+        if(now - lastTickTime >= THUMB_INTERVAL){
+          globalThumbTick++;
+          items.forEach(it => {
+            if(it._thumbPaused) return;
+            const count = it._thumbCount || 1;
+            const newIndex = globalThumbTick % count;
+            const imgs = it.querySelectorAll('.thumb-wrap img');
+            imgs.forEach((img, idx) => img.classList.toggle('active', idx === newIndex));
+            it._thumbIndex = newIndex;
+          });
+          lastTickTime = now;
+        }
+        thumbTimerId = requestAnimationFrame(thumbFrame);
+      }
+      startThumbTimer();
 
-      /* Lightbox track/logic */
+      // Lightbox functionality (track slider)
       let lbTrack = null;
       let lbSlidesArr = [];
       let lbCurrent = 0;
@@ -1234,7 +1295,7 @@ function openEmail() {
         img.src = url;
         img.alt = '';
         img.loading = 'eager';
-        // try decode to reduce flicker
+        // attempt decode for better UX
         if(img.decode) img.decode().catch(()=>{});
         wrapper.appendChild(img);
         return wrapper;
@@ -1258,7 +1319,7 @@ function openEmail() {
         lbCurrent = i;
         const offset = - (100 * lbCurrent);
         if(lbTrack){
-          if(instant){
+          if(instant) {
             lbTrack.style.transition = 'none';
             lbTrack.style.transform = `translateX(${offset}%)`;
             void lbTrack.offsetWidth;
@@ -1270,19 +1331,6 @@ function openEmail() {
       }
       function lbNextFn(){ showLbSlide(lbCurrent + 1); }
       function lbPrevFn(){ showLbSlide(lbCurrent - 1); }
-
-      function updateBottomControlsVisibility(){
-        const shell = document.querySelector('.lb-shell');
-        if(!shell) return;
-        const isStacked = window.innerWidth <= 980;
-        if(isStacked){
-          lbControlsBottom.setAttribute('aria-hidden','false');
-          lbControlsBottom.style.display = 'flex';
-        } else {
-          lbControlsBottom.setAttribute('aria-hidden','true');
-          lbControlsBottom.style.display = 'none';
-        }
-      }
 
       function openAt(index){
         const item = items[index]; if(!item) return;
@@ -1315,7 +1363,8 @@ function openEmail() {
         lightbox.classList.add('open'); lightbox.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden';
         if(lbClose && typeof lbClose.focus === 'function') lbClose.focus();
 
-        updateBottomControlsVisibility();
+        // attach swipe listeners for lbTrack
+        attachLightboxSwipe(lbTrack);
       }
 
       function closeLB(){
@@ -1324,23 +1373,20 @@ function openEmail() {
         if(lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
       }
 
-      /* Attach events to open each project */
+      // Attach open handlers
       items.forEach((it, idx) => {
         it.addEventListener('click', (ev) => { ev.preventDefault(); openAt(idx); });
         it.addEventListener('keydown', (ev) => { if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openAt(idx); }});
       });
 
-      /* control bindings */
       if(lbClose) lbClose.addEventListener('click', closeLB);
       if(lbPrev) lbPrev.addEventListener('click', () => { lbPrevFn(); });
       if(lbNext) lbNext.addEventListener('click', () => { lbNextFn(); });
-      if(lbPrevBtm) lbPrevBtm.addEventListener('click', () => { lbPrevFn(); });
-      if(lbNextBtm) lbNextBtm.addEventListener('click', () => { lbNextFn(); });
 
-      /* close when clicking backdrop */
+      // click outside to close
       lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLB(); });
 
-      /* keyboard controls */
+      // keyboard nav
       document.addEventListener('keydown', (e) => {
         if(lightbox.classList.contains('open')){
           if(e.key === 'Escape') closeLB();
@@ -1349,74 +1395,103 @@ function openEmail() {
         }
       });
 
-      /* preload first image of each card */
+      // preload first image for each card to reduce flicker
       items.forEach(it => {
         const first = (it.dataset.images || '').split(',').map(s=>s.trim()).filter(Boolean)[0];
         if(first){ const img = new Image(); img.src = first; }
       });
 
-      /* pause thumbnails on page hidden */
+      // pause thumbnails when page hidden
       document.addEventListener('visibilitychange', () => {
         if(document.hidden){
-          if(thumbTimer){ clearInterval(thumbTimer); thumbTimer = null; }
+          stopThumbTimer();
         } else {
-          if(!thumbTimer) thumbTimer = setInterval(thumbTick, THUMB_INTERVAL);
+          startThumbTimer();
         }
       });
 
-      /* allow arrow keys to scroll slider when not in lightbox */
+      // keyboard slider scroll when not in lightbox
       grid.addEventListener('keydown', (e) => {
-        if(e.key === 'ArrowRight'){ e.preventDefault(); grid.scrollBy({ left: window.innerWidth * 0.6, behavior: 'smooth' }); }
-        if(e.key === 'ArrowLeft'){ e.preventDefault(); grid.scrollBy({ left: -window.innerWidth * 0.6, behavior: 'smooth' }); }
+        if(e.key === 'ArrowRight'){ e.preventDefault(); grid.scrollBy({ left: window.innerWidth * 0.72, behavior: 'smooth' }); }
+        if(e.key === 'ArrowLeft'){ e.preventDefault(); grid.scrollBy({ left: -window.innerWidth * 0.72, behavior: 'smooth' }); }
       });
 
-      /* minor accessibility */
+      // make items keyboard focusable and nicer pointer behavior
       items.forEach(it => { it.setAttribute('tabindex', '0'); it.style.userSelect = 'none'; });
 
-      /* show/hide bottom controls on resize */
-      window.addEventListener('resize', updateBottomControlsVisibility);
-      window.addEventListener('orientationchange', updateBottomControlsVisibility);
-
-      /* make lightbox draggable on touch/desktop (basic swipe) */
-      (function enableDragOnTrack(){
-        let startX = 0, currentX = 0, dragging = false, pointerId = null;
-        const threshold = 50;
-        lbSlides.addEventListener('pointerdown', (e) => {
-          if(!lbTrack) return;
-          dragging = true; pointerId = e.pointerId;
-          startX = e.clientX;
-          lbTrack.style.transition = 'none';
-          lbSlides.setPointerCapture(e.pointerId);
-        });
-        lbSlides.addEventListener('pointermove', (e) => {
-          if(!dragging || pointerId !== e.pointerId || !lbTrack) return;
-          currentX = e.clientX;
-          const delta = currentX - startX;
-          const percent = (delta / lbSlides.clientWidth) * 100;
-          lbTrack.style.transform = `translateX(${ - (100 * lbCurrent) + percent }%)`;
-        });
-        lbSlides.addEventListener('pointerup', (e) => {
-          if(!dragging || pointerId !== e.pointerId || !lbTrack) return;
-          dragging = false; lbSlides.releasePointerCapture(e.pointerId); pointerId = null;
-          lbTrack.style.transition = '';
-          const delta = (e.clientX || currentX) - startX;
-          if(Math.abs(delta) > threshold){
-            if(delta < 0) lbNextFn(); else lbPrevFn();
+      /* ========== Lightbox swipe support ========== */
+      function attachLightboxSwipe(track){
+        if(!track) return;
+        let startX = 0, currentX = 0, dragging = false, startTime = 0;
+        function onTouchStart(e){
+          dragging = true;
+          startX = (e.touches ? e.touches[0].clientX : e.clientX);
+          currentX = startX;
+          startTime = Date.now();
+          track.style.transition = 'none';
+        }
+        function onTouchMove(e){
+          if(!dragging) return;
+          currentX = (e.touches ? e.touches[0].clientX : e.clientX);
+          const dx = currentX - startX;
+          const pct = (dx / track.offsetWidth) * 100;
+          const offset = - (100 * lbCurrent) + pct;
+          track.style.transform = `translateX(${offset}%)`;
+        }
+        function onTouchEnd(e){
+          if(!dragging) return;
+          dragging = false;
+          const dx = currentX - startX;
+          const dt = Date.now() - startTime;
+          track.style.transition = ''; // restore
+          // threshold: 50px or quick swipe
+          if(Math.abs(dx) > 50 || (Math.abs(dx) > 20 && dt < 200)){
+            if(dx < 0) showLbSlide(lbCurrent + 1);
+            else showLbSlide(lbCurrent - 1);
           } else {
             showLbSlide(lbCurrent, true);
           }
-        });
-        lbSlides.addEventListener('pointercancel', () => {
-          if(!dragging) return;
-          dragging = false; pointerId = null;
-          if(lbTrack){ lbTrack.style.transition = ''; showLbSlide(lbCurrent, true); }
-        });
-      })();
+        }
+        // attach once per open
+        track.addEventListener('touchstart', onTouchStart, {passive:true});
+        track.addEventListener('touchmove', onTouchMove, {passive:true});
+        track.addEventListener('touchend', onTouchEnd, {passive:true});
+        track.addEventListener('mousedown', onTouchStart);
+        window.addEventListener('mousemove', onTouchMove);
+        window.addEventListener('mouseup', onTouchEnd, {once:false});
+      }
+
+      // Optional: improve UX when user scrolls grid - gently snap into place after scroll end (mobile)
+      let scrollTimer = null;
+      grid.addEventListener('scroll', () => {
+        if(scrollTimer) clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => {
+          // find closest child to center
+          const children = Array.from(grid.children);
+          const centerX = grid.scrollLeft + (grid.clientWidth / 2);
+          let best = children[0], bestDist = Infinity;
+          children.forEach(ch => {
+            const rect = ch.getBoundingClientRect();
+            const chCenter = (ch.offsetLeft + (ch.offsetWidth / 2));
+            const dist = Math.abs(chCenter - centerX);
+            if(dist < bestDist){ bestDist = dist; best = ch; }
+          });
+          if(best) grid.scrollTo({ left: Math.max(0, best.offsetLeft - (grid.clientWidth - best.offsetWidth) / 2), behavior:'smooth' });
+        }, 120);
+      });
+
+      // Ensure on orientation change mobile sizes still fit
+      window.addEventListener('orientationchange', () => {
+        setTimeout(()=> {
+          // refresh layout
+          if(thumbTimerId === null) startThumbTimer();
+        }, 260);
+      });
 
     })();
   </script>
 </section>
-<!-- ===== end PROJECTS section ===== -->
+<!-- ===== end PROJECTS ===== -->
 
 
 

@@ -972,39 +972,102 @@ function openEmail() {
     .folio-arrow.left { left: 6px; }
     .folio-arrow.right { right: 6px; }
 
-    /* DOTS BELOW — modern small desktop style */
-    .folio-dots-wrap {
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:8px;
-      margin-top:12px;
-      padding-bottom:2px;
-      pointer-events:auto;
-    }
+/* DOTS BELOW — modern small desktop style */
+.folio-dots-wrap {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  margin-top:12px;
+  padding-bottom:2px;
+  pointer-events:auto;
+  z-index: 70; /* ensure visible above background content */
+}
 
-    /* modern small dot */
-    .folio-dot {
-      width:8px;
-      height:8px;
-      border-radius:999px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 6px 18px rgba(2,6,23,0.06), inset 0 1px 0 rgba(255,255,255,0.03);
-      cursor:pointer;
-      transition: transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, background .18s ease, border-color .18s ease;
-      opacity:0.98;
-      padding:0;
-    }
-    .folio-dot:hover { transform: scale(1.25); box-shadow: 0 10px 26px rgba(2,6,23,0.1); }
-    .folio-dot.active {
-      width:10px;
-      height:10px;
-      background: var(--projects-primary);
-      box-shadow: 0 12px 28px rgba(42,124,241,0.18), 0 2px 6px rgba(0,0,0,0.12);
-      transform: scale(1.35);
-      border-color: rgba(0,0,0,0.08);
-    }
+/* modern small dot (original style preserved) */
+.folio-dot {
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 6px 18px rgba(2,6,23,0.06), inset 0 1px 0 rgba(255,255,255,0.03);
+  cursor:pointer;
+  transition: transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, background .18s ease, border-color .18s ease;
+  opacity:0.98;
+  padding:0;
+}
+.folio-dot:hover { transform: scale(1.25); box-shadow: 0 10px 26px rgba(2,6,23,0.1); }
+.folio-dot.active {
+  width:10px;
+  height:10px;
+  background: var(--projects-primary);
+  box-shadow: 0 12px 28px rgba(42,124,241,0.18), 0 2px 6px rgba(0,0,0,0.12);
+  transform: scale(1.35);
+  border-color: rgba(0,0,0,0.08);
+}
+
+/* ---------- Light-mode fixes (keep same look, but visible on white) ---------- */
+/* covers html.light, body.light, and common data-theme attribute patterns */
+html.light .folio-dot,
+body.light .folio-dot,
+[data-theme="light"] .folio-dot {
+  /* subtle dark gradient so dots are visible on white backgrounds */
+  background: linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.02));
+  border: 1px solid rgba(0,0,0,0.14);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+/* active in light mode keeps your primary color and a stronger glow */
+html.light .folio-dot.active,
+body.light .folio-dot.active,
+[data-theme="light"] .folio-dot.active {
+  background: var(--projects-primary);
+  border-color: rgba(0,0,0,0.08);
+  box-shadow: 0 12px 28px rgba(42,124,241,0.20), 0 2px 6px rgba(0,0,0,0.12);
+}
+/* ---------- Dark-mode fixes (visible on dark backgrounds) ---------- */
+html.dark .folio-dot,
+body.dark .folio-dot,
+[data-theme="dark"] .folio-dot {
+  /* brighter, warmer highlight so dots contrast on dark backgrounds */
+  background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 8px 22px rgba(2,6,23,0.45), inset 0 1px 0 rgba(255,255,255,0.03);
+  opacity: 1;
+}
+
+/* Active state in dark mode keeps your primary color but with stronger glow */
+html.dark .folio-dot.active,
+body.dark .folio-dot.active,
+[data-theme="dark"] .folio-dot.active {
+  background: var(--projects-primary);
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 14px 30px rgba(42,124,241,0.26), 0 4px 10px rgba(0,0,0,0.6);
+  transform: scale(1.35);
+}
+
+/* Hover tweaks for dark mode (slightly stronger lift) */
+html.dark .folio-dot:hover,
+body.dark .folio-dot:hover,
+[data-theme="dark"] .folio-dot:hover {
+  transform: scale(1.28);
+  box-shadow: 0 14px 30px rgba(2,6,23,0.5);
+}
+
+/* Fallback for users who rely on OS color scheme rather than theme classes */
+@media (prefers-color-scheme: dark) {
+  .folio-dot {
+    background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.03));
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 8px 18px rgba(2,6,23,0.42), inset 0 1px 0 rgba(255,255,255,0.02);
+    opacity: 1;
+  }
+  .folio-dot.active {
+    box-shadow: 0 12px 28px rgba(42,124,241,0.24), 0 3px 8px rgba(0,0,0,0.55);
+  }
+}
+
 
     /* dragging state visuals */
     .folio-grid.dragging { cursor: grabbing; user-select: none; -webkit-user-select:none; -ms-user-select:none; }

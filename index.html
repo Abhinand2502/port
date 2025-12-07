@@ -865,7 +865,7 @@ function openEmail() {
       </div>
     </section>
 
-<!-- ===== PROJECTS: linear slider + unchanged lightbox behavior (desktop drag + dots; mobile internal swipe) ===== -->
+<!-- ===== PROJECTS: desktop drag on container + dot slider; lightbox only on "View details"; mobile allows page scroll ===== -->
 <section id="projects" aria-labelledby="projectsTitle">
   <style>
     /* Scoped styles for the projects section */
@@ -896,7 +896,7 @@ function openEmail() {
       color: var(--projects-text);
     }
 
-    /* Horizontal slider container */
+    /* Horizontal slider container (desktop horizontal scroll + drag) */
     .folio-grid {
       display:flex;
       gap:20px;
@@ -906,6 +906,7 @@ function openEmail() {
       padding: 18px 6px;
       align-items: stretch;
       position:relative;
+      touch-action: pan-y; /* allow vertical page scroll on touch devices */
     }
     .folio-grid::-webkit-scrollbar { height: 10px; }
     .folio-grid::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius:10px; }
@@ -922,7 +923,7 @@ function openEmail() {
       position:relative;
       border:1px solid var(--projects-glass);
       transition: transform .18s ease, box-shadow .18s ease;
-      cursor:pointer;
+      cursor: pointer;
       background:var(--projects-card-bg);
       padding:0;
       box-sizing: border-box;
@@ -939,7 +940,8 @@ function openEmail() {
 
     .folio-caption { position:absolute; left:12px; bottom:12px; right:12px; padding:10px 14px; border-radius:10px; background: rgba(0,0,0,0.56); color:#fff; font-weight:900; font-size:15px; display:flex; gap:12px; align-items:center; backdrop-filter: blur(6px); z-index: 10; }
     .folio-caption .title { font-weight:900; letter-spacing:0.2px; color:#fff; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:15px; }
-    .folio-caption .view { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:6px 10px; border-radius:10px; background: rgba(255,255,255,0.06); color:#fff; font-weight:700; font-size:13px; min-width:54px; height:36px; box-shadow: 0 6px 16px rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.06); }
+    /* make the "View details" a distinct clickable target */
+    .folio-caption .view { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:6px 10px; border-radius:10px; background: rgba(255,255,255,0.06); color:#fff; font-weight:700; font-size:13px; min-width:54px; height:36px; box-shadow: 0 6px 16px rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.06); cursor: pointer; }
 
     /* Dot slider (desktop) */
     .folio-dots {
@@ -1011,11 +1013,9 @@ function openEmail() {
         display:flex;
         flex-direction:column;
         gap:12px;
-        overflow:auto; /* vertical scrolling (internal) */
+        overflow:auto; /* vertical scrolling (native page scroll will work) */
         scroll-snap-type: none;
         padding: 12px 6px;
-        touch-action: none; /* we'll handle touch to prevent page scroll */
-        max-height: calc(100vh - var(--projects-header-h) - 120px); /* keep it visually constrained so users can swipe inside */
       }
       .folio-grid::-webkit-scrollbar { height: auto; width:8px; }
       .folio-item { flex: none; width:100%; max-width:100%; border-radius:12px; }
@@ -1076,89 +1076,89 @@ function openEmail() {
       <div class="folio-grid anim" id="folioGrid" aria-live="polite" tabindex="0">
 
         <!-- --- Project cards (kept exactly as your original content) --- -->
-        <button class="folio-item"
+        <div class="folio-item"
           data-images="assets/THOME.png,assets/TRESULT.png,assets/TRESULT1.png"
           data-lightbox="assets/TLOGIN (1).png,assets/THOME.png,assets/TPROF.png,assets/TUPLOAD.png,assets/TRESULT.png,assets/TRESULT1.png,assets/THIST.png,assets/THIST2.png,assets/TCOM.png,assets/ALOG.png,assets/AHOME.png,assets/AUSER.png,assets/AHIST.png,assets/ACOMP.png"
           data-link="https://github.com/Abhinand2502/DetexAI"
           data-title="DetexAI"
           data-desc="DetexAI is an AI-powered system using YOLOv8 to detect and classify trash in both land and aquatic environments, enabling real-time identification for smarter, faster cleanup."
           data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐YOLOv8,⭐SQLite"
-          aria-label="Open DetexAI project details">
+          aria-label="DetexAI project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">DetexAI – AI Trash Detection</span><span class="view">View details</span></div>
-        </button>
+          <div class="folio-caption"><span class="title">DetexAI – AI Trash Detection</span><span class="view" role="button" tabindex="0">View details</span></div>
+        </div>
 
-        <button class="folio-item"
+        <div class="folio-item"
           data-images="assets/face.jpg,assets/face1.png,assets/face2.png"
           data-lightbox="assets/face.jpg,assets/face1.png,assets/face2.png,assets/face3.png,assets/face4.png,assets/face5.png,assets/face6.png"
           data-link="https://github.com/Abhinand2502/Face-recognition"
           data-title="Face recognition"
           data-desc="Face recognition Attendance Register is an automated student attendance system that uses face recognition technology to mark attendance."
           data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript"
-          aria-label="Open Face recognition project details">
+          aria-label="Face recognition project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Face recognition - Attendance Register</span><span class="view">View details</span></div>
-        </button>
+          <div class="folio-caption"><span class="title">Face recognition - Attendance Register</span><span class="view" role="button" tabindex="0">View details</span></div>
+        </div>
 
-        <button class="folio-item"
+        <div class="folio-item"
           data-images="assets/login.png,assets/signup.png,assets/home.png"
           data-lightbox="assets/login.png,assets/signup.png,assets/home.png,assets/cash.png,assets/admin.png,assets/product.png,assets/orders.png"
           data-link="https://github.com/Abhinand2502/Ai-Assist-Cart"
           data-title="AI-AssistCart"
           data-desc="AI-AssistCart is an AI-powered e-commerce platform that automates product recommendations, streamlines checkout, and provides advanced admin management tools to enhance the online shopping experience. Developed using Django, it leverages TF-IDF to deliver personalized product suggestions."
           data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐AJAX,⭐SQLite"
-          aria-label="Open AI-AssistCart project details">
+          aria-label="AI-AssistCart project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">AI-AssistCart - AI Shopping Site</span><span class="view">View details</span></div>
-        </button>
+          <div class="folio-caption"><span class="title">AI-AssistCart - AI Shopping Site</span><span class="view" role="button" tabindex="0">View details</span></div>
+        </div>
 
-        <button class="folio-item"
+        <div class="folio-item"
           data-images="assets/chat1 (1).png,assets/chat1 (2).png"
           data-lightbox="assets/chat1 (1).png,assets/chat1 (2).png"
           data-link="https://github.com/Abhinand2502/AiChatbot"
           data-title="AI-Chatbot"
           data-desc="An AI-powered bilingual chatbot built with Django, designed to communicate in both English and Malayalam."
           data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐Cohere API"
-          aria-label="Open AI-Chatbot project details">
+          aria-label="AI-Chatbot project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">AI-Chatbot</span><span class="view">View details</span></div>
-        </button>
+          <div class="folio-caption"><span class="title">AI-Chatbot</span><span class="view" role="button" tabindex="0">View details</span></div>
+        </div>
 
-        <button class="folio-item"
+        <div class="folio-item"
           data-images="assets/tic (2).png,assets/tic (3).png,assets/tic (1).png"
           data-lightbox="assets/tic (2).png,assets/tic (3).png,assets/tic (1).png"
           data-link="https://github.com/Abhinand2502/tic_tac_toe"
           data-title="Tic-Tac-Toe"
           data-desc="A neon glassmorphism Tic-Tac-Toe game with real-time multiplayer using Django Channels (WebSockets)."
           data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐WebSockets"
-          aria-label="Open Tic-Tac-Toe project details">
+          aria-label="Tic-Tac-Toe project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Tic-Tac-Toe</span><span class="view">View details</span></div>
-        </button>
+          <div class="folio-caption"><span class="title">Tic-Tac-Toe</span><span class="view" role="button" tabindex="0">View details</span></div>
+        </div>
 
-        <button class="folio-item"
+        <div class="folio-item"
           data-images="assets/porto.png,assets/portfolio.jpg"
           data-lightbox="assets/porto.png,assets/portfolio.jpg"
           data-link="https://github.com/Abhinand2502/portofolio"
           data-title="Portfolio"
           data-desc="My personal portfolio website."
           data-tech="⭐HTML,⭐CSS,⭐JavaScript"
-          aria-label="Open Portfolio project details">
+          aria-label="Portfolio project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Portfolio</span><span class="view">View details</span></div>
-        </button>
+          <div class="folio-caption"><span class="title">Portfolio</span><span class="view" role="button" tabindex="0">View details</span></div>
+        </div>
 
-        <button class="folio-item"
+        <div class="folio-item"
           data-images="assets/todo.png,assets/todo.png,assets/todo.png"
           data-lightbox="assets/todo.png,assets/todo.png,assets/todo.png"
           data-link="https://github.com/Abhinand2502/to_do_app"
           data-title="To-Do List app"
           data-desc="To-Do App — a sleek, minimal task manager with real-time search filtering."
           data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript"
-          aria-label="Open To-Do List app project details">
+          aria-label="To-Do List app project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">To-Do List app</span><span class="view">View details</span></div>
-        </button>
+          <div class="folio-caption"><span class="title">To-Do List app</span><span class="view" role="button" tabindex="0">View details</span></div>
+        </div>
 
       </div> <!-- .folio-grid -->
 
@@ -1256,7 +1256,7 @@ function openEmail() {
       let thumbTimer = setInterval(thumbTick, THUMB_INTERVAL);
 
       /* -----------------------------
-         Lightbox
+         Lightbox (only open when user clicks the .view button)
          ----------------------------- */
       let lbTrack = null;
       let lbSlidesArr = [];
@@ -1345,12 +1345,6 @@ function openEmail() {
         if(lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
       }
 
-      // Attach open handlers
-      items.forEach((it, idx) => {
-        it.addEventListener('click', (ev) => { ev.preventDefault(); openAt(idx); });
-        it.addEventListener('keydown', (ev) => { if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openAt(idx); }});
-      });
-
       if(lbClose) lbClose.addEventListener('click', closeLB);
       if(lbPrev) lbPrev.addEventListener('click', () => { lbPrevFn(); });
       if(lbNext) lbNext.addEventListener('click', () => { lbNextFn(); });
@@ -1380,22 +1374,14 @@ function openEmail() {
         }
       });
 
-      // allow left/right keys to scroll slider when not in lightbox
-      grid.addEventListener('keydown', (e) => {
-        if(e.key === 'ArrowRight'){ e.preventDefault(); grid.scrollBy({ left: window.innerWidth * 0.6, behavior: 'smooth' }); }
-        if(e.key === 'ArrowLeft'){ e.preventDefault(); grid.scrollBy({ left: -window.innerWidth * 0.6, behavior: 'smooth' }); }
-      });
-
       // accessibility: make items focusable
       items.forEach(it => { it.setAttribute('tabindex', '0'); it.style.userSelect = 'none'; });
 
       /* -----------------------------
-         Desktop: drag/swipe support + dot slider
+         Desktop: drag/swipe support on container + dot slider
          ----------------------------- */
       let isPointerDown = false;
-      let startX = 0, startY = 0, scrollLeft = 0;
-      let lastPointerTime = 0;
-      let dragged = false;
+      let startX = 0, scrollLeft = 0;
       let dots = [];
 
       function createDots(){
@@ -1408,19 +1394,17 @@ function openEmail() {
             ev.preventDefault();
             scrollToItem(idx);
             setActiveDot(idx);
-            // hide hint on manual interaction
             hideDragHint();
           });
           dotsWrap.appendChild(btn);
           dots.push(btn);
         });
-        // show dots only if desktop
         if(window.innerWidth > MOBILE_BREAK){
-          dotsWrap.setAttribute('aria-hidden', 'false');
           dotsWrap.style.display = 'flex';
+          dotsWrap.setAttribute('aria-hidden','false');
         } else {
-          dotsWrap.setAttribute('aria-hidden', 'true');
           dotsWrap.style.display = 'none';
+          dotsWrap.setAttribute('aria-hidden','true');
         }
       }
 
@@ -1433,8 +1417,6 @@ function openEmail() {
         let closest = 0;
         let closestDist = Infinity;
         items.forEach((it, idx) => {
-          const rect = it.getBoundingClientRect();
-          // compute center of item relative to grid
           const itemCenter = (it.offsetLeft + (it.offsetWidth / 2));
           const dist = Math.abs(itemCenter - centerX);
           if(dist < closestDist){ closestDist = dist; closest = idx; }
@@ -1445,33 +1427,27 @@ function openEmail() {
       function scrollToItem(idx){
         const it = items[idx];
         if(!it) return;
-        // center the item in viewport
         const left = it.offsetLeft - ((grid.clientWidth - it.clientWidth) / 2);
         grid.scrollTo({ left, behavior: 'smooth' });
       }
 
-      // Pointer drag handlers (desktop & trackpad swipes)
+      // Pointer drag handlers on the container (desktop)
       grid.addEventListener('pointerdown', (e) => {
-        // Only use pointer drag for primary button / touch
+        if(window.innerWidth <= MOBILE_BREAK) return; // desktop-only
         isPointerDown = true;
         grid.setPointerCapture && grid.setPointerCapture(e.pointerId);
         startX = e.clientX;
-        startY = e.clientY;
         scrollLeft = grid.scrollLeft;
-        lastPointerTime = Date.now();
-        dragged = false;
         grid.classList.add('dragging');
       });
       grid.addEventListener('pointermove', (e) => {
         if(!isPointerDown) return;
         const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        // if vertical move larger than horizontal, ignore drag (let scroll)
-        if(Math.abs(dx) < Math.abs(dy)) return;
+        // if vertical move larger than horizontal, ignore
+        if(Math.abs(dx) < 5) return;
         e.preventDefault();
-        dragged = true;
         grid.scrollLeft = scrollLeft - dx;
-        hideDragHint(); // user has interacted
+        hideDragHint();
       }, {passive:false});
       ['pointerup','pointercancel','pointerleave'].forEach(ev => {
         grid.addEventListener(ev, (e) => {
@@ -1479,14 +1455,14 @@ function openEmail() {
           isPointerDown = false;
           try{ grid.releasePointerCapture && grid.releasePointerCapture(e.pointerId); }catch(e){}
           grid.classList.remove('dragging');
-          // snap to nearest project for better UX
+          // snap to nearest project
           const nearest = findCenteredItemIndex();
           scrollToItem(nearest);
           setActiveDot(nearest);
         });
       });
 
-      // also update dots on scroll (throttled)
+      // update dots on scroll
       let scrollTick = null;
       grid.addEventListener('scroll', () => {
         if(scrollTick) cancelAnimationFrame(scrollTick);
@@ -1500,62 +1476,19 @@ function openEmail() {
       function hideDragHint(){ if(dragHint) dragHint.classList.add('hidden'); }
       function showDragHint(){ if(dragHint) dragHint.classList.remove('hidden'); }
 
-      // initial dot generation
       createDots();
-      // set initial active
       setTimeout(()=> setActiveDot(0), 120);
+      setTimeout(()=> { if(window.innerWidth > MOBILE_BREAK) showDragHint(); }, 900);
+      setTimeout(()=> { hideDragHint(); }, 4200);
 
       /* -----------------------------
-         MOBILE: internal vertical swipe handling to avoid main page hijack
-         (we intercept touch moves inside the projects area so page scroll/next-section doesn't trigger)
-         ----------------------------- */
-      let mobileMode = window.innerWidth <= MOBILE_BREAK;
-      let touchStartY = 0;
-      let touchStartX = 0;
-      let isTouching = false;
-      let lastTouchTime = 0;
-
-      function onTouchStart(e){
-        if(!mobileMode) return;
-        if(e.touches && e.touches.length > 1) return;
-        isTouching = true;
-        touchStartY = e.touches ? e.touches[0].clientY : e.clientY;
-        touchStartX = e.touches ? e.touches[0].clientX : e.clientX;
-        lastTouchTime = Date.now();
-      }
-      function onTouchMove(e){
-        if(!mobileMode || !isTouching) return;
-        const curY = e.touches ? e.touches[0].clientY : e.clientY;
-        const curX = e.touches ? e.touches[0].clientX : e.clientX;
-        const dy = curY - touchStartY;
-        const dx = curX - touchStartX;
-
-        // if mostly horizontal and grid is horizontal, allow (but on mobile grid is vertical)
-        if(Math.abs(dx) > Math.abs(dy)) return;
-
-        // prevent page scrolling; handle internal vertical scrolling of grid
-        e.preventDefault();
-
-        // perform internal scroll: invert dy because touch moves down should scroll up (natural)
-        grid.scrollTop -= dy;
-        // update base for next move
-        touchStartY = curY;
-        touchStartX = curX;
-      }
-      function onTouchEnd(e){
-        if(!mobileMode) return;
-        isTouching = false;
-      }
-
-      // attach non-passive listeners for mobile touch interception
-      grid.addEventListener('touchstart', onTouchStart, {passive:false});
-      grid.addEventListener('touchmove', onTouchMove, {passive:false});
-      grid.addEventListener('touchend', onTouchEnd, {passive:true});
-      grid.addEventListener('touchcancel', onTouchEnd, {passive:true});
-
-      /* -----------------------------
-         MOBILE: Show more logic (unchanged behavior)
+         MOBILE: allow page-level scroll (do NOT intercept touch)
+         - we removed the previous touchmove preventDefault handlers so the page-level
+           scroll / section navigation (your main scroll animation) will work naturally.
+         - keep the "Show more" logic intact.
          --------------------- */
+      let mobileMode = window.innerWidth <= MOBILE_BREAK;
+
       const defaultVisible = 5;
       const batchSize = 2;
 
@@ -1616,14 +1549,13 @@ function openEmail() {
         const nowMobile = window.innerWidth <= MOBILE_BREAK;
         if(nowMobile !== mobileMode){
           mobileMode = nowMobile;
-          // adjust dots visibility
           if(dotsWrap){
             if(!mobileMode){ dotsWrap.style.display = 'flex'; dotsWrap.setAttribute('aria-hidden','false'); showDragHint(); }
             else { dotsWrap.style.display = 'none'; dotsWrap.setAttribute('aria-hidden','true'); hideDragHint(); }
           }
           applyMobileVisibility();
         }
-        // rebuild dots for new size (if count is same it will simply refresh)
+        // rebuild dots (keeps indexes synced)
         createDots();
         setActiveDot(findCenteredItemIndex());
       }
@@ -1631,13 +1563,35 @@ function openEmail() {
         clearTimeout(window._projectsResizeTimer);
         window._projectsResizeTimer = setTimeout(onResize, 120);
       });
-      // run once
       onResize();
 
-      // hide drag hint after some time or on first interaction
-      setTimeout(()=> { if(window.innerWidth > MOBILE_BREAK) showDragHint(); }, 900);
-      // auto-hide hint after 4s
-      setTimeout(()=> { hideDragHint(); }, 4200);
+      /* -----------------------------
+         Important change you requested:
+         - ONLY open lightbox when the user clicks the ".view" button inside the caption.
+         - clicking the card itself will no longer open the lightbox.
+         ----------------------------- */
+      function attachViewHandlers(){
+        items = Array.from(grid.querySelectorAll('.folio-item'));
+        items.forEach((it, idx) => {
+          const view = it.querySelector('.view');
+          if(!view) return;
+          // click or keyboard activation on the view button opens lightbox
+          view.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            ev.preventDefault();
+            openAt(idx);
+          });
+          view.addEventListener('keydown', (ev) => {
+            if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); ev.stopPropagation(); openAt(idx); }
+          });
+          // prevent the whole card click from opening lightbox
+          it.addEventListener('click', (ev) => {
+            // We intentionally do nothing on card click to avoid accidental lightbox.
+            // But we allow focus so keyboard users can tab to the card.
+          });
+        });
+      }
+      attachViewHandlers();
 
     })();
   </script>

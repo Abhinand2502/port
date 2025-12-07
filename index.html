@@ -865,7 +865,7 @@ function openEmail() {
       </div>
     </section>
 
-<!-- ===== PROJECTS: linear slider + unchanged lightbox behavior (desktop enlarged; mobile stacked with "show more") ===== -->
+<!-- ===== PROJECTS: linear slider + unchanged lightbox behavior (desktop drag + dots; mobile internal swipe) ===== -->
 <section id="projects" aria-labelledby="projectsTitle">
   <style>
     /* Scoped styles for the projects section */
@@ -878,6 +878,8 @@ function openEmail() {
       --projects-card-radius:12px;
       --projects-thumb-interval: 1800ms;
       --projects-card-bg: transparent;
+      --projects-dot-size:10px;
+      --projects-dot-gap:10px;
     }
 
     #projects { padding-top: calc(var(--projects-header-h) + 10px); padding-bottom: 56px; background: transparent; position: relative; z-index: 1; }
@@ -894,7 +896,7 @@ function openEmail() {
       color: var(--projects-text);
     }
 
-    /* Horizontal slider container (desktop) */
+    /* Horizontal slider container */
     .folio-grid {
       display:flex;
       gap:20px;
@@ -903,12 +905,13 @@ function openEmail() {
       scroll-snap-type: x mandatory;
       padding: 18px 6px;
       align-items: stretch;
+      position:relative;
     }
     .folio-grid::-webkit-scrollbar { height: 10px; }
     .folio-grid::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius:10px; }
     .folio-grid:focus { outline: none; }
 
-    /* slide (project card) - desktop larger sizes */
+    /* slide (project card) */
     .folio-item {
       flex: 0 0 92%;
       max-width: 1200px;
@@ -926,7 +929,6 @@ function openEmail() {
     }
     .folio-item:focus, .folio-item:hover { transform: translateY(-6px); box-shadow: 0 28px 80px rgba(16,24,40,0.12); outline:none; }
 
-    /* Increase card presence at larger breakpoints */
     @media (min-width:760px) { .folio-item { flex: 0 0 78%; max-width: 1100px; } }
     @media (min-width:1100px) { .folio-item { flex: 0 0 64%; max-width: 1100px; } }
     @media (min-width:1400px) { .folio-item { flex: 0 0 54%; max-width: 1300px; } }
@@ -938,6 +940,27 @@ function openEmail() {
     .folio-caption { position:absolute; left:12px; bottom:12px; right:12px; padding:10px 14px; border-radius:10px; background: rgba(0,0,0,0.56); color:#fff; font-weight:900; font-size:15px; display:flex; gap:12px; align-items:center; backdrop-filter: blur(6px); z-index: 10; }
     .folio-caption .title { font-weight:900; letter-spacing:0.2px; color:#fff; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:15px; }
     .folio-caption .view { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:6px 10px; border-radius:10px; background: rgba(255,255,255,0.06); color:#fff; font-weight:700; font-size:13px; min-width:54px; height:36px; box-shadow: 0 6px 16px rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.06); }
+
+    /* Dot slider (desktop) */
+    .folio-dots {
+      display:flex;
+      gap: var(--projects-dot-gap);
+      justify-content:center;
+      align-items:center;
+      margin-top:14px;
+      user-select:none;
+    }
+    .folio-dots button {
+      width: var(--projects-dot-size);
+      height: var(--projects-dot-size);
+      border-radius:50%;
+      border:1px solid rgba(0,0,0,0.06);
+      background:rgba(0,0,0,0.06);
+      padding:0;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .folio-dots button.active { transform: scale(1.12); background:var(--projects-primary); border-color:var(--projects-primary); }
 
     /* Lightbox (unchanged) */
     .lightbox {
@@ -988,9 +1011,11 @@ function openEmail() {
         display:flex;
         flex-direction:column;
         gap:12px;
-        overflow:auto; /* vertical scrolling */
+        overflow:auto; /* vertical scrolling (internal) */
         scroll-snap-type: none;
         padding: 12px 6px;
+        touch-action: none; /* we'll handle touch to prevent page scroll */
+        max-height: calc(100vh - var(--projects-header-h) - 120px); /* keep it visually constrained so users can swipe inside */
       }
       .folio-grid::-webkit-scrollbar { height: auto; width:8px; }
       .folio-item { flex: none; width:100%; max-width:100%; border-radius:12px; }
@@ -1014,6 +1039,32 @@ function openEmail() {
         cursor:pointer;
         min-width:160px;
       }
+    }
+
+    /* Desktop drag cursor and hint */
+    @media (min-width:760px) {
+      .folio-grid { cursor: grab; user-select:none; -webkit-user-drag:none; }
+      .folio-grid.dragging { cursor: grabbing; }
+      .drag-hint {
+        position:absolute;
+        right:14px;
+        bottom:-8px;
+        display:flex;
+        gap:8px;
+        align-items:center;
+        background: rgba(255,255,255,0.95);
+        color:#111;
+        padding:8px 10px;
+        border-radius:999px;
+        box-shadow: 0 8px 28px rgba(2,6,23,0.12);
+        font-weight:700;
+        font-size:13px;
+        z-index:40;
+        transform: translateY(6px);
+        transition: opacity .28s ease, transform .28s ease;
+      }
+      .drag-hint.hidden { opacity:0; transform: translateY(12px); pointer-events:none; }
+      .drag-hand { font-size:16px; transform: translateY(1px); }
     }
   </style>
 
@@ -1111,6 +1162,10 @@ function openEmail() {
 
       </div> <!-- .folio-grid -->
 
+      <!-- drag hint & dots (desktop) -->
+      <div class="drag-hint" id="dragHint" aria-hidden="true"><span class="drag-hand">🤚</span><span>Drag to browse</span></div>
+      <div class="folio-dots" id="folioDots" aria-hidden="true"></div>
+
       <!-- show more (mobile only) -->
       <button id="showMoreProjects" class="anim sr-only" aria-expanded="false" aria-controls="folioGrid">Show more projects</button>
     </div>
@@ -1156,10 +1211,15 @@ function openEmail() {
       const lbNext = document.getElementById('lbNext');
 
       const showMoreBtn = document.getElementById('showMoreProjects');
+      const dragHint = document.getElementById('dragHint');
+      const dotsWrap = document.getElementById('folioDots');
 
       const THUMB_INTERVAL = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--projects-thumb-interval')) || 1800;
+      const MOBILE_BREAK = 760;
 
-      // Build thumbnail images per card and autoplay them
+      /* -----------------------------
+         Thumbnail autoplay + setup
+         ----------------------------- */
       items.forEach((it) => {
         const wrap = it.querySelector('.thumb-wrap');
         const images = (it.dataset.images || '').split(',').map(s => s.trim()).filter(Boolean);
@@ -1195,7 +1255,9 @@ function openEmail() {
       }
       let thumbTimer = setInterval(thumbTick, THUMB_INTERVAL);
 
-      // Lightbox functionality (track slider)
+      /* -----------------------------
+         Lightbox
+         ----------------------------- */
       let lbTrack = null;
       let lbSlidesArr = [];
       let lbCurrent = 0;
@@ -1318,54 +1380,204 @@ function openEmail() {
         }
       });
 
-      // allow left/right keys to scroll slider when not in lightbox (desktop)
+      // allow left/right keys to scroll slider when not in lightbox
       grid.addEventListener('keydown', (e) => {
         if(e.key === 'ArrowRight'){ e.preventDefault(); grid.scrollBy({ left: window.innerWidth * 0.6, behavior: 'smooth' }); }
         if(e.key === 'ArrowLeft'){ e.preventDefault(); grid.scrollBy({ left: -window.innerWidth * 0.6, behavior: 'smooth' }); }
       });
 
-      // small accessibility improvement: make each button focusable by keyboard and show pointer
+      // accessibility: make items focusable
       items.forEach(it => { it.setAttribute('tabindex', '0'); it.style.userSelect = 'none'; });
 
-      /* ---------------------
-         MOBILE: Show more logic
-         - defaultVisible: how many to show initially on mobile
-         - batchSize: how many to reveal per "Show more" click
+      /* -----------------------------
+         Desktop: drag/swipe support + dot slider
+         ----------------------------- */
+      let isPointerDown = false;
+      let startX = 0, startY = 0, scrollLeft = 0;
+      let lastPointerTime = 0;
+      let dragged = false;
+      let dots = [];
+
+      function createDots(){
+        dotsWrap.innerHTML = '';
+        dots = [];
+        items.forEach((it, idx) => {
+          const btn = document.createElement('button');
+          btn.setAttribute('aria-label', `Go to project ${idx+1}`);
+          btn.addEventListener('click', (ev) => {
+            ev.preventDefault();
+            scrollToItem(idx);
+            setActiveDot(idx);
+            // hide hint on manual interaction
+            hideDragHint();
+          });
+          dotsWrap.appendChild(btn);
+          dots.push(btn);
+        });
+        // show dots only if desktop
+        if(window.innerWidth > MOBILE_BREAK){
+          dotsWrap.setAttribute('aria-hidden', 'false');
+          dotsWrap.style.display = 'flex';
+        } else {
+          dotsWrap.setAttribute('aria-hidden', 'true');
+          dotsWrap.style.display = 'none';
+        }
+      }
+
+      function setActiveDot(i){
+        dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+      }
+
+      function findCenteredItemIndex(){
+        const centerX = grid.scrollLeft + (grid.clientWidth / 2);
+        let closest = 0;
+        let closestDist = Infinity;
+        items.forEach((it, idx) => {
+          const rect = it.getBoundingClientRect();
+          // compute center of item relative to grid
+          const itemCenter = (it.offsetLeft + (it.offsetWidth / 2));
+          const dist = Math.abs(itemCenter - centerX);
+          if(dist < closestDist){ closestDist = dist; closest = idx; }
+        });
+        return closest;
+      }
+
+      function scrollToItem(idx){
+        const it = items[idx];
+        if(!it) return;
+        // center the item in viewport
+        const left = it.offsetLeft - ((grid.clientWidth - it.clientWidth) / 2);
+        grid.scrollTo({ left, behavior: 'smooth' });
+      }
+
+      // Pointer drag handlers (desktop & trackpad swipes)
+      grid.addEventListener('pointerdown', (e) => {
+        // Only use pointer drag for primary button / touch
+        isPointerDown = true;
+        grid.setPointerCapture && grid.setPointerCapture(e.pointerId);
+        startX = e.clientX;
+        startY = e.clientY;
+        scrollLeft = grid.scrollLeft;
+        lastPointerTime = Date.now();
+        dragged = false;
+        grid.classList.add('dragging');
+      });
+      grid.addEventListener('pointermove', (e) => {
+        if(!isPointerDown) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        // if vertical move larger than horizontal, ignore drag (let scroll)
+        if(Math.abs(dx) < Math.abs(dy)) return;
+        e.preventDefault();
+        dragged = true;
+        grid.scrollLeft = scrollLeft - dx;
+        hideDragHint(); // user has interacted
+      }, {passive:false});
+      ['pointerup','pointercancel','pointerleave'].forEach(ev => {
+        grid.addEventListener(ev, (e) => {
+          if(!isPointerDown) return;
+          isPointerDown = false;
+          try{ grid.releasePointerCapture && grid.releasePointerCapture(e.pointerId); }catch(e){}
+          grid.classList.remove('dragging');
+          // snap to nearest project for better UX
+          const nearest = findCenteredItemIndex();
+          scrollToItem(nearest);
+          setActiveDot(nearest);
+        });
+      });
+
+      // also update dots on scroll (throttled)
+      let scrollTick = null;
+      grid.addEventListener('scroll', () => {
+        if(scrollTick) cancelAnimationFrame(scrollTick);
+        scrollTick = requestAnimationFrame(() => {
+          const idx = findCenteredItemIndex();
+          setActiveDot(idx);
+        });
+      }, {passive:true});
+
+      // drag hint show/hide
+      function hideDragHint(){ if(dragHint) dragHint.classList.add('hidden'); }
+      function showDragHint(){ if(dragHint) dragHint.classList.remove('hidden'); }
+
+      // initial dot generation
+      createDots();
+      // set initial active
+      setTimeout(()=> setActiveDot(0), 120);
+
+      /* -----------------------------
+         MOBILE: internal vertical swipe handling to avoid main page hijack
+         (we intercept touch moves inside the projects area so page scroll/next-section doesn't trigger)
+         ----------------------------- */
+      let mobileMode = window.innerWidth <= MOBILE_BREAK;
+      let touchStartY = 0;
+      let touchStartX = 0;
+      let isTouching = false;
+      let lastTouchTime = 0;
+
+      function onTouchStart(e){
+        if(!mobileMode) return;
+        if(e.touches && e.touches.length > 1) return;
+        isTouching = true;
+        touchStartY = e.touches ? e.touches[0].clientY : e.clientY;
+        touchStartX = e.touches ? e.touches[0].clientX : e.clientX;
+        lastTouchTime = Date.now();
+      }
+      function onTouchMove(e){
+        if(!mobileMode || !isTouching) return;
+        const curY = e.touches ? e.touches[0].clientY : e.clientY;
+        const curX = e.touches ? e.touches[0].clientX : e.clientX;
+        const dy = curY - touchStartY;
+        const dx = curX - touchStartX;
+
+        // if mostly horizontal and grid is horizontal, allow (but on mobile grid is vertical)
+        if(Math.abs(dx) > Math.abs(dy)) return;
+
+        // prevent page scrolling; handle internal vertical scrolling of grid
+        e.preventDefault();
+
+        // perform internal scroll: invert dy because touch moves down should scroll up (natural)
+        grid.scrollTop -= dy;
+        // update base for next move
+        touchStartY = curY;
+        touchStartX = curX;
+      }
+      function onTouchEnd(e){
+        if(!mobileMode) return;
+        isTouching = false;
+      }
+
+      // attach non-passive listeners for mobile touch interception
+      grid.addEventListener('touchstart', onTouchStart, {passive:false});
+      grid.addEventListener('touchmove', onTouchMove, {passive:false});
+      grid.addEventListener('touchend', onTouchEnd, {passive:true});
+      grid.addEventListener('touchcancel', onTouchEnd, {passive:true});
+
+      /* -----------------------------
+         MOBILE: Show more logic (unchanged behavior)
          --------------------- */
-      const MOBILE_BREAK = 760;
       const defaultVisible = 5;
       const batchSize = 2;
-      let mobileMode = window.innerWidth <= MOBILE_BREAK;
-      let currentlyVisible = items.length;
 
       function applyMobileVisibility() {
-        items = Array.from(grid.querySelectorAll('.folio-item')); // refresh list
+        items = Array.from(grid.querySelectorAll('.folio-item')); // refresh
         if(!mobileMode){
-          // ensure all visible on desktop
           items.forEach(it => it.classList.remove('hidden-mobile'));
           if(showMoreBtn){
             showMoreBtn.classList.add('sr-only');
             showMoreBtn.setAttribute('aria-expanded','false');
           }
-          currentlyVisible = items.length;
           return;
         }
 
-        // mobile: hide items beyond defaultVisible
         items.forEach((it, idx) => {
-          if(idx < defaultVisible) {
-            it.classList.remove('hidden-mobile');
-          } else {
-            it.classList.add('hidden-mobile');
-          }
+          if(idx < defaultVisible) it.classList.remove('hidden-mobile'); else it.classList.add('hidden-mobile');
         });
-        currentlyVisible = Math.min(defaultVisible, items.length);
 
-        // configure button
         if(showMoreBtn){
-          showMoreBtn.classList.remove('sr-only');
-          showMoreBtn.style.display = 'block';
           if(items.length > defaultVisible){
+            showMoreBtn.classList.remove('sr-only');
+            showMoreBtn.style.display = 'block';
             showMoreBtn.textContent = 'Show more projects';
             showMoreBtn.setAttribute('aria-expanded','false');
           } else {
@@ -1374,28 +1586,20 @@ function openEmail() {
         }
       }
 
-      // reveal next batch on click
       if(showMoreBtn){
         showMoreBtn.addEventListener('click', () => {
           const hiddenItems = Array.from(grid.querySelectorAll('.folio-item.hidden-mobile'));
           if(hiddenItems.length === 0){
-            // all shown -> collapse
-            items.forEach((it, idx) => {
-              if(idx >= defaultVisible) it.classList.add('hidden-mobile');
-            });
-            currentlyVisible = Math.min(defaultVisible, items.length);
+            // collapse
+            items.forEach((it, idx) => { if(idx >= defaultVisible) it.classList.add('hidden-mobile'); });
             showMoreBtn.textContent = 'Show more projects';
             showMoreBtn.setAttribute('aria-expanded','false');
-            // scroll to the grid top so user sees collapsed start
             grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
             return;
           }
-          // reveal next batchSize items
           for(let i=0; i<batchSize && hiddenItems[i]; i++){
             hiddenItems[i].classList.remove('hidden-mobile');
-            currentlyVisible++;
           }
-          // update button state
           const remaining = Array.from(grid.querySelectorAll('.folio-item.hidden-mobile')).length;
           if(remaining === 0){
             showMoreBtn.textContent = 'Show less';
@@ -1407,21 +1611,33 @@ function openEmail() {
         });
       }
 
-      // initial apply
-      applyMobileVisibility();
-
-      // handle resize toggling mobile/desktop behavior
-      let resizeTimer = null;
-      window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-          const nowMobile = window.innerWidth <= MOBILE_BREAK;
-          if(nowMobile !== mobileMode){
-            mobileMode = nowMobile;
-            applyMobileVisibility();
+      // initial apply & responsive behavior
+      function onResize() {
+        const nowMobile = window.innerWidth <= MOBILE_BREAK;
+        if(nowMobile !== mobileMode){
+          mobileMode = nowMobile;
+          // adjust dots visibility
+          if(dotsWrap){
+            if(!mobileMode){ dotsWrap.style.display = 'flex'; dotsWrap.setAttribute('aria-hidden','false'); showDragHint(); }
+            else { dotsWrap.style.display = 'none'; dotsWrap.setAttribute('aria-hidden','true'); hideDragHint(); }
           }
-        }, 120);
+          applyMobileVisibility();
+        }
+        // rebuild dots for new size (if count is same it will simply refresh)
+        createDots();
+        setActiveDot(findCenteredItemIndex());
+      }
+      window.addEventListener('resize', () => {
+        clearTimeout(window._projectsResizeTimer);
+        window._projectsResizeTimer = setTimeout(onResize, 120);
       });
+      // run once
+      onResize();
+
+      // hide drag hint after some time or on first interaction
+      setTimeout(()=> { if(window.innerWidth > MOBILE_BREAK) showDragHint(); }, 900);
+      // auto-hide hint after 4s
+      setTimeout(()=> { hideDragHint(); }, 4200);
 
     })();
   </script>

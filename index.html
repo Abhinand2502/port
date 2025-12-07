@@ -836,37 +836,186 @@ function openEmail() {
     </div>
   </section>
 
-  <!-- ================= MAIN CONTENT ================= -->
-  <main id="main">
-    <section class="section" id="about" aria-label="About section">
-      <div class="container">
-        <div class="grid">
-          <div class="col-6">
-            <div class="card">
-              <h2>About me</h2>
-              <p style="color:var(--muted)">A short intro about your design philosophy and technical chops. Mention frameworks, tools, or industries you specialize in. Keep this concise and punchy — use bullets if needed.</p>
-              <ul style="color:var(--muted);margin-top:12px">
-                <li>UI/UX design systems</li>
-                <li>Modern frontend (HTML, CSS, JavaScript)</li>
-                <li>Accessibility & performance-first</li>
-              </ul>
+ <section id="about">
+  <style>
+    /* ---------------------- ABOUT SECTION ---------------------- */
+    #about { display:block; background: var(--bg); color: var(--text); }
+    .about-inner { min-height: calc(100vh - var(--header-h)); padding-top: var(--header-h); display: flex; align-items: center; justify-content: center; }
+
+    .about-container { width: 100%; max-width: 1350px; padding: 2rem; display: grid; grid-template-columns: 400px 1fr; gap: 2rem; align-items: start; }
+
+    /* ----- CARDS / GLASSMORPHIC EFFECT ----- */
+    .themed-card {
+      border-radius: 20px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.12);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    /* LIGHT MODE: transparent black */
+    html[data-theme="light"] .themed-card {
+      background: rgba(0,0,0,0.3);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    /* DARK MODE: transparent white */
+    html[data-theme="dark"] .themed-card {
+      background: rgba(255,255,255,0.12);
+      color: #111;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .themed-card:hover, .themed-card:focus-within {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    }
+
+    /* ----- LEFT: PROFILE ----- */
+    .profile-wrap { display:flex; flex-direction:column; align-items:center; gap:1rem; text-align:center; }
+    .avatar { width:160px; height:160px; border-radius:50%; overflow:hidden; display:grid; place-items:center; position: relative; box-shadow: 0 12px 36px rgba(0,0,0,0.12); }
+    .avatar img { width:100%; height:100%; object-fit:cover; }
+    .avatar::after { content:""; position:absolute; inset:-6px; border-radius:50%; border:5px solid rgba(255,255,255,0.6); animation: pulseBorder 2.5s infinite; }
+    @keyframes pulseBorder { 0%,100%{ transform: scale(1); opacity:0.7 } 50%{ transform: scale(1.05); opacity:0.4 } }
+
+    .profile-name { font-family:'Playfair Display', serif; font-size:30px; font-weight:900; margin:0; }
+    .profile-role { font-size:14px; font-weight:700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing:0.5px; margin-bottom:1rem; }
+
+    .degree-pill { border-radius:14px; padding:0.6rem 1rem; font-weight:900; background: linear-gradient(180deg, rgba(37,99,235,0.15), rgba(37,99,235,0.05)); color:#0af; margin-bottom:1rem; font-size:16px; }
+
+    .stat-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:0.8rem; margin-top:1rem; width:100%; }
+    .stat { padding:1rem; border-radius:12px; background: rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); text-align:center; }
+    .stat .k { font-size:12px; font-weight:700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing:0.8px; }
+    .stat .v { font-size:18px; font-weight:900; margin-top:0.3rem; }
+
+    /* ----- RIGHT: EDUCATION + SKILLS ----- */
+    .right-col { display:flex; flex-direction:column; gap:1.5rem; }
+
+    .section-title { font-family:'Playfair Display', serif; font-size:22px; font-weight:800; margin-bottom:0.8rem; }
+
+    .edu-item { display:flex; flex-direction:column; gap:0.6rem; }
+    .edu-head { display:flex; flex-direction:column; gap:0.2rem; }
+    .edu-school { font-weight:800; font-size:15px; }
+    .edu-meta { font-size:13px; color: rgba(255,255,255,0.6); }
+    .edu-row { display:flex; align-items:center; gap:0.5rem; }
+    .edu-bar-wrap { flex:1; height:10px; background: rgba(255,255,255,0.1); border-radius:999px; overflow:hidden; }
+    .edu-bar { height:100%; width:0; border-radius:999px; background: linear-gradient(90deg,#0af,#0ff); transition: width 1s ease; }
+    .edu-percent { font-size:13px; font-weight:700; color:#0af; min-width:50px; text-align:right; }
+
+    .skills-grid { display:grid; grid-template-columns: repeat(4,1fr); gap:0.8rem; margin-top:0.5rem; }
+    .skill { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; padding:0.8rem; border-radius:12px; background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); transition: transform 0.2s ease; }
+    .skill:hover { transform: translateY(-3px); }
+    .skill .icon { width:50px; height:50px; display:grid; place-items:center; border-radius:12px; background: rgba(255,255,255,0.9); box-shadow:0 6px 18px rgba(0,0,0,0.1); }
+    .skill .icon img { width:28px; height:28px; object-fit:contain; }
+    .skill .label { font-weight:700; font-size:14px; color:#0af; }
+
+    /* RESPONSIVE */
+    @media (max-width:980px){
+      .about-container { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: repeat(3,1fr); }
+      .stat-grid { grid-template-columns: repeat(3,1fr); }
+      .avatar { width:140px; height:140px; }
+    }
+    @media (max-width:720px){
+      .skills-grid { grid-template-columns: repeat(2,1fr); }
+      .stat-grid { grid-template-columns: repeat(2,1fr); }
+    }
+  </style>
+
+  <div class="about-inner">
+    <div class="about-container">
+      <!-- LEFT: PROFILE -->
+      <div class="profile-wrap themed-card">
+        <div class="avatar">
+          <img src="assets/your-profile.jpg" alt="Abhinand profile picture">
+        </div>
+        <div class="profile-name">Abhinand Babu</div>
+        <div class="profile-role">Developer · B.Tech CSE</div>
+        <div class="degree-pill">B.Tech — CSE</div>
+        <div class="stat-grid">
+          <div class="stat"><div class="k">AGE</div><div class="v">22</div></div>
+          <div class="stat"><div class="k">DOB</div><div class="v">25/02/2003</div></div>
+          <div class="stat"><div class="k">STATUS</div><div class="v">Student</div></div>
+          <div class="stat"><div class="k">EXP</div><div class="v">Fresher</div></div>
+          <div class="stat"><div class="k">COUNTRY</div><div class="v">India 🇮🇳</div></div>
+          <div class="stat"><div class="k">LOC</div><div class="v">Kerala</div></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: EDUCATION + SKILLS -->
+      <div class="right-col">
+        <!-- EDUCATION -->
+        <div class="themed-card">
+          <h3 class="section-title">Education (Academic Journey)</h3>
+          <div class="edu-list">
+            <div class="edu-item">
+              <div class="edu-head">
+                <div class="edu-school">B.Tech in CSE — UCE, Thodupuzha</div>
+                <div class="edu-meta">2021 – 2025</div>
+              </div>
+              <div class="edu-row">
+                <div class="edu-bar-wrap"><div class="edu-bar" data-width="69.9"></div></div>
+                <div class="edu-percent">69.9 GPA</div>
+              </div>
             </div>
-          </div>
-          <div class="col-6">
-            <div class="card">
-              <h3>Skills</h3>
-              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-                <span class="btn">HTML</span>
-                <span class="btn">CSS</span>
-                <span class="btn">JavaScript</span>
-                <span class="btn">React</span>
-                <span class="btn">Figma</span>
+
+            <div class="edu-item">
+              <div class="edu-head">
+                <div class="edu-school">Higher Secondary — St. Sebastian's HSS, Vazhithala</div>
+                <div class="edu-meta">2019 – 2021</div>
+              </div>
+              <div class="edu-row">
+                <div class="edu-bar-wrap"><div class="edu-bar" data-width="94"></div></div>
+                <div class="edu-percent">94%</div>
+              </div>
+            </div>
+
+            <div class="edu-item">
+              <div class="edu-head">
+                <div class="edu-school">Secondary — Bappuji Public School, Vazhithala</div>
+                <div class="edu-meta">2018 – 2019</div>
+              </div>
+              <div class="edu-row">
+                <div class="edu-bar-wrap"><div class="edu-bar" data-width="80"></div></div>
+                <div class="edu-percent">80%</div>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- SKILLS -->
+        <div class="themed-card">
+          <h3 class="section-title">Skills — Modern Stack</h3>
+          <div class="skills-grid">
+            <div class="skill"><div class="icon"><img src="assets/logos/python.png" alt="Python"></div><div class="label">Python</div></div>
+            <div class="skill"><div class="icon"><img src="assets/logos/django.png" alt="Django"></div><div class="label">Django</div></div>
+            <div class="skill"><div class="icon"><img src="assets/logos/html5.png" alt="HTML"></div><div class="label">HTML</div></div>
+            <div class="skill"><div class="icon"><img src="assets/logos/css3.png" alt="CSS"></div><div class="label">CSS</div></div>
+            <div class="skill"><div class="icon"><img src="assets/logos/javascript.png" alt="JavaScript"></div><div class="label">JavaScript</div></div>
+            <div class="skill"><div class="icon"><img src="assets/logos/react.png" alt="React"></div><div class="label">React</div></div>
+            <div class="skill"><div class="icon"><img src="assets/logos/sql.png" alt="SQL"></div><div class="label">SQL</div></div>
+            <div class="skill"><div class="icon"><img src="assets/logos/ml.png" alt="Machine Learning"></div><div class="label">ML</div></div>
+          </div>
+        </div>
       </div>
-    </section>
+    </div>
+  </div>
+
+  <script>
+    // Animate education bars
+    document.addEventListener("DOMContentLoaded", () => {
+      const bars = document.querySelectorAll('.edu-bar');
+      bars.forEach(bar => {
+        const w = bar.dataset.width || 0;
+        setTimeout(()=> { bar.style.width = w + '%'; }, 200);
+      });
+    });
+  </script>
+</section>
+
+
+    
 <!-- ===== PROJECTS: desktop modern small dots (hidden on mobile); rest unchanged ===== -->
 <section id="projects" aria-labelledby="projectsTitle">
   <style>

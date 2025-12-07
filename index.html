@@ -865,7 +865,7 @@ function openEmail() {
       </div>
     </section>
 
-<!-- ===== PROJECTS: linear slider + unchanged lightbox behavior (updated) ===== -->
+<!-- ===== PROJECTS: linear slider + unchanged lightbox behavior (desktop enlarged; mobile stacked with "show more") ===== -->
 <section id="projects" aria-labelledby="projectsTitle">
   <style>
     /* Scoped styles for the projects section */
@@ -880,7 +880,6 @@ function openEmail() {
       --projects-card-bg: transparent;
     }
 
-    /* container */
     #projects { padding-top: calc(var(--projects-header-h) + 10px); padding-bottom: 56px; background: transparent; position: relative; z-index: 1; }
     #projects > .section-inner { height:auto !important; min-height:0 !important; display:block !important; padding-top:0 !important; }
     #projects .box { width:100%; max-width:1400px; margin:0 auto; padding:18px 24px; box-sizing:border-box; }
@@ -895,25 +894,24 @@ function openEmail() {
       color: var(--projects-text);
     }
 
-    /* Horizontal slider container */
+    /* Horizontal slider container (desktop) */
     .folio-grid {
       display:flex;
-      gap:16px;
+      gap:20px;
       overflow-x:auto;
       -webkit-overflow-scrolling: touch;
       scroll-snap-type: x mandatory;
       padding: 18px 6px;
       align-items: stretch;
-      align-content: center;
     }
     .folio-grid::-webkit-scrollbar { height: 10px; }
     .folio-grid::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius:10px; }
     .folio-grid:focus { outline: none; }
 
-    /* slide (project card) */
+    /* slide (project card) - desktop larger sizes */
     .folio-item {
-      flex: 0 0 88%;
-      max-width: 1100px;
+      flex: 0 0 92%;
+      max-width: 1200px;
       scroll-snap-align: center;
       display:block;
       overflow:visible;
@@ -926,14 +924,13 @@ function openEmail() {
       padding:0;
       box-sizing: border-box;
     }
-    .folio-item:focus, .folio-item:hover { transform: translateY(-8px); box-shadow: 0 36px 110px rgba(16,24,40,0.14); outline:none; }
+    .folio-item:focus, .folio-item:hover { transform: translateY(-6px); box-shadow: 0 28px 80px rgba(16,24,40,0.12); outline:none; }
 
-    /* DESKTOP: increased size compared to your original */
-    @media (min-width:760px) { .folio-item { flex: 0 0 72%; /* bigger */ } }
-    @media (min-width:1100px) { .folio-item { flex: 0 0 64%; } }
-    @media (min-width:1400px) { .folio-item { flex: 0 0 60%; } }
+    /* Increase card presence at larger breakpoints */
+    @media (min-width:760px) { .folio-item { flex: 0 0 78%; max-width: 1100px; } }
+    @media (min-width:1100px) { .folio-item { flex: 0 0 64%; max-width: 1100px; } }
+    @media (min-width:1400px) { .folio-item { flex: 0 0 54%; max-width: 1300px; } }
 
-    /* THUMB */
     .thumb-wrap { width:100%; aspect-ratio: 16/9; position:relative; overflow:hidden; border-radius:var(--projects-card-radius) var(--projects-card-radius) 8px 8px; background:#000; display:block; }
     .thumb-wrap img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; opacity:0; transform: scale(1.03) translateZ(0); transition: opacity .45s ease, transform .6s cubic-bezier(.2,.9,.2,1); backface-visibility:hidden; will-change: opacity, transform; }
     .thumb-wrap img.active { opacity:1; transform: scale(1); z-index:1; }
@@ -941,25 +938,6 @@ function openEmail() {
     .folio-caption { position:absolute; left:12px; bottom:12px; right:12px; padding:10px 14px; border-radius:10px; background: rgba(0,0,0,0.56); color:#fff; font-weight:900; font-size:15px; display:flex; gap:12px; align-items:center; backdrop-filter: blur(6px); z-index: 10; }
     .folio-caption .title { font-weight:900; letter-spacing:0.2px; color:#fff; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:15px; }
     .folio-caption .view { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:6px 10px; border-radius:10px; background: rgba(255,255,255,0.06); color:#fff; font-weight:700; font-size:13px; min-width:54px; height:36px; box-shadow: 0 6px 16px rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.06); }
-
-    /* MOBILE: compact line of 5 small thumbnails visible; last two projects hidden until show-more */
-    @media (max-width:760px){
-      .folio-grid { gap:10px; padding: 12px 8px; }
-      .folio-item { flex: 0 0 20%; max-width: 20%; /* 5 across */ min-width: 110px; box-shadow: none; border-radius:10px; border:1px solid rgba(0,0,0,0.06); }
-      .thumb-wrap { aspect-ratio: 4/5; border-radius:10px; }
-      .folio-caption { position:static; margin-top:8px; padding:6px 8px; background:transparent; color:var(--projects-text); font-weight:700; display:block; }
-      .folio-caption .title { color:var(--projects-text); white-space:normal; font-size:12px; overflow:visible; text-overflow:clip; font-weight:800; }
-      .folio-caption .view { display:none; }
-      .folio-item:focus, .folio-item:hover { transform: none; box-shadow:none; }
-      /* hide the two 'extra' items on mobile initially */
-      .hidden-mobile { display:none !important; }
-      /* show the show-more button only on mobile */
-      #showMoreBtn { display:block; margin: 14px auto 0 auto; }
-      #showMoreBtn[aria-hidden="true"] { display:none; }
-    }
-
-    /* default hide show-more on desktop */
-    #showMoreBtn { display:none; }
 
     /* Lightbox (unchanged) */
     .lightbox {
@@ -1001,6 +979,42 @@ function openEmail() {
     .lightbox .tech-badge { color:#111 !important; border-color: rgba(0,0,0,0.06) !important; }
 
     .sr-only { position:absolute !important; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
+
+    /* ------------------------
+       MOBILE: stacked vertical list + Show more button
+       ------------------------ */
+    @media (max-width:760px) {
+      .folio-grid {
+        display:flex;
+        flex-direction:column;
+        gap:12px;
+        overflow:auto; /* vertical scrolling */
+        scroll-snap-type: none;
+        padding: 12px 6px;
+      }
+      .folio-grid::-webkit-scrollbar { height: auto; width:8px; }
+      .folio-item { flex: none; width:100%; max-width:100%; border-radius:12px; }
+      .thumb-wrap { aspect-ratio: 14/9; } /* slightly taller on mobile */
+      .folio-caption { padding:8px 10px; bottom:8px; left:8px; right:8px; }
+      .folio-caption .title { font-size:14px; }
+      .folio-caption .view { padding:6px 8px; min-width:44px; height:32px; font-size:12px; }
+
+      /* A class applied to hide additional mobile items */
+      .folio-item.hidden-mobile { display:none !important; }
+
+      /* Show more / show less button */
+      #showMoreProjects {
+        display:block;
+        margin: 12px auto 0 auto;
+        padding:10px 14px;
+        border-radius:12px;
+        border:1px solid var(--projects-glass);
+        background: transparent;
+        font-weight:800;
+        cursor:pointer;
+        min-width:160px;
+      }
+    }
   </style>
 
   <div class="section-inner">
@@ -1071,7 +1085,7 @@ function openEmail() {
           <div class="folio-caption"><span class="title">Tic-Tac-Toe</span><span class="view">View details</span></div>
         </button>
 
-        <button class="folio-item hidden-mobile"
+        <button class="folio-item"
           data-images="assets/porto.png,assets/portfolio.jpg"
           data-lightbox="assets/porto.png,assets/portfolio.jpg"
           data-link="https://github.com/Abhinand2502/portofolio"
@@ -1083,7 +1097,7 @@ function openEmail() {
           <div class="folio-caption"><span class="title">Portfolio</span><span class="view">View details</span></div>
         </button>
 
-        <button class="folio-item hidden-mobile"
+        <button class="folio-item"
           data-images="assets/todo.png,assets/todo.png,assets/todo.png"
           data-lightbox="assets/todo.png,assets/todo.png,assets/todo.png"
           data-link="https://github.com/Abhinand2502/to_do_app"
@@ -1097,10 +1111,8 @@ function openEmail() {
 
       </div> <!-- .folio-grid -->
 
-      <!-- Show more (mobile only) -->
-      <div style="text-align:center;">
-        <button id="showMoreBtn" class="btn" aria-expanded="false" aria-hidden="false">Show more</button>
-      </div>
+      <!-- show more (mobile only) -->
+      <button id="showMoreProjects" class="anim sr-only" aria-expanded="false" aria-controls="folioGrid">Show more projects</button>
     </div>
   </div>
 
@@ -1132,7 +1144,7 @@ function openEmail() {
     (function(){
       const grid = document.getElementById('folioGrid');
       if(!grid) return;
-      const items = Array.from(grid.querySelectorAll('.folio-item'));
+      let items = Array.from(grid.querySelectorAll('.folio-item'));
       const lightbox = document.getElementById('lightbox');
       const lbSlides = document.getElementById('lbSlides');
       const lbTitle = document.getElementById('lbTitle');
@@ -1142,7 +1154,8 @@ function openEmail() {
       const lbClose = document.getElementById('lbClose');
       const lbPrev = document.getElementById('lbPrev');
       const lbNext = document.getElementById('lbNext');
-      const showMoreBtn = document.getElementById('showMoreBtn');
+
+      const showMoreBtn = document.getElementById('showMoreProjects');
 
       const THUMB_INTERVAL = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--projects-thumb-interval')) || 1800;
 
@@ -1273,7 +1286,7 @@ function openEmail() {
       // Attach open handlers
       items.forEach((it, idx) => {
         it.addEventListener('click', (ev) => { ev.preventDefault(); openAt(idx); });
-        it.addEventListener('keydown', (ev) => { if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openAt(idx); }} );
+        it.addEventListener('keydown', (ev) => { if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openAt(idx); }});
       });
 
       if(lbClose) lbClose.addEventListener('click', closeLB);
@@ -1305,7 +1318,7 @@ function openEmail() {
         }
       });
 
-      // allow left/right keys to scroll slider when not in lightbox
+      // allow left/right keys to scroll slider when not in lightbox (desktop)
       grid.addEventListener('keydown', (e) => {
         if(e.key === 'ArrowRight'){ e.preventDefault(); grid.scrollBy({ left: window.innerWidth * 0.6, behavior: 'smooth' }); }
         if(e.key === 'ArrowLeft'){ e.preventDefault(); grid.scrollBy({ left: -window.innerWidth * 0.6, behavior: 'smooth' }); }
@@ -1314,39 +1327,101 @@ function openEmail() {
       // small accessibility improvement: make each button focusable by keyboard and show pointer
       items.forEach(it => { it.setAttribute('tabindex', '0'); it.style.userSelect = 'none'; });
 
-      // SHOW MORE button (mobile)
-      if(showMoreBtn){
-        // only show on mobile widths initially
-        const updateShowMoreVisibility = () => {
-          if(window.matchMedia('(max-width:760px)').matches){
-            // show button only if there are hidden-mobile items
-            const extras = grid.querySelectorAll('.hidden-mobile');
-            showMoreBtn.style.display = extras.length ? 'inline-block' : 'none';
-            showMoreBtn.setAttribute('aria-hidden', extras.length ? 'false' : 'true');
+      /* ---------------------
+         MOBILE: Show more logic
+         - defaultVisible: how many to show initially on mobile
+         - batchSize: how many to reveal per "Show more" click
+         --------------------- */
+      const MOBILE_BREAK = 760;
+      const defaultVisible = 5;
+      const batchSize = 2;
+      let mobileMode = window.innerWidth <= MOBILE_BREAK;
+      let currentlyVisible = items.length;
+
+      function applyMobileVisibility() {
+        items = Array.from(grid.querySelectorAll('.folio-item')); // refresh list
+        if(!mobileMode){
+          // ensure all visible on desktop
+          items.forEach(it => it.classList.remove('hidden-mobile'));
+          if(showMoreBtn){
+            showMoreBtn.classList.add('sr-only');
+            showMoreBtn.setAttribute('aria-expanded','false');
+          }
+          currentlyVisible = items.length;
+          return;
+        }
+
+        // mobile: hide items beyond defaultVisible
+        items.forEach((it, idx) => {
+          if(idx < defaultVisible) {
+            it.classList.remove('hidden-mobile');
+          } else {
+            it.classList.add('hidden-mobile');
+          }
+        });
+        currentlyVisible = Math.min(defaultVisible, items.length);
+
+        // configure button
+        if(showMoreBtn){
+          showMoreBtn.classList.remove('sr-only');
+          showMoreBtn.style.display = 'block';
+          if(items.length > defaultVisible){
+            showMoreBtn.textContent = 'Show more projects';
+            showMoreBtn.setAttribute('aria-expanded','false');
           } else {
             showMoreBtn.style.display = 'none';
-            showMoreBtn.setAttribute('aria-hidden', 'true');
           }
-        };
-        updateShowMoreVisibility();
-        window.addEventListener('resize', updateShowMoreVisibility);
-
-        showMoreBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const extras = grid.querySelectorAll('.hidden-mobile');
-          extras.forEach(el => {
-            el.classList.remove('hidden-mobile');
-            // small visual hint
-            el.style.transition = 'transform .28s ease, opacity .28s ease';
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(6px)';
-            requestAnimationFrame(()=>{ el.style.opacity = ''; el.style.transform = ''; });
-          });
-          showMoreBtn.setAttribute('aria-expanded', 'true');
-          showMoreBtn.setAttribute('aria-hidden', 'true');
-          showMoreBtn.style.display = 'none';
-        }, {passive:false});
+        }
       }
+
+      // reveal next batch on click
+      if(showMoreBtn){
+        showMoreBtn.addEventListener('click', () => {
+          const hiddenItems = Array.from(grid.querySelectorAll('.folio-item.hidden-mobile'));
+          if(hiddenItems.length === 0){
+            // all shown -> collapse
+            items.forEach((it, idx) => {
+              if(idx >= defaultVisible) it.classList.add('hidden-mobile');
+            });
+            currentlyVisible = Math.min(defaultVisible, items.length);
+            showMoreBtn.textContent = 'Show more projects';
+            showMoreBtn.setAttribute('aria-expanded','false');
+            // scroll to the grid top so user sees collapsed start
+            grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+          }
+          // reveal next batchSize items
+          for(let i=0; i<batchSize && hiddenItems[i]; i++){
+            hiddenItems[i].classList.remove('hidden-mobile');
+            currentlyVisible++;
+          }
+          // update button state
+          const remaining = Array.from(grid.querySelectorAll('.folio-item.hidden-mobile')).length;
+          if(remaining === 0){
+            showMoreBtn.textContent = 'Show less';
+            showMoreBtn.setAttribute('aria-expanded','true');
+          } else {
+            showMoreBtn.textContent = `Show more projects (${remaining})`;
+            showMoreBtn.setAttribute('aria-expanded','true');
+          }
+        });
+      }
+
+      // initial apply
+      applyMobileVisibility();
+
+      // handle resize toggling mobile/desktop behavior
+      let resizeTimer = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          const nowMobile = window.innerWidth <= MOBILE_BREAK;
+          if(nowMobile !== mobileMode){
+            mobileMode = nowMobile;
+            applyMobileVisibility();
+          }
+        }, 120);
+      });
 
     })();
   </script>

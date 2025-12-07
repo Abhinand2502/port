@@ -82,13 +82,15 @@
       line-height:1.4;
       font-size:16px;
       transition:background .35s ease, color .35s ease;
-      scroll-behavior: smooth;
-      scroll-snap-type: y mandatory;
+      /* changed: use standard scroll for wheel/trackpad/touch (no forced snap/auto scroll) */
+      scroll-behavior: auto;
+      scroll-snap-type: none;
     }
 
     .visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap;border:0;padding:0;margin:-1px}
 
-    section{scroll-snap-align: start;scroll-margin-top: calc(var(--nav-height) + 8px);} 
+    /* disable snap on sections but keep scroll-margin for nav offset */
+    section{scroll-snap-align: none;scroll-margin-top: calc(var(--nav-height) + 8px);} 
 
     @media (prefers-reduced-motion: reduce){html,body{ scroll-behavior: auto; scroll-snap-type: none; } section{ scroll-snap-align: none; scroll-margin-top: 0; }}
 
@@ -99,7 +101,7 @@
 
     /* Header / Nav */
     header{position:fixed;inset:0 0 auto 0;height:var(--nav-height);display:flex;align-items:center;z-index:160;backdrop-filter: blur(8px) saturate(120%);background: var(--header-bg);border-bottom:1px solid var(--header-border);padding:0 20px;gap:16px;transition:background .35s ease, border .25s ease, color .25s ease;}
-
+    
     header.light-outside-hero .brand .text,header.light-outside-hero .nav-links a,header.light-outside-hero .btn,header.light-outside-hero .primary,header.light-outside-hero .secondary{color: #0a0a0a !important;border-color: rgba(0,0,0,0.08) !important}
 
     .brand{font-weight:700;letter-spacing:0.06em;font-size:clamp(18px,1.6vw,22px);display:flex;align-items:center;gap:12px}
@@ -248,7 +250,8 @@ h1 {
 }
 /* Smooth page scroll */
 html {
-  scroll-behavior: smooth;
+  /* changed: default browser scroll behavior (standard) */
+  scroll-behavior: auto;
 }
 
 /* Container */
@@ -865,10 +868,10 @@ function openEmail() {
       </div>
     </section>
 
-<!-- ===== PROJECTS: desktop drag on container + dot slider; lightbox only on "View details"; mobile allows page scroll ===== -->
+<!-- ===== PROJECTS: improved linear slider + mobile single-image fit + better alignment ===== -->
 <section id="projects" aria-labelledby="projectsTitle">
   <style>
-    /* Scoped styles for the projects section */
+    /* Scoped styles for the projects section (mobile-first) */
     :root{
       --projects-glass: rgba(0,0,0,0.08);
       --projects-primary:#2a7cf1;
@@ -876,15 +879,24 @@ function openEmail() {
       --projects-muted:#7a7a7a;
       --projects-header-h:72px;
       --projects-card-radius:12px;
-      --projects-thumb-interval: 1800ms;
+      --projects-thumb-interval:1800; /* milliseconds number */
       --projects-card-bg: transparent;
-      --projects-dot-size:10px;
-      --projects-dot-gap:10px;
+      --projects-control-size:44px;
+      --projects-control-size-mobile:56px;
+      --projects-gap:20px;
     }
 
-    #projects { padding-top: calc(var(--projects-header-h) + 10px); padding-bottom: 56px; background: transparent; position: relative; z-index: 1; }
+    /* container */
+    #projects {
+      padding-top: calc(var(--projects-header-h) + 10px);
+      padding-bottom: 0;
+      background: transparent;
+      position: relative;
+      z-index: 1;
+      box-sizing: border-box;
+    }
     #projects > .section-inner { height:auto !important; min-height:0 !important; display:block !important; padding-top:0 !important; }
-    #projects .box { width:100%; max-width:1400px; margin:0 auto; padding:18px 24px; box-sizing:border-box; }
+    #projects .box { width:100%; max-width:1400px; margin:0 auto; padding:12px 18px; box-sizing:border-box; }
 
     /* Title */
     #projectsTitle {
@@ -896,17 +908,17 @@ function openEmail() {
       color: var(--projects-text);
     }
 
-    /* Horizontal slider container (desktop horizontal scroll + drag) */
+    /* Horizontal slider container (mobile-first) */
     .folio-grid {
       display:flex;
-      gap:20px;
+      gap:var(--projects-gap);
       overflow-x:auto;
       -webkit-overflow-scrolling: touch;
       scroll-snap-type: x mandatory;
-      padding: 18px 6px;
+      padding: 12px 6px 22px 6px;
       align-items: stretch;
-      position:relative;
-      touch-action: pan-y; /* allow vertical page scroll on touch devices */
+      scroll-behavior: smooth;
+      align-content: start;
     }
     .folio-grid::-webkit-scrollbar { height: 10px; }
     .folio-grid::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius:10px; }
@@ -914,57 +926,54 @@ function openEmail() {
 
     /* slide (project card) */
     .folio-item {
-      flex: 0 0 92%;
-      max-width: 1200px;
+      flex: 0 0 94%;
+      max-width: 100%;
       scroll-snap-align: center;
-      display:block;
+      display:flex;
+      flex-direction:column;
       overflow:visible;
       border-radius:var(--projects-card-radius);
       position:relative;
       border:1px solid var(--projects-glass);
       transition: transform .18s ease, box-shadow .18s ease;
-      cursor: pointer;
+      cursor:pointer;
       background:var(--projects-card-bg);
       padding:0;
       box-sizing: border-box;
+      min-height: calc(100vh - var(--projects-header-h) - 40px); /* mobile: make item full screen */
     }
     .folio-item:focus, .folio-item:hover { transform: translateY(-6px); box-shadow: 0 28px 80px rgba(16,24,40,0.12); outline:none; }
 
-    @media (min-width:760px) { .folio-item { flex: 0 0 78%; max-width: 1100px; } }
-    @media (min-width:1100px) { .folio-item { flex: 0 0 64%; max-width: 1100px; } }
-    @media (min-width:1400px) { .folio-item { flex: 0 0 54%; max-width: 1300px; } }
-
-    .thumb-wrap { width:100%; aspect-ratio: 16/9; position:relative; overflow:hidden; border-radius:var(--projects-card-radius) var(--projects-card-radius) 8px 8px; background:#000; display:block; }
+    /* thumbnail */
+    .thumb-wrap { width:100%; position:relative; overflow:hidden; border-radius:var(--projects-card-radius) var(--projects-card-radius) 8px 8px; background:#000; display:block; flex:1 1 auto; min-height:0; }
     .thumb-wrap img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; opacity:0; transform: scale(1.03) translateZ(0); transition: opacity .45s ease, transform .6s cubic-bezier(.2,.9,.2,1); backface-visibility:hidden; will-change: opacity, transform; }
     .thumb-wrap img.active { opacity:1; transform: scale(1); z-index:1; }
 
-    .folio-caption { position:absolute; left:12px; bottom:12px; right:12px; padding:10px 14px; border-radius:10px; background: rgba(0,0,0,0.56); color:#fff; font-weight:900; font-size:15px; display:flex; gap:12px; align-items:center; backdrop-filter: blur(6px); z-index: 10; }
-    .folio-caption .title { font-weight:900; letter-spacing:0.2px; color:#fff; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:15px; }
-    /* make the "View details" a distinct clickable target */
-    .folio-caption .view { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:6px 10px; border-radius:10px; background: rgba(255,255,255,0.06); color:#fff; font-weight:700; font-size:13px; min-width:54px; height:36px; box-shadow: 0 6px 16px rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.06); cursor: pointer; }
+    /* overlay gradient for readability */
+    .thumb-wrap::after{ content:''; position:absolute; inset:0; pointer-events:none; }
 
-    /* Dot slider (desktop) */
-    .folio-dots {
+    /* caption */
+    .folio-caption {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      right: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.56);
+      color: #fff;
+      font-weight: 900;
+      font-size: 15px;
       display:flex;
-      gap: var(--projects-dot-gap);
-      justify-content:center;
+      gap:12px;
       align-items:center;
-      margin-top:14px;
-      user-select:none;
+      backdrop-filter: blur(6px);
+      z-index: 10;
     }
-    .folio-dots button {
-      width: var(--projects-dot-size);
-      height: var(--projects-dot-size);
-      border-radius:50%;
-      border:1px solid rgba(0,0,0,0.06);
-      background:rgba(0,0,0,0.06);
-      padding:0;
-      cursor:pointer;
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
-    }
-    .folio-dots button.active { transform: scale(1.12); background:var(--projects-primary); border-color:var(--projects-primary); }
+    .folio-caption .title { font-weight:900; letter-spacing:0.2px; color:#fff; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:15px; }
+    .folio-caption .view { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:6px 10px; border-radius:10px; background: rgba(255,255,255,0.06); color:#fff; font-weight:700; font-size:13px; min-width:54px; height:36px; box-shadow: 0 6px 16px rgba(0,0,0,0.18); border: 1px solid rgba(255,255,255,0.06); }
 
-    /* Lightbox (unchanged) */
+    /* Lightbox */
     .lightbox {
       position:fixed;
       inset:0;
@@ -980,16 +989,88 @@ function openEmail() {
       transition: opacity .22s ease;
     }
     .lightbox.open { opacity:1; pointer-events:auto; }
-    .lb-shell { width: calc(100vw - 48px); height: calc(100vh - var(--projects-header-h) - 48px); max-width:1200px; max-height:880px; border-radius:10px; overflow:hidden; display:grid; grid-template-columns: 1fr 360px; gap:12px; background: #ffffff; border:1px solid rgba(0,0,0,0.06); box-shadow: 0 40px 120px rgba(2,6,23,0.25); margin-top:8px; }
-    @media (max-width:980px){ .lb-shell { grid-template-columns: 1fr; width: calc(100vw - 12px); height: calc(100vh - var(--projects-header-h) - 12px); } }
+    .lb-shell {
+      width: calc(100vw - 48px);
+      height: calc(100vh - var(--projects-header-h) - 48px);
+      max-width:1200px;
+      max-height:880px;
+      border-radius:10px;
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:12px;
+      background: #ffffff;
+      border:1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 40px 120px rgba(2,6,23,0.25);
+      margin-top:8px;
+    }
+    @media (max-width:980px){
+      .lb-shell { grid-template-columns: 1fr; width: calc(100vw - 12px); height: calc(100vh - var(--projects-header-h) - 12px); border-radius:8px; }
+    }
     .lb-view { position:relative; background:#111; display:flex; align-items:center; justify-content:center; overflow:hidden; min-height:320px; }
-    .lb-track { display:flex; width:100%; height:100%; will-change: transform; transition: transform .55s cubic-bezier(.2,.9,.2,1); }
+    .lb-track { display:flex; width:100%; height:100%; will-change: transform; transition: transform .45s cubic-bezier(.2,.9,.2,1); touch-action: pan-y pinch-zoom; }
     .lb-slide { flex:0 0 100%; display:flex; align-items:center; justify-content:center; position:relative; height:100%; min-height:320px; padding:12px; box-sizing:border-box; }
     .lb-slide img { max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block; margin:auto; cursor:zoom-in; user-select:none; -webkit-user-drag:none; }
 
-    .lb-close, .lb-prev, .lb-next { position:absolute; z-index:40; width:44px; height:44px; border-radius:10px; display:grid; place-items:center; background: rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.06); color:#fff; font-size:18px; cursor:pointer; transition: transform .12s ease, opacity .12s ease; }
-    .lb-close { right:12px; top:12px; } .lb-prev { left:12px; top:50%; transform:translateY(-50%); } .lb-next { right:12px; top:50%; transform:translateY(-50%); }
+    /* desktop controls (top corners) */
+    .lb-close, .lb-prev, .lb-next {
+      position:absolute;
+      z-index:40;
+      width:var(--projects-control-size);
+      height:var(--projects-control-size);
+      border-radius:10px;
+      display:grid;
+      place-items:center;
+      background: rgba(0,0,0,0.6);
+      border:1px solid rgba(255,255,255,0.06);
+      color:#fff;
+      font-size:18px;
+      cursor:pointer;
+      transition: transform .12s ease, opacity .12s ease;
+      backdrop-filter: blur(6px);
+    }
+    .lb-close { right:12px; top:12px; }
+    .lb-prev { left:12px; top:50%; transform:translateY(-50%); }
+    .lb-next { right:12px; top:50%; transform:translateY(-50%); }
 
+    /* mobile: reposition prev/next to bottom center, use larger round buttons and SVG chevrons */
+    @media (max-width:760px){
+      .lb-close { top:10px; right:10px; width:44px; height:44px; border-radius:10px; }
+      .lb-prev, .lb-next {
+        top: auto;
+        bottom: 18px;
+        width: var(--projects-control-size-mobile);
+        height: var(--projects-control-size-mobile);
+        border-radius:999px;
+        background: rgba(0,0,0,0.65);
+        border:1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 8px 24px rgba(2,6,23,0.32);
+        transform:none;
+      }
+      .lb-prev { left: 50%; transform: translateX(-140%); }
+      .lb-next { left: 50%; transform: translateX(40%); }
+
+      /* make the section occupy full screen better */
+      #projects { padding-bottom: 0; }
+      .folio-grid { padding-bottom: 8px; gap:12px; }
+      .folio-item { min-height: calc(100vh - var(--projects-header-h) - 28px); border-radius:12px; }
+      .folio-caption { left:10px; right:10px; bottom: 14px; padding:8px 12px; }
+
+      /* MOBILE: single-image fit + centered alignment */
+      .thumb-wrap { height: calc(100vh - var(--projects-header-h) - 140px); border-radius:12px; }
+      .thumb-wrap img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
+      /* show only the active image to guarantee single visible image per card */
+      .thumb-wrap img:not(.active){ display:none; }
+      /* subtle dark gradient for caption readability */
+      .thumb-wrap::after{ background: linear-gradient(to top, rgba(0,0,0,0.52), rgba(0,0,0,0.18) 35%, rgba(0,0,0,0) 65%); }
+
+      /* center caption and pill style */
+      .folio-caption { left:50%; right:auto; transform:translateX(-50%); width:calc(100% - 36px); text-align:center; border-radius:999px; padding:10px 14px; background: linear-gradient(90deg, rgba(0,0,0,0.5), rgba(0,0,0,0.36)); }
+      .folio-caption .title{ white-space:normal; font-size:16px; }
+      .folio-caption .view{ display:none; }
+    }
+
+    /* meta column */
     .lb-meta { padding:18px; display:flex; flex-direction:column; gap:12px; overflow:auto; color:#111; background: #ffffff; }
     .lb-title { font-family:'Playfair Display', serif; font-size:20px; font-weight:900; margin:0; color:#111; }
     .lb-desc { color:var(--projects-muted); font-size:13px; line-height:1.45; margin:0; min-height:48px; color:#111; }
@@ -1003,68 +1084,18 @@ function openEmail() {
     .lightbox .lb-meta, .lightbox .lb-meta * { color: #111 !important; }
     .lightbox .tech-badge { color:#111 !important; border-color: rgba(0,0,0,0.06) !important; }
 
+    /* accessibility helper */
     .sr-only { position:absolute !important; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
 
-    /* ------------------------
-       MOBILE: stacked vertical list + Show more button
-       ------------------------ */
-    @media (max-width:760px) {
-      .folio-grid {
-        display:flex;
-        flex-direction:column;
-        gap:12px;
-        overflow:auto; /* vertical scrolling (native page scroll will work) */
-        scroll-snap-type: none;
-        padding: 12px 6px;
-      }
-      .folio-grid::-webkit-scrollbar { height: auto; width:8px; }
-      .folio-item { flex: none; width:100%; max-width:100%; border-radius:12px; }
-      .thumb-wrap { aspect-ratio: 14/9; } /* slightly taller on mobile */
-      .folio-caption { padding:8px 10px; bottom:8px; left:8px; right:8px; }
-      .folio-caption .title { font-size:14px; }
-      .folio-caption .view { padding:6px 8px; min-width:44px; height:32px; font-size:12px; }
+    /* smaller screens and larger breakpoints for grid item width */
+    @media (min-width:760px){ .folio-item { flex: 0 0 70%; min-height: 420px; } }
+    @media (min-width:1100px){ .folio-item { flex: 0 0 54%; } }
+    @media (min-width:1400px){ .folio-item { flex: 0 0 46%; } }
 
-      /* A class applied to hide additional mobile items */
-      .folio-item.hidden-mobile { display:none !important; }
-
-      /* Show more / show less button */
-      #showMoreProjects {
-        display:block;
-        margin: 12px auto 0 auto;
-        padding:10px 14px;
-        border-radius:12px;
-        border:1px solid var(--projects-glass);
-        background: transparent;
-        font-weight:800;
-        cursor:pointer;
-        min-width:160px;
-      }
-    }
-
-    /* Desktop drag cursor and hint */
-    @media (min-width:760px) {
-      .folio-grid { cursor: grab; user-select:none; -webkit-user-drag:none; }
-      .folio-grid.dragging { cursor: grabbing; }
-      .drag-hint {
-        position:absolute;
-        right:14px;
-        bottom:-8px;
-        display:flex;
-        gap:8px;
-        align-items:center;
-        background: rgba(255,255,255,0.95);
-        color:#111;
-        padding:8px 10px;
-        border-radius:999px;
-        box-shadow: 0 8px 28px rgba(2,6,23,0.12);
-        font-weight:700;
-        font-size:13px;
-        z-index:40;
-        transform: translateY(6px);
-        transition: opacity .28s ease, transform .28s ease;
-      }
-      .drag-hint.hidden { opacity:0; transform: translateY(12px); pointer-events:none; }
-      .drag-hand { font-size:16px; transform: translateY(1px); }
+    /* if desktop: keep image aspect ratio pleasant */
+    @media (min-width:760px){
+      .thumb-wrap { aspect-ratio: 16/9; height:auto; }
+      .folio-item { min-height: 0; }
     }
   </style>
 
@@ -1076,98 +1107,91 @@ function openEmail() {
       <div class="folio-grid anim" id="folioGrid" aria-live="polite" tabindex="0">
 
         <!-- --- Project cards (kept exactly as your original content) --- -->
-        <div class="folio-item"
+        <button class="folio-item"
           data-images="assets/THOME.png,assets/TRESULT.png,assets/TRESULT1.png"
           data-lightbox="assets/TLOGIN (1).png,assets/THOME.png,assets/TPROF.png,assets/TUPLOAD.png,assets/TRESULT.png,assets/TRESULT1.png,assets/THIST.png,assets/THIST2.png,assets/TCOM.png,assets/ALOG.png,assets/AHOME.png,assets/AUSER.png,assets/AHIST.png,assets/ACOMP.png"
           data-link="https://github.com/Abhinand2502/DetexAI"
           data-title="DetexAI"
           data-desc="DetexAI is an AI-powered system using YOLOv8 to detect and classify trash in both land and aquatic environments, enabling real-time identification for smarter, faster cleanup."
           data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐YOLOv8,⭐SQLite"
-          aria-label="DetexAI project details">
+          aria-label="Open DetexAI project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">DetexAI – AI Trash Detection</span><span class="view" role="button" tabindex="0">View details</span></div>
-        </div>
+          <div class="folio-caption"><span class="title">DetexAI – AI Trash Detection</span><span class="view">View details</span></div>
+        </button>
 
-        <div class="folio-item"
+        <button class="folio-item"
           data-images="assets/face.jpg,assets/face1.png,assets/face2.png"
           data-lightbox="assets/face.jpg,assets/face1.png,assets/face2.png,assets/face3.png,assets/face4.png,assets/face5.png,assets/face6.png"
           data-link="https://github.com/Abhinand2502/Face-recognition"
           data-title="Face recognition"
           data-desc="Face recognition Attendance Register is an automated student attendance system that uses face recognition technology to mark attendance."
           data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript"
-          aria-label="Face recognition project details">
+          aria-label="Open Face recognition project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Face recognition - Attendance Register</span><span class="view" role="button" tabindex="0">View details</span></div>
-        </div>
+          <div class="folio-caption"><span class="title">Face recognition - Attendance Register</span><span class="view">View details</span></div>
+        </button>
 
-        <div class="folio-item"
+        <button class="folio-item"
           data-images="assets/login.png,assets/signup.png,assets/home.png"
           data-lightbox="assets/login.png,assets/signup.png,assets/home.png,assets/cash.png,assets/admin.png,assets/product.png,assets/orders.png"
           data-link="https://github.com/Abhinand2502/Ai-Assist-Cart"
           data-title="AI-AssistCart"
           data-desc="AI-AssistCart is an AI-powered e-commerce platform that automates product recommendations, streamlines checkout, and provides advanced admin management tools to enhance the online shopping experience. Developed using Django, it leverages TF-IDF to deliver personalized product suggestions."
           data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐AJAX,⭐SQLite"
-          aria-label="AI-AssistCart project details">
+          aria-label="Open AI-AssistCart project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">AI-AssistCart - AI Shopping Site</span><span class="view" role="button" tabindex="0">View details</span></div>
-        </div>
+          <div class="folio-caption"><span class="title">AI-AssistCart - AI Shopping Site</span><span class="view">View details</span></div>
+        </button>
 
-        <div class="folio-item"
+        <button class="folio-item"
           data-images="assets/chat1 (1).png,assets/chat1 (2).png"
           data-lightbox="assets/chat1 (1).png,assets/chat1 (2).png"
           data-link="https://github.com/Abhinand2502/AiChatbot"
           data-title="AI-Chatbot"
           data-desc="An AI-powered bilingual chatbot built with Django, designed to communicate in both English and Malayalam."
           data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐Cohere API"
-          aria-label="AI-Chatbot project details">
+          aria-label="Open AI-Chatbot project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">AI-Chatbot</span><span class="view" role="button" tabindex="0">View details</span></div>
-        </div>
+          <div class="folio-caption"><span class="title">AI-Chatbot</span><span class="view">View details</span></div>
+        </button>
 
-        <div class="folio-item"
+        <button class="folio-item"
           data-images="assets/tic (2).png,assets/tic (3).png,assets/tic (1).png"
           data-lightbox="assets/tic (2).png,assets/tic (3).png,assets/tic (1).png"
           data-link="https://github.com/Abhinand2502/tic_tac_toe"
           data-title="Tic-Tac-Toe"
           data-desc="A neon glassmorphism Tic-Tac-Toe game with real-time multiplayer using Django Channels (WebSockets)."
           data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript,⭐WebSockets"
-          aria-label="Tic-Tac-Toe project details">
+          aria-label="Open Tic-Tac-Toe project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Tic-Tac-Toe</span><span class="view" role="button" tabindex="0">View details</span></div>
-        </div>
+          <div class="folio-caption"><span class="title">Tic-Tac-Toe</span><span class="view">View details</span></div>
+        </button>
 
-        <div class="folio-item"
+        <button class="folio-item"
           data-images="assets/porto.png,assets/portfolio.jpg"
           data-lightbox="assets/porto.png,assets/portfolio.jpg"
           data-link="https://github.com/Abhinand2502/portofolio"
           data-title="Portfolio"
           data-desc="My personal portfolio website."
           data-tech="⭐HTML,⭐CSS,⭐JavaScript"
-          aria-label="Portfolio project details">
+          aria-label="Open Portfolio project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">Portfolio</span><span class="view" role="button" tabindex="0">View details</span></div>
-        </div>
+          <div class="folio-caption"><span class="title">Portfolio</span><span class="view">View details</span></div>
+        </button>
 
-        <div class="folio-item"
+        <button class="folio-item"
           data-images="assets/todo.png,assets/todo.png,assets/todo.png"
           data-lightbox="assets/todo.png,assets/todo.png,assets/todo.png"
           data-link="https://github.com/Abhinand2502/to_do_app"
           data-title="To-Do List app"
           data-desc="To-Do App — a sleek, minimal task manager with real-time search filtering."
           data-tech="⭐Python,⭐Django,⭐HTML,⭐CSS,⭐JavaScript"
-          aria-label="To-Do List app project details">
+          aria-label="Open To-Do List app project details">
           <span class="thumb-wrap" aria-hidden="true"></span>
-          <div class="folio-caption"><span class="title">To-Do List app</span><span class="view" role="button" tabindex="0">View details</span></div>
-        </div>
+          <div class="folio-caption"><span class="title">To-Do List app</span><span class="view">View details</span></div>
+        </button>
 
       </div> <!-- .folio-grid -->
-
-      <!-- drag hint & dots (desktop) -->
-      <div class="drag-hint" id="dragHint" aria-hidden="true"><span class="drag-hand">🤚</span><span>Drag to browse</span></div>
-      <div class="folio-dots" id="folioDots" aria-hidden="true"></div>
-
-      <!-- show more (mobile only) -->
-      <button id="showMoreProjects" class="anim sr-only" aria-expanded="false" aria-controls="folioGrid">Show more projects</button>
     </div>
   </div>
 
@@ -1177,9 +1201,20 @@ function openEmail() {
       <div class="lb-view" id="lbView" aria-hidden="false">
         <div id="lbSlides" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
 
-        <button class="lb-prev" id="lbPrev" aria-label="Previous (Left arrow)">◀</button>
-        <button class="lb-next" id="lbNext" aria-label="Next (Right arrow)">▶</button>
-        <button class="lb-close" id="lbClose" aria-label="Close (Esc)">✕</button>
+        <!-- SVG arrows (kept as buttons, replaced content for accessibility) -->
+        <button class="lb-prev" id="lbPrev" aria-label="Previous">
+          <!-- left chevron -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <button class="lb-next" id="lbNext" aria-label="Next">
+          <!-- right chevron -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <button class="lb-close" id="lbClose" aria-label="Close (Esc)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
       </div>
 
       <div class="lb-meta" id="lbMeta">
@@ -1199,7 +1234,7 @@ function openEmail() {
     (function(){
       const grid = document.getElementById('folioGrid');
       if(!grid) return;
-      let items = Array.from(grid.querySelectorAll('.folio-item'));
+      const items = Array.from(grid.querySelectorAll('.folio-item'));
       const lightbox = document.getElementById('lightbox');
       const lbSlides = document.getElementById('lbSlides');
       const lbTitle = document.getElementById('lbTitle');
@@ -1210,16 +1245,12 @@ function openEmail() {
       const lbPrev = document.getElementById('lbPrev');
       const lbNext = document.getElementById('lbNext');
 
-      const showMoreBtn = document.getElementById('showMoreProjects');
-      const dragHint = document.getElementById('dragHint');
-      const dotsWrap = document.getElementById('folioDots');
+      const THUMB_INTERVAL = (function(){
+        const val = getComputedStyle(document.documentElement).getPropertyValue('--projects-thumb-interval') || '1800';
+        return parseInt(val,10) || 1800;
+      })();
 
-      const THUMB_INTERVAL = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--projects-thumb-interval')) || 1800;
-      const MOBILE_BREAK = 760;
-
-      /* -----------------------------
-         Thumbnail autoplay + setup
-         ----------------------------- */
+      // Build thumbnail images per card and autoplay them
       items.forEach((it) => {
         const wrap = it.querySelector('.thumb-wrap');
         const images = (it.dataset.images || '').split(',').map(s => s.trim()).filter(Boolean);
@@ -1235,29 +1266,59 @@ function openEmail() {
         it._thumbCount = imgs.length;
         it._thumbIndex = 0;
         it._thumbPaused = false;
+        // pause on interactions
         it.addEventListener('mouseenter', () => { it._thumbPaused = true; }, {passive:true});
         it.addEventListener('mouseleave', () => { it._thumbPaused = false; }, {passive:true});
         it.addEventListener('touchstart', () => { it._thumbPaused = true; }, {passive:true});
         it.addEventListener('touchend', () => { it._thumbPaused = false; }, {passive:true});
       });
 
-      let globalThumbTick = 1;
-      function thumbTick(){
+      // If mobile: prefer a single static visible image per card (improves layout and stability)
+      const mobileMQ = window.matchMedia('(max-width:760px)');
+      function applyMobileThumbBehavior(isMobile){
         items.forEach(it => {
-          if(it._thumbPaused) return;
-          const count = it._thumbCount || 1;
-          const newIndex = globalThumbTick % count;
           const imgs = it.querySelectorAll('.thumb-wrap img');
-          imgs.forEach((img, idx) => img.classList.toggle('active', idx === newIndex));
-          it._thumbIndex = newIndex;
+          if(isMobile){
+            // pause cycling and ensure only first image is active
+            it._thumbPaused = true;
+            imgs.forEach((img, idx) => img.classList.toggle('active', idx === 0));
+          } else {
+            // enable cycling on larger screens
+            it._thumbPaused = false;
+          }
         });
-        globalThumbTick++;
       }
-      let thumbTimer = setInterval(thumbTick, THUMB_INTERVAL);
+      applyMobileThumbBehavior(mobileMQ.matches);
+      if(mobileMQ.addEventListener) mobileMQ.addEventListener('change', (e) => applyMobileThumbBehavior(e.matches));
 
-      /* -----------------------------
-         Lightbox (only open when user clicks the .view button)
-         ----------------------------- */
+      // central tick uses requestAnimationFrame for smoother updates
+      let globalThumbTick = 0;
+      let lastTickTime = performance.now();
+      let thumbTimerId = null;
+      function startThumbTimer(){
+        stopThumbTimer();
+        lastTickTime = performance.now();
+        thumbTimerId = requestAnimationFrame(thumbFrame);
+      }
+      function stopThumbTimer(){ if(thumbTimerId) cancelAnimationFrame(thumbTimerId); thumbTimerId = null; }
+      function thumbFrame(now){
+        if(now - lastTickTime >= THUMB_INTERVAL){
+          globalThumbTick++;
+          items.forEach(it => {
+            if(it._thumbPaused) return;
+            const count = it._thumbCount || 1;
+            const newIndex = globalThumbTick % count;
+            const imgs = it.querySelectorAll('.thumb-wrap img');
+            imgs.forEach((img, idx) => img.classList.toggle('active', idx === newIndex));
+            it._thumbIndex = newIndex;
+          });
+          lastTickTime = now;
+        }
+        thumbTimerId = requestAnimationFrame(thumbFrame);
+      }
+      startThumbTimer();
+
+      // Lightbox functionality (track slider)
       let lbTrack = null;
       let lbSlidesArr = [];
       let lbCurrent = 0;
@@ -1271,6 +1332,7 @@ function openEmail() {
         img.src = url;
         img.alt = '';
         img.loading = 'eager';
+        // attempt decode for better UX
         if(img.decode) img.decode().catch(()=>{});
         wrapper.appendChild(img);
         return wrapper;
@@ -1337,6 +1399,9 @@ function openEmail() {
 
         lightbox.classList.add('open'); lightbox.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden';
         if(lbClose && typeof lbClose.focus === 'function') lbClose.focus();
+
+        // attach swipe listeners for lbTrack
+        attachLightboxSwipe(lbTrack);
       }
 
       function closeLB(){
@@ -1345,12 +1410,20 @@ function openEmail() {
         if(lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
       }
 
+      // Attach open handlers
+      items.forEach((it, idx) => {
+        it.addEventListener('click', (ev) => { ev.preventDefault(); openAt(idx); });
+        it.addEventListener('keydown', (ev) => { if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openAt(idx); }});
+      });
+
       if(lbClose) lbClose.addEventListener('click', closeLB);
       if(lbPrev) lbPrev.addEventListener('click', () => { lbPrevFn(); });
       if(lbNext) lbNext.addEventListener('click', () => { lbNextFn(); });
 
+      // click outside to close
       lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLB(); });
 
+      // keyboard nav
       document.addEventListener('keydown', (e) => {
         if(lightbox.classList.contains('open')){
           if(e.key === 'Escape') closeLB();
@@ -1368,237 +1441,93 @@ function openEmail() {
       // pause thumbnails when page hidden
       document.addEventListener('visibilitychange', () => {
         if(document.hidden){
-          if(thumbTimer){ clearInterval(thumbTimer); thumbTimer = null; }
+          stopThumbTimer();
         } else {
-          if(!thumbTimer) thumbTimer = setInterval(thumbTick, THUMB_INTERVAL);
+          startThumbTimer();
         }
       });
 
-      // accessibility: make items focusable
+      // keyboard slider scroll when not in lightbox
+      grid.addEventListener('keydown', (e) => {
+        if(e.key === 'ArrowRight'){ e.preventDefault(); grid.scrollBy({ left: window.innerWidth * 0.72, behavior: 'smooth' }); }
+        if(e.key === 'ArrowLeft'){ e.preventDefault(); grid.scrollBy({ left: -window.innerWidth * 0.72, behavior: 'smooth' }); }
+      });
+
+      // make items keyboard focusable and nicer pointer behavior
       items.forEach(it => { it.setAttribute('tabindex', '0'); it.style.userSelect = 'none'; });
 
-      /* -----------------------------
-         Desktop: drag/swipe support on container + dot slider
-         ----------------------------- */
-      let isPointerDown = false;
-      let startX = 0, scrollLeft = 0;
-      let dots = [];
-
-      function createDots(){
-        dotsWrap.innerHTML = '';
-        dots = [];
-        items.forEach((it, idx) => {
-          const btn = document.createElement('button');
-          btn.setAttribute('aria-label', `Go to project ${idx+1}`);
-          btn.addEventListener('click', (ev) => {
-            ev.preventDefault();
-            scrollToItem(idx);
-            setActiveDot(idx);
-            hideDragHint();
-          });
-          dotsWrap.appendChild(btn);
-          dots.push(btn);
-        });
-        if(window.innerWidth > MOBILE_BREAK){
-          dotsWrap.style.display = 'flex';
-          dotsWrap.setAttribute('aria-hidden','false');
-        } else {
-          dotsWrap.style.display = 'none';
-          dotsWrap.setAttribute('aria-hidden','true');
+      /* ========== Lightbox swipe support ========== */
+      function attachLightboxSwipe(track){
+        if(!track) return;
+        let startX = 0, currentX = 0, dragging = false, startTime = 0;
+        function onTouchStart(e){
+          dragging = true;
+          startX = (e.touches ? e.touches[0].clientX : e.clientX);
+          currentX = startX;
+          startTime = Date.now();
+          track.style.transition = 'none';
         }
+        function onTouchMove(e){
+          if(!dragging) return;
+          currentX = (e.touches ? e.touches[0].clientX : e.clientX);
+          const dx = currentX - startX;
+          const pct = (dx / track.offsetWidth) * 100;
+          const offset = - (100 * lbCurrent) + pct;
+          track.style.transform = `translateX(${offset}%)`;
+        }
+        function onTouchEnd(e){
+          if(!dragging) return;
+          dragging = false;
+          const dx = currentX - startX;
+          const dt = Date.now() - startTime;
+          track.style.transition = ''; // restore
+          // threshold: 50px or quick swipe
+          if(Math.abs(dx) > 50 || (Math.abs(dx) > 20 && dt < 200)){
+            if(dx < 0) showLbSlide(lbCurrent + 1);
+            else showLbSlide(lbCurrent - 1);
+          } else {
+            showLbSlide(lbCurrent, true);
+          }
+        }
+        // attach once per open
+        track.addEventListener('touchstart', onTouchStart, {passive:true});
+        track.addEventListener('touchmove', onTouchMove, {passive:true});
+        track.addEventListener('touchend', onTouchEnd, {passive:true});
+        track.addEventListener('mousedown', onTouchStart);
+        window.addEventListener('mousemove', onTouchMove);
+        window.addEventListener('mouseup', onTouchEnd, {once:false});
       }
 
-      function setActiveDot(i){
-        dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
-      }
-
-      function findCenteredItemIndex(){
-        const centerX = grid.scrollLeft + (grid.clientWidth / 2);
-        let closest = 0;
-        let closestDist = Infinity;
-        items.forEach((it, idx) => {
-          const itemCenter = (it.offsetLeft + (it.offsetWidth / 2));
-          const dist = Math.abs(itemCenter - centerX);
-          if(dist < closestDist){ closestDist = dist; closest = idx; }
-        });
-        return closest;
-      }
-
-      function scrollToItem(idx){
-        const it = items[idx];
-        if(!it) return;
-        const left = it.offsetLeft - ((grid.clientWidth - it.clientWidth) / 2);
-        grid.scrollTo({ left, behavior: 'smooth' });
-      }
-
-      // Pointer drag handlers on the container (desktop)
-      grid.addEventListener('pointerdown', (e) => {
-        if(window.innerWidth <= MOBILE_BREAK) return; // desktop-only
-        isPointerDown = true;
-        grid.setPointerCapture && grid.setPointerCapture(e.pointerId);
-        startX = e.clientX;
-        scrollLeft = grid.scrollLeft;
-        grid.classList.add('dragging');
-      });
-      grid.addEventListener('pointermove', (e) => {
-        if(!isPointerDown) return;
-        const dx = e.clientX - startX;
-        // if vertical move larger than horizontal, ignore
-        if(Math.abs(dx) < 5) return;
-        e.preventDefault();
-        grid.scrollLeft = scrollLeft - dx;
-        hideDragHint();
-      }, {passive:false});
-      ['pointerup','pointercancel','pointerleave'].forEach(ev => {
-        grid.addEventListener(ev, (e) => {
-          if(!isPointerDown) return;
-          isPointerDown = false;
-          try{ grid.releasePointerCapture && grid.releasePointerCapture(e.pointerId); }catch(e){}
-          grid.classList.remove('dragging');
-          // snap to nearest project
-          const nearest = findCenteredItemIndex();
-          scrollToItem(nearest);
-          setActiveDot(nearest);
-        });
-      });
-
-      // update dots on scroll
-      let scrollTick = null;
+      // Optional: improve UX when user scrolls grid - gently snap into place after scroll end (mobile)
+      let scrollTimer = null;
       grid.addEventListener('scroll', () => {
-        if(scrollTick) cancelAnimationFrame(scrollTick);
-        scrollTick = requestAnimationFrame(() => {
-          const idx = findCenteredItemIndex();
-          setActiveDot(idx);
-        });
-      }, {passive:true});
-
-      // drag hint show/hide
-      function hideDragHint(){ if(dragHint) dragHint.classList.add('hidden'); }
-      function showDragHint(){ if(dragHint) dragHint.classList.remove('hidden'); }
-
-      createDots();
-      setTimeout(()=> setActiveDot(0), 120);
-      setTimeout(()=> { if(window.innerWidth > MOBILE_BREAK) showDragHint(); }, 900);
-      setTimeout(()=> { hideDragHint(); }, 4200);
-
-      /* -----------------------------
-         MOBILE: allow page-level scroll (do NOT intercept touch)
-         - we removed the previous touchmove preventDefault handlers so the page-level
-           scroll / section navigation (your main scroll animation) will work naturally.
-         - keep the "Show more" logic intact.
-         --------------------- */
-      let mobileMode = window.innerWidth <= MOBILE_BREAK;
-
-      const defaultVisible = 5;
-      const batchSize = 2;
-
-      function applyMobileVisibility() {
-        items = Array.from(grid.querySelectorAll('.folio-item')); // refresh
-        if(!mobileMode){
-          items.forEach(it => it.classList.remove('hidden-mobile'));
-          if(showMoreBtn){
-            showMoreBtn.classList.add('sr-only');
-            showMoreBtn.setAttribute('aria-expanded','false');
-          }
-          return;
-        }
-
-        items.forEach((it, idx) => {
-          if(idx < defaultVisible) it.classList.remove('hidden-mobile'); else it.classList.add('hidden-mobile');
-        });
-
-        if(showMoreBtn){
-          if(items.length > defaultVisible){
-            showMoreBtn.classList.remove('sr-only');
-            showMoreBtn.style.display = 'block';
-            showMoreBtn.textContent = 'Show more projects';
-            showMoreBtn.setAttribute('aria-expanded','false');
-          } else {
-            showMoreBtn.style.display = 'none';
-          }
-        }
-      }
-
-      if(showMoreBtn){
-        showMoreBtn.addEventListener('click', () => {
-          const hiddenItems = Array.from(grid.querySelectorAll('.folio-item.hidden-mobile'));
-          if(hiddenItems.length === 0){
-            // collapse
-            items.forEach((it, idx) => { if(idx >= defaultVisible) it.classList.add('hidden-mobile'); });
-            showMoreBtn.textContent = 'Show more projects';
-            showMoreBtn.setAttribute('aria-expanded','false');
-            grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            return;
-          }
-          for(let i=0; i<batchSize && hiddenItems[i]; i++){
-            hiddenItems[i].classList.remove('hidden-mobile');
-          }
-          const remaining = Array.from(grid.querySelectorAll('.folio-item.hidden-mobile')).length;
-          if(remaining === 0){
-            showMoreBtn.textContent = 'Show less';
-            showMoreBtn.setAttribute('aria-expanded','true');
-          } else {
-            showMoreBtn.textContent = `Show more projects (${remaining})`;
-            showMoreBtn.setAttribute('aria-expanded','true');
-          }
-        });
-      }
-
-      // initial apply & responsive behavior
-      function onResize() {
-        const nowMobile = window.innerWidth <= MOBILE_BREAK;
-        if(nowMobile !== mobileMode){
-          mobileMode = nowMobile;
-          if(dotsWrap){
-            if(!mobileMode){ dotsWrap.style.display = 'flex'; dotsWrap.setAttribute('aria-hidden','false'); showDragHint(); }
-            else { dotsWrap.style.display = 'none'; dotsWrap.setAttribute('aria-hidden','true'); hideDragHint(); }
-          }
-          applyMobileVisibility();
-        }
-        // rebuild dots (keeps indexes synced)
-        createDots();
-        setActiveDot(findCenteredItemIndex());
-      }
-      window.addEventListener('resize', () => {
-        clearTimeout(window._projectsResizeTimer);
-        window._projectsResizeTimer = setTimeout(onResize, 120);
+        if(scrollTimer) clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => {
+          // find closest child to center
+          const children = Array.from(grid.children);
+          const centerX = grid.scrollLeft + (grid.clientWidth / 2);
+          let best = children[0], bestDist = Infinity;
+          children.forEach(ch => {
+            const chCenter = (ch.offsetLeft + (ch.offsetWidth / 2));
+            const dist = Math.abs(chCenter - centerX);
+            if(dist < bestDist){ bestDist = dist; best = ch; }
+          });
+          if(best) grid.scrollTo({ left: Math.max(0, best.offsetLeft - (grid.clientWidth - best.offsetWidth) / 2), behavior:'smooth' });
+        }, 120);
       });
-      onResize();
 
-      /* -----------------------------
-         Important change you requested:
-         - ONLY open lightbox when the user clicks the ".view" button inside the caption.
-         - clicking the card itself will no longer open the lightbox.
-         ----------------------------- */
-      function attachViewHandlers(){
-        items = Array.from(grid.querySelectorAll('.folio-item'));
-        items.forEach((it, idx) => {
-          const view = it.querySelector('.view');
-          if(!view) return;
-          // click or keyboard activation on the view button opens lightbox
-          view.addEventListener('click', (ev) => {
-            ev.stopPropagation();
-            ev.preventDefault();
-            openAt(idx);
-          });
-          view.addEventListener('keydown', (ev) => {
-            if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); ev.stopPropagation(); openAt(idx); }
-          });
-          // prevent the whole card click from opening lightbox
-          it.addEventListener('click', (ev) => {
-            // We intentionally do nothing on card click to avoid accidental lightbox.
-            // But we allow focus so keyboard users can tab to the card.
-          });
-        });
-      }
-      attachViewHandlers();
+      // Ensure on orientation change mobile sizes still fit
+      window.addEventListener('orientationchange', () => {
+        setTimeout(()=> {
+          // refresh layout
+          if(thumbTimerId === null) startThumbTimer();
+        }, 260);
+      });
 
     })();
   </script>
 </section>
 <!-- ===== end PROJECTS ===== -->
-
-
 
     <section class="section" id="contact" aria-label="Contact">
       <div class="container">
@@ -1850,87 +1779,9 @@ function openEmail() {
       window.addEventListener('load', ()=>{ setTimeout(()=>{}, 60); });
     })();
 
-    /* Section snap (unchanged) */
-    (function(){
-      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if(prefersReduced) return;
-
-      const sections = Array.from(document.querySelectorAll('section[id]'));
-      if(!sections.length) return;
-
-      let isAutoScrolling = false;
-      let touchStartY = null;
-      let lastWheelTime = 0;
-      const SCROLL_TIMEOUT = 800; // ms
-
-      function indexOfNearestSection(){
-        const scrollTop = window.scrollY || window.pageYOffset;
-        let bestIndex = 0;
-        let bestDistance = Infinity;
-        for(let i=0;i<sections.length;i++){
-          const rect = sections[i].getBoundingClientRect();
-          const distance = Math.abs((rect.top + window.scrollY) - scrollTop);
-          if(distance < bestDistance){ bestDistance = distance; bestIndex = i; }
-        }
-        return bestIndex;
-      }
-
-      function scrollToSectionIndex(i){
-        if(i < 0) i = 0;
-        if(i >= sections.length) i = sections.length - 1;
-        const target = sections[i];
-        if(!target) return;
-        isAutoScrolling = true;
-        target.scrollIntoView({behavior: 'smooth', block: 'start'});
-        clearTimeout(window._sectionSnapTimer);
-        window._sectionSnapTimer = setTimeout(()=>{ isAutoScrolling = false; }, SCROLL_TIMEOUT);
-      }
-
-      function onWheel(e){
-        if(isAutoScrolling) { e.preventDefault(); return; }
-        const now = Date.now();
-        if(now - lastWheelTime < 120) return;
-        lastWheelTime = now;
-
-        const delta = e.deltaY;
-        if(Math.abs(delta) < 10) return;
-
-        e.preventDefault();
-
-        const currentIndex = indexOfNearestSection();
-        if(delta > 0) scrollToSectionIndex(currentIndex + 1);
-        else scrollToSectionIndex(currentIndex - 1);
-      }
-
-      function onTouchStart(e){ if(e.touches && e.touches.length === 1) touchStartY = e.touches[0].clientY; else touchStartY = null; }
-      function onTouchEnd(e){
-        if(isAutoScrolling || touchStartY === null) return;
-        const touchEndY = (e.changedTouches && e.changedTouches[0] && e.changedTouches[0].clientY) || null;
-        if(touchEndY === null) return;
-        const diff = touchStartY - touchEndY;
-        const abs = Math.abs(diff);
-        const THRESHOLD = Math.max(40, window.innerHeight * 0.06);
-        if(abs < THRESHOLD) return;
-        const currentIndex = indexOfNearestSection();
-        if(diff > 0) scrollToSectionIndex(currentIndex + 1);
-        else scrollToSectionIndex(currentIndex - 1);
-        touchStartY = null;
-      }
-
-      window.addEventListener('wheel', onWheel, {passive:false});
-      window.addEventListener('touchstart', onTouchStart, {passive:true});
-      window.addEventListener('touchend', onTouchEnd, {passive:false});
-
-      window.addEventListener('keydown', (e) => {
-        if(isAutoScrolling) return;
-        const key = e.key;
-        let currentIndex = indexOfNearestSection();
-        if(key === 'PageDown' || key === 'ArrowDown'){ e.preventDefault(); scrollToSectionIndex(currentIndex + 1); }
-        else if(key === 'PageUp' || key === 'ArrowUp'){ e.preventDefault(); scrollToSectionIndex(currentIndex - 1); }
-        else if(key === 'Home'){ e.preventDefault(); scrollToSectionIndex(0); }
-        else if(key === 'End'){ e.preventDefault(); scrollToSectionIndex(sections.length - 1); }
-      });
-    })();
+    /* NOTE: Section snap/auto-scroll logic removed so native (standard) scrolling is used for wheel/trackpad/touch.
+       This preserves your content and structure exactly while disabling the forced snapping behaviour.
+    */
 
   </script>
 </body>

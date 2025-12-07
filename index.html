@@ -1137,18 +1137,64 @@ body.dark .folio-dot:hover,
       /* A class applied to hide additional mobile items */
       .folio-item.hidden-mobile { display:none !important; }
 
-      /* Show more / show less button */
-      #showMoreProjects {
-        display:block;
-        margin: 12px auto 0 auto;
-        padding:10px 14px;
-        border-radius:12px;
-        border:1px solid var(--projects-glass);
-        background: transparent;
-        font-weight:800;
-        cursor:pointer;
-        min-width:160px;
-      }
+   /* Show More / Show Less button */
+#showMoreProjects {
+  display: block;
+  margin: 18px auto 0 auto;
+  padding: 12px 18px;
+  min-width: 170px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all .25s cubic-bezier(.25,.8,.25,1);
+  text-align: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Default button style uses neutral glass */
+#showMoreProjects {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,0.12);
+}
+
+/* Hover */
+#showMoreProjects:hover {
+  transform: translateY(-2px);
+  background: var(--projects-primary);
+  box-shadow: 0 8px 20px rgba(42,124,241,0.35);
+  border-color: rgba(42,124,241,0.45);
+  color: #fff;
+}
+
+/* Active / Press */
+#showMoreProjects:active {
+  transform: translateY(1px) scale(.97);
+}
+
+/* Light mode visibility fix */
+html.light #showMoreProjects,
+body.light #showMoreProjects,
+[data-theme="light"] #showMoreProjects {
+  background: rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.18);
+  color: #111;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+/* Light mode hover */
+html.light #showMoreProjects:hover,
+body.light #showMoreProjects:hover,
+[data-theme="light"] #showMoreProjects:hover {
+  background: var(--projects-primary);
+  border-color: rgba(42,124,241,0.55);
+  color: #fff;
+  box-shadow: 0 10px 26px rgba(42,124,241,0.35);
+}
+
 
       /* hide desktop-only arrows on mobile */
       .folio-arrow { display:none !important; }

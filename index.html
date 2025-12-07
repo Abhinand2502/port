@@ -919,22 +919,33 @@ function openEmail() {
 
 
 
-    /* Wrapper to contain grid and controls */
-    .folio-wrap { position: relative; }
+/* Wrapper to contain grid and controls */
+.folio-wrap {
+  position: relative;
+  margin-top: -0.5cm; /* move up 0.5 cm on desktop */
+}
 
-    /* Horizontal slider container (desktop) */
-    .folio-grid {
-      display:flex;
-      gap:20px;
-      overflow-x:auto;
-      -webkit-overflow-scrolling: touch;
-      scroll-snap-type: x mandatory;
-      padding: 18px 6px;
-      align-items: stretch;
-      position:relative;
-      cursor: grab; /* hand hint */
-      scroll-behavior: smooth;
-    }
+/* Horizontal slider container (desktop) */
+.folio-grid {
+  display:flex;
+  gap:20px;
+  overflow-x:auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  padding: 18px 6px;
+  align-items: stretch;
+  position:relative;
+  cursor: grab; /* hand hint */
+  scroll-behavior: smooth;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .folio-wrap {
+    margin-top: -2cm; /* move up 2cm on mobile */
+  }
+}
+
     /* hide native scrollbar on desktop (visual 'remove/hide current slider') */
     .folio-grid::-webkit-scrollbar { height: 0; }
     .folio-grid { scrollbar-width: none; -ms-overflow-style: none; }

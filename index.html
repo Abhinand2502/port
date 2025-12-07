@@ -867,7 +867,7 @@ function openEmail() {
         </div>
       </div>
     </section>
-<!-- ===== PROJECTS: updated — small centered dots below, larger arrows, lightbox click fix ===== -->
+<!-- ===== PROJECTS: desktop modern small dots (hidden on mobile); rest unchanged ===== -->
 <section id="projects" aria-labelledby="projectsTitle">
   <style>
     /* Scoped styles for the projects section */
@@ -972,30 +972,38 @@ function openEmail() {
     .folio-arrow.left { left: 6px; }
     .folio-arrow.right { right: 6px; }
 
-    /* DOTS BELOW (small & centered) */
+    /* DOTS BELOW — modern small desktop style */
     .folio-dots-wrap {
       display:flex;
       justify-content:center;
       align-items:center;
-      gap:10px;
+      gap:8px;
       margin-top:12px;
       padding-bottom:2px;
+      pointer-events:auto;
     }
+
+    /* modern small dot */
     .folio-dot {
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 6px 18px rgba(2,6,23,0.06), inset 0 1px 0 rgba(255,255,255,0.03);
+      cursor:pointer;
+      transition: transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, background .18s ease, border-color .18s ease;
+      opacity:0.98;
+      padding:0;
+    }
+    .folio-dot:hover { transform: scale(1.25); box-shadow: 0 10px 26px rgba(2,6,23,0.1); }
+    .folio-dot.active {
       width:10px;
       height:10px;
-      border-radius:50%;
-      background: rgba(0,0,0,0.12);
-      border: 2px solid rgba(255,255,255,0.06);
-      cursor:pointer;
-      transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
-      box-shadow: 0 4px 10px rgba(2,6,23,0.06);
-    }
-    .folio-dot.active {
       background: var(--projects-primary);
+      box-shadow: 0 12px 28px rgba(42,124,241,0.18), 0 2px 6px rgba(0,0,0,0.12);
       transform: scale(1.35);
-      box-shadow: 0 8px 20px rgba(42,124,241,0.18);
-      border-color: rgba(0,0,0,0.06);
+      border-color: rgba(0,0,0,0.08);
     }
 
     /* dragging state visuals */
@@ -1081,7 +1089,8 @@ function openEmail() {
 
       /* hide desktop-only arrows on mobile */
       .folio-arrow { display:none !important; }
-      .folio-dots-wrap { margin-top:10px; }
+      /* HIDE DOTS ON MOBILE */
+      .folio-dots-wrap { display: none !important; }
     }
   </style>
 

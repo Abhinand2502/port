@@ -2037,216 +2037,227 @@ body.light #showMoreProjects:hover,
 </section>
 <!-- ===== end PROJECTS ===== -->
 
-<section class="section" id="contact" aria-label="Contact">
+<!-- ===== MODERN GLASS CONTACT SECTION (Full Code) ===== -->
+<section id="contact" aria-label="Contact">
   <style>
-    /* ===== Contact: Clean, aligned, logos inline (theme-aware) ===== */
-    :root {
-      --max-w: 1100px;
-      --accent: #0af;
-      --accent-2: #06c;
-      --glass: rgba(255,255,255,0.04);
-      --muted: rgba(0,0,0,0.55);
-      --card-radius: 14px;
-      --pad: 24px;
-      --shadow: 0 10px 30px rgba(8,10,20,0.08);
+    :root{
+      --bg: #0b0c10;
+      --text: #ffffff;
+      --muted: rgba(255,255,255,0.62);
+      --link-color: #7aa2ff;
+
+      --glass-dark: rgba(255,255,255,0.05);
+      --glass-border-dark: rgba(255,255,255,0.12);
+      --glass-light: rgba(11,16,32,0.05);
+      --glass-border-light: rgba(11,16,32,0.10);
+
+      --icon-color: #ffffff;
+      --icon-bg-dark: rgba(255,255,255,0.08);
+      --icon-bg-light: rgba(0,0,0,0.08);
     }
 
-    html[data-theme="dark"] { --glass: rgba(0,0,0,0.28); --muted: rgba(255,255,255,0.78); --shadow: 0 10px 30px rgba(0,0,0,0.6); }
+    html[data-theme="light"]{
+      --bg: #f7f8fb;
+      --text: #0b1020;
+      --muted: rgba(11,16,32,0.6);
+      --link-color: #0b61ff;
+      --icon-color: #0b1020;
+    }
 
-    #contact { padding: 56px 16px; background: var(--bg); color: var(--text); }
-    .contact-inner { max-width: var(--max-w); margin: 0 auto; display: grid; grid-template-columns: 1fr 520px; gap: 28px; align-items: center; }
+    #contact{
+      padding: clamp(70px, 10vh, 140px) 18px;
+      background: var(--bg);
+      color: var(--text);
+    }
 
-    /* Left column: contact cards and socials */
-    .contact-left { display:flex; flex-direction:column; gap:18px; align-items: stretch; justify-content: center; }
+    .contact-box{
+      width: min(1280px, 96%);
+      margin: 0 auto;
+      text-align: center;
+      padding: clamp(36px, 4vw, 60px);
+      border-radius: 24px;
+      background: var(--glass-dark);
+      backdrop-filter: blur(20px) saturate(120%);
+      -webkit-backdrop-filter: blur(20px) saturate(120%);
+      border: 1px solid var(--glass-border-dark);
+      box-shadow: 0 10px 50px rgba(2,6,23,0.45);
+      transition: .25s ease;
+    }
 
-    .contact-hero {
+    html[data-theme="light"] .contact-box{
+      background: var(--glass-light);
+      border: 1px solid var(--glass-border-light);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.10);
+    }
+
+    .contact-box:hover{
+      transform: translateY(-5px);
+      box-shadow: 0 18px 60px rgba(2,6,23,0.28);
+    }
+
+    .contact-text{
+      font-size: clamp(15px, 2vw, 20px);
+      color: var(--muted);
+      margin-bottom: 30px;
+      max-width: 70ch;
+      margin-inline: auto;
+      line-height: 1.6;
+    }
+
+    .contact-social{
       display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap: 22px;
+      margin-bottom: 30px;
+    }
+
+    .icon-btn{
+      width: 82px;
+      height: 82px;
+      display:grid;
+      place-items:center;
+      border-radius:18px;
+      background: var(--icon-bg-dark);
+      border:1px solid rgba(255,255,255,0.12);
+      transition:.25s ease;
+    }
+    html[data-theme="light"] .icon-btn{
+      background: var(--icon-bg-light);
+      border: 1px solid rgba(0,0,0,0.10);
+    }
+
+    .icon-btn:hover{
+      transform: translateY(-6px) scale(1.05);
+      border-color: var(--link-color);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+    }
+
+    .icon-btn img{
+      width: 36px;
+      height: 36px;
+      filter: brightness(0) invert(1);
+      transition:.25s;
+    }
+    html[data-theme="light"] .icon-btn img{
+      filter:none;
+    }
+
+    .contact-details{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
       gap:18px;
+      margin-top: 20px;
+    }
+
+    .detail{
+      min-width:280px;
+      padding:18px 22px;
+      display:flex;
       align-items:center;
-      justify-content:flex-start;
+      gap:14px;
+      background: transparent;
+      border-radius:18px;
+      backdrop-filter: blur(8px);
+      border:1px solid rgba(255,255,255,0.12);
     }
-    .contact-hero h2 { margin:0; font-size:34px; font-weight:800; letter-spacing:-0.02em; }
-    .contact-hero p { margin:0; color:var(--muted); font-size:14px; }
-
-    /* Cards wrapper */
-    .cards { display:grid; grid-template-columns: repeat(2,1fr); gap:12px; margin-top:6px; }
-    .card { padding:14px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); box-shadow: var(--shadow); display:flex; gap:12px; align-items:center; min-height:72px; }
-    html[data-theme="dark"] .card { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.06); }
-
-    .card .iwrap { width:56px; height:56px; border-radius:12px; display:grid; place-items:center; flex-shrink:0; background: linear-gradient(135deg,var(--accent),var(--accent-2)); color: #002; box-shadow: 0 6px 18px rgba(10,100,200,0.12); }
-    html[data-theme="dark"] .card .iwrap { color:#fff; box-shadow: 0 6px 18px rgba(0,0,0,0.5); filter: saturate(1.05); }
-
-    .card .meta { display:flex; flex-direction:column; gap:2px; }
-    .card .meta .label { font-size:12px; opacity:0.9; font-weight:700; text-transform:uppercase; letter-spacing:0.6px; }
-    .card .meta .value { font-size:14px; font-weight:800; }
-
-    /* Socials row (big visible logos) */
-    .social-row { margin-top: 10px; display:flex; gap:12px; align-items:center; }
-    .social-btn {
-      display:inline-grid; place-items:center;
-      width:56px; height:56px; border-radius:12px;
-      border:1px solid rgba(0,0,0,0.06);
-      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.92));
-      text-decoration:none; color:var(--text); transition: transform .16s ease, box-shadow .16s ease;
+    html[data-theme="light"] .detail{
+      border:1px solid rgba(0,0,0,0.12);
     }
-    html[data-theme="dark"] .social-btn { background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); color:var(--text); }
-    .social-btn:hover { transform: translateY(-6px); box-shadow: 0 14px 32px rgba(0,0,0,0.14); }
-    .social-btn svg { width:22px; height:22px; display:block; }
 
-    /* Right column: form */
-    .contact-form-wrap { padding:22px; border-radius:14px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(0,0,0,0.06); box-shadow: var(--shadow); }
-    html[data-theme="dark"] .contact-form-wrap { background: rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); }
-
-    .contact-form { display:flex; flex-direction:column; gap:10px; }
-    .contact-form .row { display:flex; gap:10px; }
-    .contact-form .row .input { flex:1; }
-
-    input.input, textarea.input {
-      width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(0,0,0,0.08); outline:none; font-size:14px; background: rgba(255,255,255,0.95); color:#111;
-      box-shadow: none;
+    /* big crisp svg icons */
+    .detail-icon{
+      width: 36px;
+      height: 36px;
+      display:grid;
+      place-items:center;
+      color: var(--icon-color);
+      flex-shrink:0;
     }
-    html[data-theme="dark"] input.input, html[data-theme="dark"] textarea.input { background: rgba(255,255,255,0.04); color:#fff; border:1px solid rgba(255,255,255,0.06); }
+    .detail-icon svg{
+      width:100%;
+      height:100%;
+      fill: currentColor;
+      display:block;
+    }
 
-    textarea.input { min-height:140px; resize:vertical; }
+    .small{ font-size:13px; color: var(--muted); display:block; }
+    .detail a{ color: var(--link-color); font-weight:700; text-decoration:none; }
+    .detail a:hover{ text-decoration:underline; }
 
-    .form-actions { display:flex; gap:10px; margin-top:6px; }
-    .btn { padding:10px 14px; border-radius:10px; font-weight:800; cursor:pointer; border:none; }
-    .btn.primary { background: linear-gradient(90deg,var(--accent),var(--accent-2)); color:#001; }
-    .btn.ghost { background:transparent; border:1px solid rgba(0,0,0,0.08); color:var(--text); }
-    html[data-theme="dark"] .btn.ghost { border:1px solid rgba(255,255,255,0.06); color:var(--text); }
+    footer.contact-footer{
+      text-align:center;
+      margin-top:40px;
+      padding: 18px;
+      color: var(--muted);
+      border-top:1px solid rgba(255,255,255,0.16);
+      font-size:14px;
+      background:transparent;
+    }
+    html[data-theme="light"] footer.contact-footer{
+      border-top:1px solid rgba(0,0,0,0.12);
+    }
 
-    /* small helper text */
-    .muted { font-size:13px; color:var(--muted); margin-top:6px; }
-
-    /* footer small */
-    footer.site-foot { margin-top:28px; text-align:center; color:var(--muted); font-size:13px; }
-
-    /* RESPONSIVE */
-    @media (max-width:980px) { .contact-inner { grid-template-columns: 1fr; } .cards { grid-template-columns: 1fr 1fr; } .contact-hero h2 { font-size:28px; } }
-    @media (max-width:520px) { .cards { grid-template-columns: 1fr; } .social-row { justify-content:flex-start; } }
+    @media(max-width:560px){
+      .icon-btn{ width:68px; height:68px; }
+      .icon-btn img{ width:30px; height:30px; }
+      .detail{ min-width:100%; justify-content:center; text-align:center; }
+      .detail-icon{ width:32px; height:32px; }
+    }
   </style>
 
-  <div class="contact-inner" role="region" aria-label="Contact container">
-    <!-- LEFT -->
-    <div class="contact-left">
-      <div class="contact-hero">
-        <div>
-          <h2>Contact</h2>
-          <p style="margin-top:6px">Want to collaborate? Drop a message or connect on socials — I reply fast.</p>
-        </div>
+  <div class="contact-box">
+
+    <p class="contact-text">
+      Interested in working together? Reach out through any platform below — I usually respond within 1–2 days.
+    </p>
+
+    <div class="contact-social">
+      <a class="icon-btn" href="mailto:you@example.com">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg">
+      </a>
+      <a class="icon-btn" href="https://github.com/yourprofile" target="_blank">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg">
+      </a>
+      <a class="icon-btn" href="https://www.linkedin.com/in/yourprofile" target="_blank">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg">
+      </a>
+      <a class="icon-btn" href="https://instagram.com/yourprofile" target="_blank">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg">
+      </a>
+    </div>
+
+    <div class="contact-details">
+
+      <div class="detail">
+        <span class="detail-icon">
+          <!-- map pin modern SVG -->
+          <svg viewBox="0 0 24 24"><path d="M12 2c-3.9 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.1-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+        </span>
+        <div><span class="small">Address</span>Vazhithala, Kerala</div>
       </div>
 
-      <div class="cards" aria-hidden="false">
-        <div class="card" title="Address">
-          <div class="iwrap" aria-hidden="true">
-            <!-- Location pin SVG -->
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" fill="#001827" opacity="0.95"/>
-              <path d="M12 2.75c-3.93 0-7.1 3.16-7.1 7.07 0 4.82 6.03 10.51 6.8 11.24a1 1 0 001.56 0c.77-.73 6.8-6.42 6.8-11.24 0-3.91-3.17-7.07-7.06-7.07z" fill="#fff" opacity="0.12"/>
-            </svg>
-          </div>
-          <div class="meta">
-            <div class="label">Address</div>
-            <div class="value">Vazhithala, Idukki, Kerala, India</div>
-          </div>
-        </div>
-
-        <div class="card" title="Email">
-          <div class="iwrap" aria-hidden="true">
-            <!-- Mail SVG -->
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 6.5h18v11a1 1 0 01-1 1H4a1 1 0 01-1-1v-11z" fill="#001827"/>
-              <path d="M21 6.5L12 13 3 6.5" stroke="#fff" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="meta">
-            <div class="label">Email</div>
-            <div class="value"><a href="mailto:abhinand@example.com" style="color:inherit;text-decoration:none;font-weight:800;">abhinand@example.com</a></div>
-          </div>
-        </div>
-
-        <div class="card" title="Phone / WhatsApp">
-          <div class="iwrap" aria-hidden="true">
-            <!-- Phone SVG -->
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 01.9-.27c1 .2 2 .3 2.9.3a1 1 0 011 1V20a1 1 0 01-1 1C9.3 21 3 14.7 3 6.9A1 1 0 014 6h2.5a1 1 0 011 1c0 .9.1 1.9.3 2.9.06.34-.05.7-.27.99l-2.9 3.9z" fill="#001827"/>
-            </svg>
-          </div>
-          <div class="meta">
-            <div class="label">Phone</div>
-            <div class="value"><a href="tel:+91XXXXXXXXXX" style="color:inherit;text-decoration:none;font-weight:800;">+91 XXXXXX XXXX</a></div>
-          </div>
-        </div>
-
-        <div class="card" title="Availability">
-          <div class="iwrap" aria-hidden="true">
-            <!-- Clock SVG -->
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" fill="#001827"/>
-              <path d="M12 6v7l4 2" stroke="#fff" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="meta">
-            <div class="label">Availability</div>
-            <div class="value">Open to opportunities · Replies usually within 24h</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="social-row" aria-label="Social links">
-        <!-- Email -->
-        <a class="social-btn" href="mailto:abhinand@example.com" aria-label="Send email to Abhinand">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6.5h18v11a1 1 0 01-1 1H4a1 1 0 01-1-1v-11z" fill="currentColor"/><path d="M21 6.5L12 13 3 6.5" stroke="white" stroke-width="0.8"/></svg>
-        </a>
-
-        <!-- Instagram -->
-        <a class="social-btn" href="https://instagram.com/yourhandle" target="_blank" aria-label="Instagram profile">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" fill="currentColor"/><circle cx="12" cy="12" r="3.2" fill="white"/><circle cx="17.6" cy="6.4" r="0.8" fill="white"/></svg>
-        </a>
-
-        <!-- LinkedIn -->
-        <a class="social-btn" href="https://linkedin.com/in/yourprofile" target="_blank" aria-label="LinkedIn profile">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="2" fill="currentColor"/><path d="M7 10H4.5V18H7zM5.7 8.6a1.3 1.3 0 110-2.6 1.3 1.3 0 010 2.6zM11 10v1.1c.4-.7 1-1.6 2.2-1.6 2.3 0 2.8 1.5 2.8 3.5V18H14v-3c0-.7 0-1.6-1-1.6s-1.2.8-1.2 1.6V18H9.8V10H11z" fill="white"/></svg>
-        </a>
+      <div class="detail">
+        <span class="detail-icon">
+          <!-- phone modern SVG -->
+          <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15 15 0 006.59 6.59l2.2-2.2c.3-.3.7-.4 1.06-.2a12 12 0 003.57.7c.5 0 .96.46.96.96V20c0 .55-.45 1-1 1C9.16 21 3 14.84 3 7c0-.55.45-1 1-1h3.5c.5 0 .96.46.96.96 0 1.25.24 2.47.7 3.6.1.36 0 .75-.2 1.05l-2.36 2.18z"/></svg>
+        </span>
+        <div><span class="small">Phone</span><a href="tel:+911234567890">+91 1234567890</a></div>
       </div>
 
     </div>
 
-    <!-- RIGHT: FORM -->
-    <div class="contact-form-wrap" aria-hidden="false">
-      <form class="contact-form" onsubmit="event.preventDefault(); alert('Demo: message sent — connect your backend');">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-          <div style="flex:1">
-            <label class="muted" for="name">Your name</label>
-            <input id="name" class="input" type="text" placeholder="Full name" required>
-          </div>
-          <div style="width:160px">
-            <label class="muted" for="budget">Budget (opt.)</label>
-            <input id="budget" class="input" type="text" placeholder="e.g. ₹10k" >
-          </div>
-        </div>
-
-        <label class="muted" for="email">Email</label>
-        <input id="email" class="input" type="email" placeholder="you@example.com" required>
-
-        <label class="muted" for="message">Message</label>
-        <textarea id="message" class="input" placeholder="Tell me about your project..." required></textarea>
-
-        <div class="form-actions">
-          <button class="btn primary" type="submit">Send message</button>
-          <button class="btn ghost" type="button" onclick="location.href='#home'">Back</button>
-        </div>
-
-        <div class="muted">Prefer quick links? Use the icons on the left to email or open my socials directly.</div>
-      </form>
-    </div>
   </div>
 
-  <footer class="site-foot" aria-hidden="false">
-    <div class="container" style="max-width:var(--max-w);margin:14px auto 0;">
-      <small>&copy; <span id="year"></span> Abhinand — Built with care.</small>
-    </div>
+  <footer class="contact-footer">
+    © <span id="year"></span> Abhinand Babu — All rights reserved
   </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</section>
 
   <script>
     // set year

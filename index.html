@@ -632,6 +632,10 @@ html {
     [data-theme="light"] header .nav-links a::after{ background: linear-gradient(120deg, rgba(255,255,255,0.18), rgba(255,255,255,0.36), rgba(255,255,255,0.18)) !important; }
 
     @media (prefers-reduced-motion: reduce){*{transition:none !important}}
+    #projectsTitle1 {
+  margin-top: 2cm;
+}
+
   </style>
 </head>
 <body>
@@ -836,7 +840,42 @@ function openEmail() {
     </div>
   </section>
 
+<!-- ABOUT SECTION -->
  <section id="about">
+  <style>
+/* Title */
+#projectsTitle1 {
+  font-size: clamp(28px, 3.8vw, 40px);
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: -0.02em;
+  color: var(--projects-text);
+  position: relative;
+  transform: translateY(2cm); /* 👈 Moves title down without moving other elements */
+}
+
+/* Blue-white gradient underline */
+#projectsTitle1::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%);
+  width: 140px; /* underline length */
+  height: 3px;
+  border-radius: 3px;
+
+  background: linear-gradient(90deg, #ffffff, #2a7cf1, #ffffff);
+  box-shadow: 0 0 8px rgba(42,124,241,0.6);
+}
+
+/* Dark mode color */
+[data-theme="dark"] #projectsTitle1 {
+  color: #e8e8e8; /* white-grey mix */
+}
+
+</style>
+<h1 id="projectsTitle1" class="anim">ABOUT ME</h1>
   <style>
     /* ---------------------- ABOUT SECTION (updated) ---------------------- */
     :root{
@@ -2037,202 +2076,209 @@ body.light #showMoreProjects:hover,
 </section>
 <!-- ===== end PROJECTS ===== -->
 
+
+
+
 <!-- ===== MODERN GLASS CONTACT SECTION (Full Code) ===== -->
 <section id="contact" aria-label="Contact">
-<style>
-  /* scoped variables: only apply inside #contact */
-  #contact{
-    --bg: #0b0c10;
-    --text: #ffffff;
-    --muted: rgba(255,255,255,0.62);
-    --link-color: #7aa2ff;
+  <h1 id="projectsTitle" class="anim">CONTACT</h1>
 
-    --glass-dark: rgba(255,255,255,0.05);
-    --glass-border-dark: rgba(255,255,255,0.12);
-    --glass-light: rgba(11,16,32,0.05);
-    --glass-border-light: rgba(11,16,32,0.10);
+  <style>
+    /* scoped variables: only apply inside #contact (do NOT use :root here) */
+    #contact{
+      --bg-dark: #000000;               /* pure black fallback for dark */
+      --bg-light: #ffffff;             /* pure white fallback for light */
+      --text: #ffffff;
+      --muted: rgba(255,255,255,0.62);
+      --link-color: #7aa2ff;
 
-    --icon-color: #ffffff;
-    --icon-bg-dark: rgba(255,255,255,0.08);
-    --icon-bg-light: rgba(0,0,0,0.08);
+      --glass-dark: rgba(255,255,255,0.05);
+      --glass-border-dark: rgba(255,255,255,0.12);
+      --glass-light: rgba(11,16,32,0.05);
+      --glass-border-light: rgba(11,16,32,0.10);
 
-    padding: clamp(70px, 10vh, 140px) 18px;
-    background: var(--bg);
-    color: var(--text);
-  }
+      --icon-color: #ffffff;
+      --icon-bg-dark: rgba(255,255,255,0.08);
+      --icon-bg-light: rgba(0,0,0,0.08);
 
-  /* light-theme override scoped to #contact only */
-  html[data-theme="light"] #contact{
-    --bg: #f7f8fb;
-    --text: #0b1020;
-    --muted: rgba(11,16,32,0.6);
-    --link-color: #0b61ff;
-    --icon-color: #0b1020;
-  }
+      padding: clamp(70px, 10vh, 140px) 18px;
 
-  /* contact box */
-  #contact .contact-box{
-    width: min(1280px, 96%);
-    margin: 0 auto;
-    text-align: center;
-    padding: clamp(36px, 4vw, 60px);
-    border-radius: 24px;
-    background: var(--glass-dark);
-    backdrop-filter: blur(20px) saturate(120%);
-    -webkit-backdrop-filter: blur(20px) saturate(120%);
-    border: 1px solid var(--glass-border-dark);
-    box-shadow: 0 10px 50px rgba(2,6,23,0.45);
-    transition: .25s ease;
-  }
-  html[data-theme="light"] #contact .contact-box{
-    background: var(--glass-light);
-    border: 1px solid var(--glass-border-light);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.10);
-  }
+      /* default: dark-mode background (pure black) */
+      background: var(--bg-dark);
+      color: var(--text);
+    }
 
-  #contact .contact-box:hover{
-    transform: translateY(-5px);
-    box-shadow: 0 18px 60px rgba(2,6,23,0.28);
-  }
+    /* force pure white background for the contact SECTION in light theme */
+    html[data-theme="light"] #contact{
+      background: var(--bg-light); /* pure white */
+      --text: #0b1020;
+      --muted: rgba(11,16,32,0.6);
+      --link-color: #0b61ff;
+      --icon-color: #0b1020;
+    }
 
-  #contact .contact-text{
-    font-size: clamp(15px, 2vw, 20px);
-    color: var(--muted);
-    margin-bottom: 30px;
-    max-width: 70ch;
-    margin-inline: auto;
-    line-height: 1.6;
-  }
+    /* contact box (glass panel) */
+    #contact .contact-box{
+      width: min(1280px, 96%);
+      margin: 0 auto;
+      text-align: center;
+      padding: clamp(36px, 4vw, 60px);
+      border-radius: 24px;
+      background: var(--glass-dark);
+      backdrop-filter: blur(20px) saturate(120%);
+      -webkit-backdrop-filter: blur(20px) saturate(120%);
+      border: 1px solid var(--glass-border-dark);
+      box-shadow: 0 10px 50px rgba(2,6,23,0.45);
+      transition: .25s ease;
+    }
+    /* in light theme, the glass panel becomes lighter (still sits on pure white background) */
+    html[data-theme="light"] #contact .contact-box{
+      background: var(--glass-light);
+      border: 1px solid var(--glass-border-light);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.10);
+    }
 
-  #contact .contact-social{
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap: 22px;
-    margin-bottom: 30px;
-  }
+    #contact .contact-box:hover{
+      transform: translateY(-5px);
+      box-shadow: 0 18px 60px rgba(2,6,23,0.28);
+    }
 
-  #contact .icon-btn{
-    width: 82px;
-    height: 82px;
-    display:grid;
-    place-items:center;
-    border-radius:18px;
-    background: var(--icon-bg-dark);
-    border:1px solid rgba(255,255,255,0.12);
-    transition:.25s ease;
-  }
-  html[data-theme="light"] #contact .icon-btn{
-    background: var(--icon-bg-light);
-    border: 1px solid rgba(0,0,0,0.10);
-  }
+    #contact .contact-text{
+      font-size: clamp(15px, 2vw, 20px);
+      color: var(--muted);
+      margin-bottom: 30px;
+      max-width: 70ch;
+      margin-inline: auto;
+      line-height: 1.6;
+    }
 
-  #contact .icon-btn:hover{
-    transform: translateY(-6px) scale(1.05);
-    border-color: var(--link-color);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.22);
-  }
+    #contact .contact-social{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap: 22px;
+      margin-bottom: 30px;
+    }
 
-  #contact .icon-btn img{
-    width: 36px;
-    height: 36px;
-    filter: brightness(0) invert(1);
-    transition:.25s;
-  }
-  html[data-theme="light"] #contact .icon-btn img{
-    filter:none;
-  }
+    #contact .icon-btn{
+      width: 82px;
+      height: 82px;
+      display:grid;
+      place-items:center;
+      border-radius:18px;
+      background: var(--icon-bg-dark);
+      border:1px solid rgba(255,255,255,0.12);
+      transition:.25s ease;
+    }
+    html[data-theme="light"] #contact .icon-btn{
+      background: var(--icon-bg-light);
+      border: 1px solid rgba(0,0,0,0.10);
+    }
 
-  #contact .contact-details{
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:18px;
-    margin-top: 20px;
-  }
+    #contact .icon-btn:hover{
+      transform: translateY(-6px) scale(1.05);
+      border-color: var(--link-color);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+    }
 
-  #contact .detail{
-    min-width:280px;
-    padding:18px 22px;
-    display:flex;
-    align-items:center;
-    gap:14px;
-    background: transparent;
-    border-radius:18px;
-    backdrop-filter: blur(8px);
-    border:1px solid rgba(255,255,255,0.12);
-  }
-  html[data-theme="light"] #contact .detail{
-    border:1px solid rgba(0,0,0,0.12);
-  }
+    #contact .icon-btn img{
+      width: 36px;
+      height: 36px;
+      filter: brightness(0) invert(1);
+      transition:.25s;
+    }
+    html[data-theme="light"] #contact .icon-btn img{
+      filter:none;
+    }
 
-  /* big crisp svg icons */
-  #contact .detail-icon{
-    width: 36px;
-    height: 36px;
-    display:grid;
-    place-items:center;
-    color: var(--icon-color);
-    flex-shrink:0;
-  }
-  #contact .detail-icon svg{
-    width:100%;
-    height:100%;
-    fill: currentColor;
-    display:block;
-  }
+    #contact .contact-details{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:18px;
+      margin-top: 20px;
+    }
 
-  #contact .small{ font-size:13px; color: var(--muted); display:block; }
-  #contact .detail a{ color: var(--link-color); font-weight:700; text-decoration:none; }
-  #contact .detail a:hover{ text-decoration:underline; }
+    #contact .detail{
+      min-width:280px;
+      padding:18px 22px;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      background: transparent;
+      border-radius:18px;
+      backdrop-filter: blur(8px);
+      border:1px solid rgba(255,255,255,0.12);
+    }
+    html[data-theme="light"] #contact .detail{
+      border:1px solid rgba(0,0,0,0.12);
+    }
 
-  #contact footer.contact-footer{
-    text-align:center;
-    margin-top:40px;
-    padding: 18px;
-    color: var(--muted);
-    border-top:1px solid rgba(255,255,255,0.16);
-    font-size:14px;
-    background:transparent;
-  }
-  html[data-theme="light"] #contact footer.contact-footer{
-    border-top:1px solid rgba(0,0,0,0.12);
-  }
+    /* big crisp svg icons */
+    #contact .detail-icon{
+      width: 36px;
+      height: 36px;
+      display:grid;
+      place-items:center;
+      color: var(--icon-color);
+      flex-shrink:0;
+    }
+    #contact .detail-icon svg{
+      width:100%;
+      height:100%;
+      fill: currentColor;
+      display:block;
+    }
 
-  @media(max-width:560px){
-    #contact .icon-btn{ width:68px; height:68px; }
-    #contact .icon-btn img{ width:30px; height:30px; }
-    #contact .detail{ min-width:100%; justify-content:center; text-align:center; }
-    #contact .detail-icon{ width:32px; height:32px; }
-  }
-</style>
+    #contact .small{ font-size:13px; color: var(--muted); display:block; }
+    #contact .detail a{ color: var(--link-color); font-weight:700; text-decoration:none; }
+    #contact .detail a:hover{ text-decoration:underline; }
 
+    #contact footer.contact-footer{
+      text-align:center;
+      margin-top:40px;
+      padding: 18px;
+      color: var(--muted);
+      border-top:1px solid rgba(255,255,255,0.16);
+      font-size:14px;
+      background:transparent;
+    }
+    html[data-theme="light"] #contact footer.contact-footer{
+      border-top:1px solid rgba(0,0,0,0.12);
+    }
+
+    /* small screens */
+    @media(max-width:560px){
+      #contact .icon-btn{ width:68px; height:68px; }
+      #contact .icon-btn img{ width:30px; height:30px; }
+      #contact .detail{ min-width:100%; justify-content:center; text-align:center; }
+      #contact .detail-icon{ width:32px; height:32px; }
+    }
+  </style>
 
   <div class="contact-box">
-
     <p class="contact-text">
       Interested in working together? Reach out through any platform below — I usually respond within 1–2 days.
     </p>
 
     <div class="contact-social">
       <a class="icon-btn" href="mailto:you@example.com">
-        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Gmail">
       </a>
-      <a class="icon-btn" href="https://github.com/yourprofile" target="_blank">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg">
+      <a class="icon-btn" href="https://github.com/yourprofile" target="_blank" rel="noopener">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub">
       </a>
-      <a class="icon-btn" href="https://www.linkedin.com/in/yourprofile" target="_blank">
-        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg">
+      <a class="icon-btn" href="https://www.linkedin.com/in/yourprofile" target="_blank" rel="noopener">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn">
       </a>
-      <a class="icon-btn" href="https://instagram.com/yourprofile" target="_blank">
-        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg">
+      <a class="icon-btn" href="https://instagram.com/yourprofile" target="_blank" rel="noopener">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram">
       </a>
     </div>
 
     <div class="contact-details">
-
       <div class="detail">
-        <span class="detail-icon">
+        <span class="detail-icon" aria-hidden="true">
           <!-- map pin modern SVG -->
           <svg viewBox="0 0 24 24"><path d="M12 2c-3.9 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.1-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
         </span>
@@ -2240,15 +2286,13 @@ body.light #showMoreProjects:hover,
       </div>
 
       <div class="detail">
-        <span class="detail-icon">
+        <span class="detail-icon" aria-hidden="true">
           <!-- phone modern SVG -->
           <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15 15 0 006.59 6.59l2.2-2.2c.3-.3.7-.4 1.06-.2a12 12 0 003.57.7c.5 0 .96.46.96.96V20c0 .55-.45 1-1 1C9.16 21 3 14.84 3 7c0-.55.45-1 1-1h3.5c.5 0 .96.46.96.96 0 1.25.24 2.47.7 3.6.1.36 0 .75-.2 1.05l-2.36 2.18z"/></svg>
         </span>
         <div><span class="small">Phone</span><a href="tel:+911234567890">+91 1234567890</a></div>
       </div>
-
     </div>
-
   </div>
 
   <footer class="contact-footer">
@@ -2257,13 +2301,6 @@ body.light #showMoreProjects:hover,
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
-</section>
-
-  <script>
-    // set year
-    const yEl = document.getElementById('year');
-    if (yEl) yEl.textContent = new Date().getFullYear();
   </script>
 </section>
 

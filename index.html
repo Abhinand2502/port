@@ -844,6 +844,7 @@ function openEmail() {
  <section id="about">
   <style>
 /* Title */
+/* Default (Desktop & Tablets) */
 #projectsTitle1 {
   font-size: clamp(28px, 3.8vw, 40px);
   font-weight: 900;
@@ -851,15 +852,16 @@ function openEmail() {
   letter-spacing: -0.02em;
   color: var(--projects-text);
   position: relative;
-  transform: translateY(2cm);
-  /* 📱 Mobile override */
+  transform: translateY(0); /* No shift on larger screens */
+}
+
+/* 📱 Mobile Only */
 @media (max-width: 600px) {
   #projectsTitle1 {
-    transform: translateY(4cm); /* Move DOWN 1cm on small screens */
+    transform: translateY(2cm); /* Move title DOWN 2cm on mobile */
   }
 }
- /* 👈 Moves title down without moving other elements */
-}
+
 
 /* Blue-white gradient underline */
 #projectsTitle1::after {

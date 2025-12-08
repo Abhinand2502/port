@@ -2276,6 +2276,7 @@ body.light #showMoreProjects:hover,
       margin-top: 20px;
     }
 
+    /* details (address/phone) */
     #contact .detail{
       min-width:280px;
       padding:18px 22px;
@@ -2307,7 +2308,8 @@ body.light #showMoreProjects:hover,
       display:block;
     }
 
-    #contact .small{ font-size:13px; color: var(--muted); display:block; }
+    /* keep small label on top */
+    #contact .small{ font-size:13px; color: var(--muted); display:block; margin-bottom:4px; }
     #contact .detail a{ color: var(--link-color); font-weight:700; text-decoration:none; }
     #contact .detail a:hover{ text-decoration:underline; }
 
@@ -2359,8 +2361,11 @@ body.light #showMoreProjects:hover,
         min-width: 100%;
         justify-content: center;
         text-align: center;
+        flex-direction: column;      /* stack icon + text vertically */
+        gap: 8px;
+        padding: 14px;
       }
-      #contact .detail-icon{ width:32px; height:32px; }
+      #contact .detail-icon{ width:36px; height:36px; }
 
       /* reduce top overlap for smaller screens so title/box don't collide */
       #contact .contact-box{
@@ -2376,11 +2381,13 @@ body.light #showMoreProjects:hover,
     </p>
 
     <div class="contact-social">
-<a class="icon-btn"
-   href="https://mail.google.com/mail/?view=cm&fs=1&to=abhinandbabu2502@gmail.com&su=Opportunity%20Inquiry%20from%20Portfolio&body=Hello%20Abhinand%20Babu,%0D%0A%0D%0AI%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect%20regarding%20a%20potential%20opportunity.%20I%20would%20appreciate%20the%20chance%20to%20discuss%20more%20about%20your%20skills%20and%20experience.%0D%0A%0D%0AThanks%20and%20Regards,%0D%0A[Your%20Name]%0D%0A[Company/Organization]%0D%0A[Contact%20Number]">
-   <!-- your icon stays exactly same -->
+      <!-- Gmail web link remains as default (browser). Mobile JavaScript below replaces href with mailto: on mobile devices so the email app opens -->
+      <a class="icon-btn"
+         href="https://mail.google.com/mail/?view=cm&fs=1&to=abhinandbabu2502@gmail.com&su=Opportunity%20Inquiry%20from%20Portfolio&body=Hello%20Abhinand%20Babu,%0D%0A%0D%0AI%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect%20regarding%20a%20potential%20opportunity.%20I%20would%20appreciate%20the%20chance%20to%20discuss%20more%20about%20your%20skills%20and%20experience.%0D%0A%0D%0AThanks%20and%20Regards,%0D%0A%5BYour%20Name%5D%0D%0A%5BCompany%2FOrganization%5D%0D%0A%5BContact%20Number%5D"
+         aria-label="Send email">
         <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="Gmail">
       </a>
+
       <a class="icon-btn" href="https://github.com/Abhinand2502" target="_blank" rel="noopener">
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub">
       </a>
@@ -2398,8 +2405,7 @@ body.light #showMoreProjects:hover,
           <!-- map pin modern SVG -->
           <svg viewBox="0 0 24 24"><path d="M12 2c-3.9 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.1-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
         </span>
-        <div><span class="small">Address</span>Thodupuzha, Idukki District,
-Kerala, India – 685583</div>
+        <div><span class="small">Address</span>Thodupuzha, Idukki District, Kerala, India – 685583</div>
       </div>
 
       <div class="detail">
@@ -2407,7 +2413,7 @@ Kerala, India – 685583</div>
           <!-- phone modern SVG -->
           <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15 15 0 006.59 6.59l2.2-2.2c.3-.3.7-.4 1.06-.2a12 12 0 003.57.7c.5 0 .96.46.96.96V20c0 .55-.45 1-1 1C9.16 21 3 14.84 3 7c0-.55.45-1 1-1h3.5c.5 0 .96.46.96.96 0 1.25.24 2.47.7 3.6.1.36 0 .75-.2 1.05l-2.36 2.18z"/></svg>
         </span>
-        <div><span class="small">Phone</span><a href="tel:+911234567890">+91 7306522316</a></div>
+        <div><span class="small">Phone</span><a href="tel:+917306522316">+91 7306522316</a></div>
       </div>
     </div>
   </div>
@@ -2417,7 +2423,45 @@ Kerala, India – 685583</div>
   </footer>
 
   <script>
+    // Set year
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Switch mail link behavior: mobile -> mailto: (open app), desktop -> keep Gmail web
+    (function(){
+      try {
+        const mailAnchor = document.querySelector('.contact-social .icon-btn img[alt="Gmail"]')?.closest('a');
+        if(!mailAnchor) return;
+
+        // mailto version (URL-encoded)
+        const mailto = "mailto:abhinandbabu2502@gmail.com"
+          + "?subject=Opportunity%20Inquiry%20from%20Portfolio"
+          + "&body=Hello%20Abhinand%20Babu,%0D%0A%0D%0AI%20came%20across%20your%20portfolio%20and%20would%20like%20to%20connect%20regarding%20a%20potential%20opportunity.%20I%20would%20appreciate%20the%20chance%20to%20discuss%20more%20about%20your%20skills%20and%20experience.%0D%0A%0D%0AThanks%20and%20Regards,%0D%0A%5BYour%20Name%5D%0D%0A%5BCompany%2FOrganization%5D%0D%0A%5BContact%20Number%5D";
+
+        // default (existing href) is Gmail web (keeps whatever href you already have)
+        const webHref = mailAnchor.getAttribute('href');
+
+        // simple mobile detection
+        const isMobile = /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent)
+                       || (navigator.maxTouchPoints && navigator.maxTouchPoints > 1 && /Mac|Windows|Linux/i.test(navigator.platform) === false);
+
+        if(isMobile){
+          // On mobile prefer mailto: which opens the email app
+          mailAnchor.setAttribute('href', mailto);
+        } else {
+          // On desktop keep Gmail web (or existing href) so it opens in browser
+          mailAnchor.setAttribute('href', webHref || mailto);
+        }
+
+        // Optional: ensure link uses target _blank on web (safer to open new tab)
+        if(!isMobile){
+          mailAnchor.setAttribute('target','_blank');
+          mailAnchor.setAttribute('rel','noopener');
+        }
+      } catch (e) {
+        // fail silently if something goes wrong; link remains usable
+        console.error(e);
+      }
+    })();
   </script>
 </section>
 

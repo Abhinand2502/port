@@ -2093,7 +2093,12 @@ body.light #showMoreProjects:hover,
   position: relative;
   transform: translateY(-1cm); /* 👈 Moves title down without moving other elements */
 }
-
+/* 📱 Mobile override */
+@media (max-width: 600px) {
+  #projectsTitle2 {
+    transform: translateY(1cm); /* Move DOWN 1cm on small screens */
+  }
+}
 /* Blue-white gradient underline */
 #projectsTitle2::after {
   content: "";
@@ -2112,12 +2117,6 @@ body.light #showMoreProjects:hover,
 /* Dark mode color */
 [data-theme="dark"] #projectsTitle2 {
   color: #e8e8e8; /* white-grey mix */
-}
-
-@media(min-width: 768px){
-  #contact .contact-box{
-    margin-top: 1cm;
-  }
 }
 
 </style>

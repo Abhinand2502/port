@@ -2036,142 +2036,173 @@ body.light #showMoreProjects:hover,
   </script>
 </section>
 <!-- ===== end PROJECTS ===== -->
-
-<!-- ===== Modern Clean Contact Section ===== -->
+<!-- ===== MODERN GLASS CONTACT SECTION (Full Code) ===== -->
 <section id="contact" aria-label="Contact">
   <style>
-    :root {
+    :root{
       --bg: #0b0c10;
-      --card: rgba(255,255,255,0.06);
       --text: #ffffff;
-      --muted: rgba(255,255,255,0.6);
-      --icon-color: #ffffff;
-      --icon-bg: rgba(255,255,255,0.12);
+      --muted: rgba(255,255,255,0.62);
       --link-color: #7aa2ff;
+
+      --glass-dark: rgba(255,255,255,0.05);
+      --glass-border-dark: rgba(255,255,255,0.12);
+      --glass-light: rgba(11,16,32,0.05);
+      --glass-border-light: rgba(11,16,32,0.10);
+
+      --icon-color: #ffffff;
+      --icon-bg-dark: rgba(255,255,255,0.08);
+      --icon-bg-light: rgba(0,0,0,0.08);
     }
 
-    html[data-theme="light"] {
+    html[data-theme="light"]{
       --bg: #f7f8fb;
-      --card: rgba(0,0,0,0.06);
       --text: #0b1020;
-      --muted: rgba(11,16,32,0.58);
-      --icon-color: #0b1020;
-      --icon-bg: rgba(0,0,0,0.08);
+      --muted: rgba(11,16,32,0.6);
       --link-color: #0b61ff;
+      --icon-color: #0b1020;
     }
 
-    #contact {
-      padding: clamp(70px, 10vh, 130px) 18px;
+    #contact{
+      padding: clamp(70px, 10vh, 140px) 18px;
       background: var(--bg);
       color: var(--text);
     }
 
-    .contact-box {
-      max-width: 760px;
+    .contact-box{
+      width: min(1280px, 96%);
       margin: 0 auto;
       text-align: center;
-      padding: 32px 36px;
-      border-radius: 20px;
-      background: var(--card);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(255,255,255,0.18);
+      padding: clamp(36px, 4vw, 60px);
+      border-radius: 24px;
+      background: var(--glass-dark);
+      backdrop-filter: blur(20px) saturate(120%);
+      -webkit-backdrop-filter: blur(20px) saturate(120%);
+      border: 1px solid var(--glass-border-dark);
+      box-shadow: 0 10px 50px rgba(2,6,23,0.45);
+      transition: .25s ease;
     }
 
-    .contact-text {
-      font-size: clamp(14px, 2vw, 18px);
+    html[data-theme="light"] .contact-box{
+      background: var(--glass-light);
+      border: 1px solid var(--glass-border-light);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.10);
+    }
+
+    .contact-box:hover{
+      transform: translateY(-5px);
+      box-shadow: 0 18px 60px rgba(2,6,23,0.28);
+    }
+
+    .contact-text{
+      font-size: clamp(15px, 2vw, 20px);
       color: var(--muted);
-      margin-bottom: 32px;
+      margin-bottom: 30px;
       max-width: 70ch;
       margin-inline: auto;
-      line-height: 1.55;
+      line-height: 1.6;
     }
 
-    .contact-social {
-      display: flex;
-      justify-content: center;
-      gap: 18px;
-      flex-wrap: wrap;
-      margin-bottom: 26px;
+    .contact-social{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap: 22px;
+      margin-bottom: 30px;
     }
 
-    .icon-btn {
-      width: 62px;
-      height: 62px;
-      display: grid;
-      place-items: center;
-      border-radius: 14px;
-      background: var(--icon-bg);
-      color: var(--icon-color);
-      transition: .22s ease;
-      border: 1px solid rgba(255,255,255,0.12);
-    }
-
-    .icon-btn:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.32);
-      border-color: var(--link-color);
-    }
-
-    .icon-btn img {
-      width: 28px;
-      height: 28px;
-      filter: brightness(0) invert(1);
-      transition: .3s;
-    }
-
-    html[data-theme="light"] .icon-btn img { filter: none; }
-
-    .contact-details {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 10px;
-    }
-
-    .detail {
-      min-width: 240px;
-      padding: 16px 18px;
-      background: var(--icon-bg);
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.14);
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .detail-icon {
-      width: 26px;
-      height: 26px;
+    .icon-btn{
+      width: 82px;
+      height: 82px;
       display:grid;
       place-items:center;
+      border-radius:18px;
+      background: var(--icon-bg-dark);
+      border:1px solid rgba(255,255,255,0.12);
+      transition:.25s ease;
+    }
+    html[data-theme="light"] .icon-btn{
+      background: var(--icon-bg-light);
+      border: 1px solid rgba(0,0,0,0.10);
     }
 
-    .detail-icon img {
-      width: 100%;
-      height: 100%;
+    .icon-btn:hover{
+      transform: translateY(-6px) scale(1.05);
+      border-color: var(--link-color);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+    }
+
+    .icon-btn img{
+      width: 36px;
+      height: 36px;
       filter: brightness(0) invert(1);
+      transition:.25s;
+    }
+    html[data-theme="light"] .icon-btn img{
+      filter:none;
     }
 
-    html[data-theme="light"] .detail-icon img { filter:none; }
+    .contact-details{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:18px;
+      margin-top: 20px;
+    }
 
-    .detail .small { font-size: 13px; color: var(--muted); display:block; }
-    .detail a { color: var(--link-color); font-weight: 700; text-decoration:none; }
-    .detail a:hover { text-decoration: underline; }
+    .detail{
+      min-width:280px;
+      padding:18px 22px;
+      display:flex;
+      align-items:center;
+      gap:14px;
+      background: transparent;
+      border-radius:18px;
+      backdrop-filter: blur(8px);
+      border:1px solid rgba(255,255,255,0.12);
+    }
+    html[data-theme="light"] .detail{
+      border:1px solid rgba(0,0,0,0.12);
+    }
 
-    footer.contact-footer {
+    /* big crisp svg icons */
+    .detail-icon{
+      width: 36px;
+      height: 36px;
+      display:grid;
+      place-items:center;
+      color: var(--icon-color);
+      flex-shrink:0;
+    }
+    .detail-icon svg{
+      width:100%;
+      height:100%;
+      fill: currentColor;
+      display:block;
+    }
+
+    .small{ font-size:13px; color: var(--muted); display:block; }
+    .detail a{ color: var(--link-color); font-weight:700; text-decoration:none; }
+    .detail a:hover{ text-decoration:underline; }
+
+    footer.contact-footer{
       text-align:center;
-      margin-top: 42px;
-      padding: 16px;
+      margin-top:40px;
+      padding: 18px;
       color: var(--muted);
-      border-top: 1px solid rgba(255,255,255,0.16);
-      background: var(--bg);
+      border-top:1px solid rgba(255,255,255,0.16);
+      font-size:14px;
+      background:transparent;
+    }
+    html[data-theme="light"] footer.contact-footer{
+      border-top:1px solid rgba(0,0,0,0.12);
     }
 
     @media(max-width:560px){
-      .icon-btn{ width:56px; height:56px; }
-      .detail{ text-align:center; justify-content:center; }
-      .contact-box{ padding:24px; }
+      .icon-btn{ width:68px; height:68px; }
+      .icon-btn img{ width:30px; height:30px; }
+      .detail{ min-width:100%; justify-content:center; text-align:center; }
+      .detail-icon{ width:32px; height:32px; }
     }
   </style>
 
@@ -2197,15 +2228,23 @@ body.light #showMoreProjects:hover,
     </div>
 
     <div class="contact-details">
+
       <div class="detail">
-        <span class="detail-icon"><img src="https://cdn.iconscout.com/icon/free/png-256/free-location-pin-icon-download-in-svg-png-gif-file-formats--map-marker-place-navigation-gps-user-interface-pack-icons-32296.png"></span>
+        <span class="detail-icon">
+          <!-- map pin modern SVG -->
+          <svg viewBox="0 0 24 24"><path d="M12 2c-3.9 0-7 3.13-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.1-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+        </span>
         <div><span class="small">Address</span>Vazhithala, Kerala</div>
       </div>
 
       <div class="detail">
-        <span class="detail-icon"><img src="https://cdn-icons-png.flaticon.com/512/455/455705.png"></span>
+        <span class="detail-icon">
+          <!-- phone modern SVG -->
+          <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15 15 0 006.59 6.59l2.2-2.2c.3-.3.7-.4 1.06-.2a12 12 0 003.57.7c.5 0 .96.46.96.96V20c0 .55-.45 1-1 1C9.16 21 3 14.84 3 7c0-.55.45-1 1-1h3.5c.5 0 .96.46.96.96 0 1.25.24 2.47.7 3.6.1.36 0 .75-.2 1.05l-2.36 2.18z"/></svg>
+        </span>
         <div><span class="small">Phone</span><a href="tel:+911234567890">+91 1234567890</a></div>
       </div>
+
     </div>
 
   </div>
@@ -2218,6 +2257,7 @@ body.light #showMoreProjects:hover,
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 </section>
+
 
   <script>
     // set year

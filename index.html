@@ -870,9 +870,8 @@ function openEmail() {
         }
     }
 </style>
-
-<!-- ABOUT SECTION -->
- <section id="about">
+<!-- ABOUT SECTION (with inline SVG skill icons) -->
+<section id="about">
   <style>
 /* Title */
 #projectsTitle1 {
@@ -882,8 +881,7 @@ function openEmail() {
   letter-spacing: -0.02em;
   color: var(--projects-text);
   position: relative;
-  transform: translateY(2cm);
-   /* 👈 Moves title down without moving other elements */
+  transform: translateY(2cm); /* moves title down without moving other elements */
 }
 
 /* Blue-white gradient underline */
@@ -893,179 +891,127 @@ function openEmail() {
   left: 50%;
   bottom: -6px;
   transform: translateX(-50%);
-  width: 140px; /* underline length */
+  width: 140px;
   height: 3px;
   border-radius: 3px;
-
   background: linear-gradient(90deg, #ffffff, #2a7cf1, #ffffff);
   box-shadow: 0 0 8px rgba(42,124,241,0.6);
 }
 
 /* Dark mode color */
-[data-theme="dark"] #projectsTitle1 {
-  color: #e8e8e8; /* white-grey mix */
+[data-theme="dark"] #projectsTitle1 { color: #e8e8e8; }
+
+/* ---------------------- ABOUT SECTION (updated) ---------------------- */
+:root{
+  --glass-bg-light: rgba(0,0,0,0.035);
+  --glass-border-light: rgba(0,0,0,0.14);
+  --glass-bg-dark: rgba(255,255,255,0.035);
+  --glass-border-dark: rgba(255,255,255,0.10);
+  --stat-bg-light: rgba(0,0,0,0.03);
+  --stat-border-light: rgba(0,0,0,0.12);
+  --stat-bg-dark: rgba(255,255,255,0.03);
+  --stat-border-dark: rgba(255,255,255,0.08);
+  --avatar-ring-light: rgba(0,0,0,0.18);
+  --avatar-ring-dark: rgba(255,255,255,0.28);
+  --accent: #0af;
 }
 
-</style>
-<h1 id="projectsTitle1" class="anim">ABOUT ME</h1>
-  <style>
-    /* ---------------------- ABOUT SECTION (updated) ---------------------- */
-    :root{
-      /* overall tokens — low-intensity glass effect */
-      --glass-bg-light: rgba(0,0,0,0.035);    /* subtle black in light */
-      --glass-border-light: rgba(0,0,0,0.14);
+/* base */
+#about { display:block; background: var(--bg); color: var(--text); }
+.about-inner { min-height: calc(100vh - var(--header-h)); padding-top: var(--header-h); display: flex; align-items: center; justify-content: center; }
+.about-container { width: 100%; max-width: 1350px; padding: 2rem; display: grid; grid-template-columns: 400px 1fr; gap: 2rem; align-items: start; }
 
-      --glass-bg-dark: rgba(255,255,255,0.035); /* subtle white in dark */
-      --glass-border-dark: rgba(255,255,255,0.10);
-
-      --muted-surface-light: rgba(0,0,0,0.04);
-      --muted-surface-dark: rgba(255,255,255,0.04);
-
-      --stat-bg-light: rgba(0,0,0,0.03);
-      --stat-border-light: rgba(0,0,0,0.12);
-
-      --stat-bg-dark: rgba(255,255,255,0.03);
-      --stat-border-dark: rgba(255,255,255,0.08);
-
-      --avatar-ring-light: rgba(0,0,0,0.18);
-      --avatar-ring-dark: rgba(255,255,255,0.28);
-
-      --skill-icon-bg-light: rgba(255,255,255,0.92); /* still bright on light */
-      --skill-icon-bg-dark: rgba(255,255,255,0.06);  /* subtle on dark */
-
-      --accent-grad: linear-gradient(90deg,#0af,#0ff);
-    }
-
-    /* base */
-    #about { display:block; background: var(--bg); color: var(--text); }
-    .about-inner { min-height: calc(100vh - var(--header-h)); padding-top: var(--header-h); display: flex; align-items: center; justify-content: center; }
-
-    .about-container { width: 100%; max-width: 1350px; padding: 2rem; display: grid; grid-template-columns: 400px 1fr; gap: 2rem; align-items: start; }
-
-    /* ----- CARDS / GLASSMORPHIC EFFECT ----- */
-    .themed-card {
-      border-radius: 20px;
-      padding: 2rem;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(0,0,0,0.06); /* fallback */
-      transition: transform 0.28s cubic-bezier(.2,.9,.2,1), box-shadow 0.28s ease, background 0.28s ease, color 0.28s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      background: transparent;
-      color: inherit;
-    }
-
-    /* LIGHT MODE: subtle transparent black */
-    html[data-theme="light"] .themed-card {
-      background: var(--glass-bg-light);
-      color: #111; /* black text */
-      border: 1px solid var(--glass-border-light);
-    }
-
-    /* DARK MODE: subtle transparent white */
-    html[data-theme="dark"] .themed-card {
-      background: var(--glass-bg-dark);
-      color: #fff; /* white text */
-      border: 1px solid var(--glass-border-dark);
-    }
-
-    .themed-card:hover, .themed-card:focus-within {
-      transform: translateY(-6px);
-      box-shadow: 0 18px 42px rgba(0,0,0,0.16);
-    }
-
-    /* ----- LEFT: PROFILE ----- */
-    .profile-wrap { display:flex; flex-direction:column; align-items:center; gap:1rem; text-align:center; height:100%; }
-    .avatar { width:160px; height:160px; border-radius:50%; overflow:hidden; display:grid; place-items:center; position: relative; box-shadow: 0 10px 28px rgba(0,0,0,0.08); }
-    .avatar img { width:100%; height:100%; object-fit:cover; }
-
-    /* avatar ring theme-aware and less intense */
-    .avatar::after { content:""; position:absolute; inset:-6px; border-radius:50%; border:4px solid var(--avatar-ring); animation: pulseBorder 2.6s infinite; }
-    @keyframes pulseBorder { 0%,100%{ transform: scale(1); opacity:0.75 } 50%{ transform: scale(1.03); opacity:0.45 } }
-
-    /* theme avatar ring values */
-    html[data-theme="light"] .avatar::after { --avatar-ring: var(--avatar-ring-light); }
-    html[data-theme="dark"]  .avatar::after { --avatar-ring: var(--avatar-ring-dark); }
-
-    .profile-name { font-family:'Playfair Display', serif; font-size:30px; font-weight:900; margin:0; }
-    .profile-role { font-size:14px; font-weight:700; color: inherit; text-transform: uppercase; letter-spacing:0.5px; margin-bottom:1rem; }
-
-    .degree-pill { border-radius:14px; padding:0.5rem 0.9rem; font-weight:800; background: linear-gradient(180deg, rgba(37,99,235,0.12), rgba(37,99,235,0.04)); color:#0af; margin-bottom:1rem; font-size:15px; }
-
-    /* Stat grid — made theme-aware so borders are visible in light mode */
-    .stat-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:0.8rem; margin-top:1rem; width:100%; }
-    .stat { padding:0.9rem; border-radius:12px; background: var(--stat-bg); border:1px solid var(--stat-border); text-align:center; color: inherit; box-shadow: none; }
-
-    html[data-theme="light"] .stat { --stat-bg: var(--stat-bg-light); --stat-border: var(--stat-border-light); }
-    html[data-theme="dark"]  .stat { --stat-bg: var(--stat-bg-dark);  --stat-border: var(--stat-border-dark);  }
-
-    .stat .k { font-size:11px; font-weight:700; text-transform: uppercase; letter-spacing:0.7px; color: inherit; opacity:0.9; }
-    .stat .v { font-size:16px; font-weight:900; margin-top:0.2rem; }
-
-    /* ----- RIGHT: EDUCATION + SKILLS ----- */
-    .right-col { display:flex; flex-direction:column; gap:1.5rem; }
-
-    .section-title { font-family:'Playfair Display', serif; font-size:20px; font-weight:800; margin-bottom:0.6rem; color: inherit; }
-
-    .edu-item { display:flex; flex-direction:column; gap:0.6rem; }
-    .edu-head { display:flex; flex-direction:column; gap:0.2rem; }
-    .edu-school { font-weight:800; font-size:15px; }
-    .edu-meta { font-size:13px; color: inherit; opacity:0.9; }
-    .edu-row { display:flex; align-items:center; gap:0.5rem; }
-
-    /* edu bar theme-aware: subtle track */
-   /* EDU BAR TRACK */
-.edu-bar-wrap { 
-  flex:1; 
-  height:10px; 
-  background: var(--edu-track); /* subtle track */
-  border-radius:999px; 
-  overflow:hidden; 
+/* cards/glass */
+.themed-card {
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0,0,0,0.06);
+  transition: transform 0.28s cubic-bezier(.2,.9,.2,1), box-shadow 0.28s ease, background 0.28s ease, color 0.28s ease;
+  display: flex; flex-direction: column; justify-content: center; background: transparent; color: inherit;
 }
+html[data-theme="light"] .themed-card { background: var(--glass-bg-light); color: #111; border: 1px solid var(--glass-border-light); }
+html[data-theme="dark"]  .themed-card { background: var(--glass-bg-dark); color: #fff; border: 1px solid var(--glass-border-dark); }
+.themed-card:hover, .themed-card:focus-within { transform: translateY(-6px); box-shadow: 0 18px 42px rgba(0,0,0,0.16); }
 
-/* EDU BAR FILL */
-.edu-bar { 
-  height:100%; 
-  width:0; 
-  border-radius:999px; 
-  background: linear-gradient(90deg,#0af,#0ff); /* visible gradient fill */
-  transition: width 1s ease; 
-}
+/* left/profile */
+.profile-wrap { display:flex; flex-direction:column; align-items:center; gap:1rem; text-align:center; height:100%; }
+.avatar { width:160px; height:160px; border-radius:50%; overflow:hidden; display:grid; place-items:center; position: relative; box-shadow: 0 10px 28px rgba(0,0,0,0.08); }
+.avatar img { width:100%; height:100%; object-fit:cover; }
+.avatar::after { content:""; position:absolute; inset:-6px; border-radius:50%; border:4px solid var(--avatar-ring); animation: pulseBorder 2.6s infinite; }
+@keyframes pulseBorder { 0%,100%{ transform: scale(1); opacity:0.75 } 50%{ transform: scale(1.03); opacity:0.45 } }
+html[data-theme="light"] .avatar::after { --avatar-ring: var(--avatar-ring-light); }
+html[data-theme="dark"]  .avatar::after { --avatar-ring: var(--avatar-ring-dark); }
 
-/* track theme */
+.profile-name { font-family:'Playfair Display', serif; font-size:30px; font-weight:900; margin:0; }
+.profile-role { font-size:14px; font-weight:700; color: inherit; text-transform: uppercase; letter-spacing:0.5px; margin-bottom:1rem; }
+.degree-pill { border-radius:14px; padding:0.5rem 0.9rem; font-weight:800; background: linear-gradient(180deg, rgba(37,99,235,0.12), rgba(37,99,235,0.04)); color:var(--accent); margin-bottom:1rem; font-size:15px; }
+
+/* stats */
+.stat-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:0.8rem; margin-top:1rem; width:100%; }
+.stat { padding:0.9rem; border-radius:12px; background: var(--stat-bg); border:1px solid var(--stat-border); text-align:center; color: inherit; box-shadow: none; }
+html[data-theme="light"] .stat { --stat-bg: var(--stat-bg-light); --stat-border: var(--stat-border-light); }
+html[data-theme="dark"]  .stat { --stat-bg: var(--stat-bg-dark);  --stat-border: var(--stat-border-dark);  }
+.stat .k { font-size:11px; font-weight:700; text-transform: uppercase; letter-spacing:0.7px; color: inherit; opacity:0.9; }
+.stat .v { font-size:16px; font-weight:900; margin-top:0.2rem; }
+
+/* right column */
+.right-col { display:flex; flex-direction:column; gap:1.5rem; }
+.section-title { font-family:'Playfair Display', serif; font-size:20px; font-weight:800; margin-bottom:0.6rem; color: inherit; }
+
+/* education bars */
+.edu-bar-wrap { flex:1; height:10px; background: var(--edu-track); border-radius:999px; overflow:hidden; }
+.edu-bar { height:100%; width:0; border-radius:999px; background: linear-gradient(90deg,#0af,#0ff); transition: width 1s ease; }
 html[data-theme="light"] .edu-bar-wrap { --edu-track: rgba(0,0,0,0.03); }
 html[data-theme="dark"]  .edu-bar-wrap { --edu-track: rgba(255,255,255,0.03); }
+.edu-percent { font-size:13px; font-weight:700; color:var(--accent); min-width:50px; text-align:right; }
 
-    .edu-percent { font-size:13px; font-weight:700; color:#0af; min-width:50px; text-align:right; }
+/* skills grid */
+.skills-grid { display:grid; grid-template-columns: repeat(4,1fr); gap:0.8rem; margin-top:0.5rem; }
+.skill { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.6rem; padding:1rem; border-radius:12px; background: var(--skill-surface); border:1px solid var(--skill-border); transition: transform 0.2s ease; color: inherit; }
+.skill:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(0,0,0,0.06); }
+.skill .label { font-weight:700; font-size:13.5px; color:var(--accent); }
 
-    html[data-theme="light"] .edu-bar-wrap { --edu-track: rgba(0,0,0,0.03); }
-    html[data-theme="dark"]  .edu-bar-wrap { --edu-track: rgba(255,255,255,0.03); }
+/* theme surfaces for skill cards */
+html[data-theme="light"] .skill { --skill-surface: rgba(0,0,0,0.03); --skill-border: rgba(0,0,0,0.09); }
+html[data-theme="dark"]  .skill { --skill-surface: rgba(255,255,255,0.02); --skill-border: rgba(255,255,255,0.06); }
 
-    .skills-grid { display:grid; grid-template-columns: repeat(4,1fr); gap:0.8rem; margin-top:0.5rem; }
-    .skill { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; padding:0.8rem; border-radius:12px; background: var(--skill-surface); border:1px solid var(--skill-border); transition: transform 0.2s ease; color: inherit; }
-    .skill:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(0,0,0,0.06); }
+/* ICON container - we'll use inline SVG inside */
+.skill .icon {
+  width:64px;
+  height:64px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  overflow:hidden;
+  background: transparent;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+html[data-theme="light"] .skill .icon { border: 1px solid rgba(0,0,0,0.06); }
+html[data-theme="dark"]  .skill .icon  { border: 1px solid rgba(255,255,255,0.06); }
 
-    /* skill icon theme-aware (less intense white in dark mode) */
-    .skill .icon { width:50px; height:50px; display:grid; place-items:center; border-radius:12px; background: var(--skill-icon-bg); box-shadow:0 6px 18px rgba(0,0,0,0.06); }
-    .skill .icon img { width:28px; height:28px; object-fit:contain; }
-    .skill .label { font-weight:700; font-size:13.5px; color:#0af; }
+/* make svg scale nicely */
+.skill .icon svg { width:48px; height:48px; display:block; }
 
-    html[data-theme="light"] .skill { --skill-surface: rgba(0,0,0,0.03); --skill-border: rgba(0,0,0,0.09); --skill-icon-bg: var(--skill-icon-bg-light); }
-    html[data-theme="dark"]  .skill { --skill-surface: rgba(255,255,255,0.02); --skill-border: rgba(255,255,255,0.06); --skill-icon-bg: var(--skill-icon-bg-dark); }
+/* hover lift for the icon */
+.skill:hover .icon { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.12); }
 
-    /* RESPONSIVE */
-    @media (max-width:980px){
-      .about-container { grid-template-columns: 1fr; }
-      .skills-grid { grid-template-columns: repeat(3,1fr); }
-      .stat-grid { grid-template-columns: repeat(3,1fr); }
-      .avatar { width:140px; height:140px; }
-    }
-    @media (max-width:720px){
-      .skills-grid { grid-template-columns: repeat(2,1fr); }
-      .stat-grid { grid-template-columns: repeat(2,1fr); }
-    }
+/* responsiveness */
+@media (max-width:980px){
+  .about-container { grid-template-columns: 1fr; }
+  .skills-grid { grid-template-columns: repeat(3,1fr); }
+  .stat-grid { grid-template-columns: repeat(3,1fr); }
+  .avatar { width:140px; height:140px; }
+}
+@media (max-width:720px){
+  .skills-grid { grid-template-columns: repeat(2,1fr); }
+  .stat-grid { grid-template-columns: repeat(2,1fr); }
+}
   </style>
+
+  <h1 id="projectsTitle1" class="anim">ABOUT ME</h1>
 
   <div class="about-inner">
     <div class="about-container">
@@ -1132,14 +1078,71 @@ html[data-theme="dark"]  .edu-bar-wrap { --edu-track: rgba(255,255,255,0.03); }
         <div class="themed-card">
           <h3 class="section-title">Skills — Modern Stack</h3>
           <div class="skills-grid">
-            <div class="skill"><div class="icon"><img src="assets/logos/python.png" alt="Python"></div><div class="label">Python</div></div>
-            <div class="skill"><div class="icon"><img src="assets/logos/django.png" alt="Django"></div><div class="label">Django</div></div>
-            <div class="skill"><div class="icon"><img src="assets/logos/html5.png" alt="HTML"></div><div class="label">HTML</div></div>
-            <div class="skill"><div class="icon"><img src="assets/logos/css3.png" alt="CSS"></div><div class="label">CSS</div></div>
-            <div class="skill"><div class="icon"><img src="assets/logos/javascript.png" alt="JavaScript"></div><div class="label">JavaScript</div></div>
-            <div class="skill"><div class="icon"><img src="assets/logos/react.png" alt="React"></div><div class="label">React</div></div>
-            <div class="skill"><div class="icon"><img src="assets/logos/sql.png" alt="SQL"></div><div class="label">SQL</div></div>
-            <div class="skill"><div class="icon"><img src="assets/logos/ml.png" alt="Machine Learning"></div><div class="label">ML</div></div>
+            <!-- Python -->
+            <div class="skill">
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 100 100" role="img" aria-label="Python">
+                  <rect x="6" y="6" width="88" height="88" rx="14" ry="14" fill="#3776AB"></rect>
+                  <text x="50" y="58" text-anchor="middle" font-size="34" font-weight="800" fill="#ffffff" font-family="Arial, Helvetica, sans-serif">Py</text>
+                </svg>
+              </div>
+              <div class="label">Python</div>
+            </div>
+
+            <!-- Django -->
+            <div class="skill">
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 100 100" role="img" aria-label="Django">
+                  <rect x="6" y="6" width="88" height="88" rx="14" ry="14" fill="#092E20"></rect>
+                  <text x="50" y="58" text-anchor="middle" font-size="32" font-weight="800" fill="#ffffff" font-family="Arial, Helvetica, sans-serif">Dj</text>
+                </svg>
+              </div>
+              <div class="label">Django</div>
+            </div>
+
+            <!-- HTML -->
+            <div class="skill">
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 100 100" role="img" aria-label="HTML">
+                  <rect x="6" y="6" width="88" height="88" rx="14" ry="14" fill="#E34F26"></rect>
+                  <text x="50" y="58" text-anchor="middle" font-size="26" font-weight="800" fill="#ffffff" font-family="Arial, Helvetica, sans-serif">HTML</text>
+                </svg>
+              </div>
+              <div class="label">HTML</div>
+            </div>
+
+            <!-- CSS -->
+            <div class="skill">
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 100 100" role="img" aria-label="CSS">
+                  <rect x="6" y="6" width="88" height="88" rx="14" ry="14" fill="#1572B6"></rect>
+                  <text x="50" y="58" text-anchor="middle" font-size="26" font-weight="800" fill="#ffffff" font-family="Arial, Helvetica, sans-serif">CSS</text>
+                </svg>
+              </div>
+              <div class="label">CSS</div>
+            </div>
+
+            <!-- JavaScript -->
+            <div class="skill">
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 100 100" role="img" aria-label="JavaScript">
+                  <rect x="6" y="6" width="88" height="88" rx="14" ry="14" fill="#F7DF1E"></rect>
+                  <text x="50" y="58" text-anchor="middle" font-size="32" font-weight="800" fill="#000000" font-family="Arial, Helvetica, sans-serif">JS</text>
+                </svg>
+              </div>
+              <div class="label">JavaScript</div>
+            </div>
+
+            <!-- SQL -->
+            <div class="skill">
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 100 100" role="img" aria-label="SQL">
+                  <rect x="6" y="6" width="88" height="88" rx="14" ry="14" fill="#003B57"></rect>
+                  <text x="50" y="58" text-anchor="middle" font-size="26" font-weight="800" fill="#ffffff" font-family="Arial, Helvetica, sans-serif">SQL</text>
+                </svg>
+              </div>
+              <div class="label">SQL</div>
+            </div>
           </div>
         </div>
       </div>
@@ -1157,6 +1160,7 @@ html[data-theme="dark"]  .edu-bar-wrap { --edu-track: rgba(255,255,255,0.03); }
     });
   </script>
 </section>
+
 
 
 

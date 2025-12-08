@@ -1144,19 +1144,20 @@ html[data-theme="dark"]  .edu-bar-wrap { --edu-track: rgba(255,255,255,0.03); }
       --projects-card-bg: transparent;
     }
 
-    #projects { padding-top: calc(var(--projects-header-h) + 10px); padding-bottom: 56px; background: transparent; position: relative; z-index: 1; }
+    #projects { padding-top: calc(var(--projects-header-h) + 10px); padding-bottom: 56px; background: transparent; position: relative; z-index: 1; margin-top: -0.5cm;}
     #projects > .section-inner { height:auto !important; min-height:0 !important; display:block !important; padding-top:0 !important; }
     #projects .box { width:100%; max-width:1400px; margin:0 auto; padding:18px 24px; box-sizing:border-box; }
 
 /* Title */
 #projectsTitle {
   font-size: clamp(28px, 3.8vw, 40px);
-  margin: 6px 0 18px 0;
   font-weight: 900;
   text-align: center;
   letter-spacing: -0.02em;
   color: var(--projects-text);
   position: relative;
+  transform: translateY(1cm);
+   margin-top: -1cm; /* 👈 Moves title down without moving other elements */
 }
 
 /* Blue-white gradient underline */
@@ -2081,8 +2082,45 @@ body.light #showMoreProjects:hover,
 
 <!-- ===== MODERN GLASS CONTACT SECTION (Full Code) ===== -->
 <section id="contact" aria-label="Contact">
-  <h1 id="projectsTitle" class="anim">CONTACT</h1>
+  <h1 id="projectsTitle2" class="anim">CONTACT</h1>
+<style>/* Title */
+#projectsTitle2 {
+  font-size: clamp(28px, 3.8vw, 40px);
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: -0.02em;
+  color: var(--projects-text);
+  position: relative;
+  transform: translateY(-1cm); /* 👈 Moves title down without moving other elements */
+}
 
+/* Blue-white gradient underline */
+#projectsTitle2::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%);
+  width: 140px; /* underline length */
+  height: 3px;
+  border-radius: 3px;
+
+  background: linear-gradient(90deg, #ffffff, #2a7cf1, #ffffff);
+  box-shadow: 0 0 8px rgba(42,124,241,0.6);
+}
+
+/* Dark mode color */
+[data-theme="dark"] #projectsTitle2 {
+  color: #e8e8e8; /* white-grey mix */
+}
+
+@media(min-width: 768px){
+  #contact .contact-box{
+    margin-top: -2cm;
+  }
+}
+
+</style>
   <style>
     /* scoped variables: only apply inside #contact (do NOT use :root here) */
     #contact{
@@ -2116,21 +2154,24 @@ body.light #showMoreProjects:hover,
       --link-color: #0b61ff;
       --icon-color: #0b1020;
     }
+/* contact box (glass panel) */
+#contact .contact-box{
+  width: min(1280px, 96%);
+  margin: 0 auto;
+  text-align: center;
+  padding: clamp(36px, 4vw, 60px);
+  border-radius: 24px;
+  background: var(--glass-dark);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border: 1px solid var(--glass-border-dark);
+  box-shadow: 0 10px 50px rgba(2,6,23,0.45);
+  transition: .25s ease;
 
-    /* contact box (glass panel) */
-    #contact .contact-box{
-      width: min(1280px, 96%);
-      margin: 0 auto;
-      text-align: center;
-      padding: clamp(36px, 4vw, 60px);
-      border-radius: 24px;
-      background: var(--glass-dark);
-      backdrop-filter: blur(20px) saturate(120%);
-      -webkit-backdrop-filter: blur(20px) saturate(120%);
-      border: 1px solid var(--glass-border-dark);
-      box-shadow: 0 10px 50px rgba(2,6,23,0.45);
-      transition: .25s ease;
-    }
+  /* 🔥 Add this */
+  margin-top: -2cm;
+}
+
     /* in light theme, the glass panel becomes lighter (still sits on pure white background) */
     html[data-theme="light"] #contact .contact-box{
       background: var(--glass-light);

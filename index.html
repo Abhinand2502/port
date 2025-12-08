@@ -839,12 +839,42 @@ function openEmail() {
       </div>
     </div>
   </section>
+<h1 id="projectsTitle" class="anim">MY PROJECTS</h1>
+<hr class="section-divider">
+
+<style>
+    /* Title position – stays perfect */
+    #projectsTitle {
+        margin-top: 3cm;
+        text-align: center;
+        font-size: clamp(28px, 3.8vw, 40px);
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        color: var(--projects-text);
+    }
+
+    /* Full-width transparent line */
+    .section-divider {
+        width: 100%;         /* Full width across page */
+        height: 1px;         /* Thin minimal line */
+        border: none;
+        margin: 20px 0;      /* Space around without shifting layout */
+        background: rgba(255, 255, 255, 0.18); /* transparent glow look */
+        backdrop-filter: blur(4px);
+    }
+
+    @media (max-width: 768px){
+        /* Mobile view adjustments if needed */
+        #projectsTitle {
+            margin-top: 2cm;
+        }
+    }
+</style>
 
 <!-- ABOUT SECTION -->
  <section id="about">
   <style>
 /* Title */
-/* Default (Desktop & Tablets) */
 #projectsTitle1 {
   font-size: clamp(28px, 3.8vw, 40px);
   font-weight: 900;
@@ -852,16 +882,9 @@ function openEmail() {
   letter-spacing: -0.02em;
   color: var(--projects-text);
   position: relative;
-  transform: translateY(0); /* No shift on larger screens */
+  transform: translateY(2cm);
+   /* 👈 Moves title down without moving other elements */
 }
-
-/* 📱 Mobile Only */
-@media (max-width: 600px) {
-  #projectsTitle1 {
-    transform: translateY(2cm); /* Move title DOWN 2cm on mobile */
-  }
-}
-
 
 /* Blue-white gradient underline */
 #projectsTitle1::after {
@@ -1137,7 +1160,7 @@ html[data-theme="dark"]  .edu-bar-wrap { --edu-track: rgba(255,255,255,0.03); }
 
 
 
-    
+ <hr class="section-divider">
 <!-- ===== PROJECTS: desktop modern small dots (hidden on mobile); rest unchanged ===== -->
 <section id="projects" aria-labelledby="projectsTitle">
   <style>
@@ -2088,7 +2111,7 @@ body.light #showMoreProjects:hover,
 
 
 
-
+<hr class="section-divider">
 <!-- ===== MODERN GLASS CONTACT SECTION (Full Code) ===== -->
 <section id="contact" aria-label="Contact">
   <h1 id="projectsTitle2" class="anim">CONTACT</h1>
